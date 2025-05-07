@@ -1,0 +1,67 @@
+@import 'tailwindcss';
+
+*
+{
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url(../public/Assets/Fonts/Satoshi/Satoshi-Regular.otf) format('opentype');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Integral';
+  src: url(../public/Assets/Fonts/IntegralCF/Fontspring-DEMO-integralcf-bold.otf) format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@theme {
+  --font-integral: 'Integral';
+  --font-satoshi: 'Satoshi';
+}
+
+@utility flex-center {
+    @apply flex items-center justify-center;
+}
+
+@utility flex-center-around {
+    @apply flex items-center justify-around;
+}
+
+@layer components {
+  .navbar {
+    @apply flex-center-around p-6;
+  }
+
+  .navbarLogo {
+    @apply text-3xl font-bold font-integral;
+  }
+
+  .navbarList {
+    @apply flex-center gap-6;
+  }
+
+  .navbarList li {
+    @apply cursor-pointer;
+  }
+
+  .navbarList .navbarListSub {
+    @apply flex-center gap-2;
+  }
+
+  .navbarSearch {
+    @apply flex-center gap-4 border-2 border-gray-300 bg-gray-300 rounded-full px-4 py-2;
+  }
+
+  .navbarCartProfile {
+    @apply flex-center gap-4;
+  }
+
+}
+
+
+
+
