@@ -1,0 +1,38 @@
+import React from 'react'
+import heroImg from '../../public/Assets/HeroImg.svg'
+
+export const Hero = () => {
+  return (
+    <div className = 'hero'>
+        <div className = 'heroText'>
+            <div className='heroMaintext'>
+                <div>FIND CLOTHES</div>
+                <div>THAT MATCHES</div>
+                <div>YOUR STYLE</div>
+            </div>
+
+            <div className ='heroSubtext'>
+                Explore a diverse world of fashion to find your ideal self
+            </div>
+
+            <button className='heroButton'>Shop now</button>
+
+            <div className ='heroStats'>
+                <div className='Stat'>
+                    <p className='statNum'>200+</p>
+                    <p>High-Quality Products</p>
+                </div>
+
+                <div class="w-[2px] bg-gray-300"> </div>
+
+                <div className='Stat'>
+                    <p className='statNum'>1000+</p>
+                    <p>Happy Customer</p>
+                </div>
+            </div>
+        </div>
+        <img src={heroImg}/>
+    </div>
+  )
+}
+
