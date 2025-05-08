@@ -1,5 +1,4 @@
 import React from 'react'
-import heroImg from '../../public/Assets/HeroImg.svg'
 
 export const Hero = () => {
   return (
@@ -23,7 +22,7 @@ export const Hero = () => {
                     <p>High-Quality Products</p>
                 </div>
 
-                <div class="w-[2px] bg-gray-300"> </div>
+                <div className="w-[2px] bg-gray-300"></div>
 
                 <div className='Stat'>
                     <p className='statNum'>1000+</p>
@@ -31,7 +30,7 @@ export const Hero = () => {
                 </div>
             </div>
         </div>
-        <img src={heroImg}/>
+        <div className='bg-gray-500 w-1/2 max-sm:w-full h-full'></div>
     </div>
   )
 }

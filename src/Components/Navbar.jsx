@@ -3,10 +3,12 @@ import arrowDown from '../../public/Assets/arrowdown.svg'
 import searchIcon from '../../public/Assets/searchIcon.svg'
 import cartIcon from '../../public/Assets/cart.svg'
 import profile from '../../public/Assets/profile.svg'
+import menu from '../../public/Assets/menu.svg'
 
 const Navbar = () => {
   return (
     <div className = 'navbar'>
+        <img src={menu} alt='menu' className='navbarMenu'/>
         <div className = 'navbarLogo'>T3.SAHUR</div>
         <ul className = 'navbarList'>
             <li className = 'navbarListSub'>
