@@ -4,7 +4,7 @@ import ProductCard from './ProductCard'
 const FourItemDisplay = ({heading = 'Some Heading'} = heading) => {
   return (
     <div className='fourDisplay'>
-        <div className='displayHeading'>{heading}</div>
+        <div className='heading'>{heading}</div>
         <div className='itemList'>
             <ProductCard/>
             <ProductCard/>
