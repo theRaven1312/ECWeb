@@ -44,6 +44,26 @@ body {
 
 @layer components {
 
+  .commentDisplay {
+    @apply flex flex-col gap-8 items-center;
+  }
+
+  .commentCard {
+    @apply flex flex-col gap-2 rounded-xl w-96 h-42 p-4 shadow-xl border-1 border-gray-50;
+  }
+
+  .commentList {
+    @apply gap-8 w-screen flex-center;
+  }
+
+  .customer{
+    @apply flex gap-2 font-bold;
+  }
+
+  .comment {
+    @apply overflow-auto text-gray-500;
+  }
+
   .galleryDisplay {
     @apply flex-center flex-col w-[80%] bg-gray-300 p-12 max-sm:p-4 rounded-4xl gap-8;
   }

@@ -5,6 +5,7 @@ import { Hero } from './Components/Hero'
 import BlackStripe from './Components/BlackStripe'
 import FourItemDisplay from './Components/FourItemDisplay'
 import GalleryDisplay from './Components/GalleryDisplay'
+import CommentDisplay from './Components/CommentDisplay'
 
 export const App = () => {
   return (
@@ -23,7 +24,11 @@ export const App = () => {
           <FourItemDisplay heading='Top Selling'/>
           <GalleryDisplay/>
         </div>
+        
+      <CommentDisplay/>
     </div>
+
+   
   )
 }
 
