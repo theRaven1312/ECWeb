@@ -9,6 +9,8 @@ const CommentDisplay = () => {
         <CommentCard/>
         <CommentCard/>
         <CommentCard/>
+        <CommentCard/>
+        <CommentCard/>
       </div>
       
     </div>
