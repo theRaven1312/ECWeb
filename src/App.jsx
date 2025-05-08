@@ -6,6 +6,7 @@ import BlackStripe from './Components/BlackStripe'
 import FourItemDisplay from './Components/FourItemDisplay'
 import GalleryDisplay from './Components/GalleryDisplay'
 import CommentDisplay from './Components/CommentDisplay'
+import Footer from './Components/Footer'
 
 export const App = () => {
   return (
@@ -26,6 +27,8 @@ export const App = () => {
         </div>
         
       <CommentDisplay/>
+
+      <Footer/>
     </div>
 
    
