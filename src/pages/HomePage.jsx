@@ -12,7 +12,6 @@ import Footer from '../Components/Footer'
 const HomePage = () => {
   return (
     <div>
-
         <Hero/>
 
         <BlackStripe/>
