@@ -50,6 +50,12 @@ body {
   @apply text-gray-500;
 }
 
+@utility flex-center-between {
+  @apply flex items-center justify-between;
+}
+
+
+
 @layer base
 {
   input {
