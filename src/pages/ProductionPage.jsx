@@ -13,9 +13,7 @@ import CommentCard from "../Components/CommentCard.jsx";
 export default function ProductionPage() {
     return (
         <>
-            <Prompt></Prompt>
             <div class='flex flex-col flex-center'>
-                <Navbar></Navbar>
                 <div className='w-[80%] h-px bg-gray-300'></div>
             </div>
             <MainContainer>
@@ -79,7 +77,6 @@ export default function ProductionPage() {
 
                 <FourItemDisplay />
             </MainContainer>
-            <Footer />
         </>
     );
 }

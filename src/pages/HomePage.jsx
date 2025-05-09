@@ -12,9 +12,6 @@ import Footer from '../Components/Footer'
 const HomePage = () => {
   return (
     <div>
-        <Prompt/>
-
-        <Navbar/>
 
         <Hero/>
 
@@ -29,7 +26,6 @@ const HomePage = () => {
         
         <CommentDisplay/>
 
-        <Footer/>
     </div>
   )
 }
