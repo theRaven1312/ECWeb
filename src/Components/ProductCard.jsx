@@ -1,5 +1,6 @@
 import React from 'react'
 import star from '../../public/Assets/star.svg'
+import RatingStar from './RatingStar'
 const ProductCard = () => {
   return (
     <div className='productCard'>
@@ -7,10 +8,7 @@ const ProductCard = () => {
         <div className='productName'>Some product</div>
         <div className='productRating'>
             <div className='ratingStar'>
-                <img src={star}/>
-                <img src={star}/>
-                <img src={star}/>
-                <img src={star}/>
+                <RatingStar/>
             </div>
             <div className='ratingNumber'>4/5</div>
         </div>

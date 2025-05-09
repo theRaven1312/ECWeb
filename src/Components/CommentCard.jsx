@@ -1,16 +1,13 @@
 import React from 'react'
 import start from '../../public/Assets/star.svg'
 import verf from '../../public/Assets/verified.svg'
-
+import RatingStar from './RatingStar'
 
 const CommentCard = () => {
   return (
     <div className='commentCard'>
         <div className='ratingStar'>
-            <img src={start} alt="star" />
-            <img src={start} alt="star" />
-            <img src={start} alt="star" />
-            <img src={start} alt="star" />
+          <RatingStar/>
         </div>
         <div className='customer'>
             <div className='name'>Some dude</div>

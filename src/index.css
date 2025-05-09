@@ -180,7 +180,7 @@ body {
   }
 
   .productRating {
-    @apply flex gap-10;
+    @apply flex gap-15;
   }
 
   .ratingStar {
