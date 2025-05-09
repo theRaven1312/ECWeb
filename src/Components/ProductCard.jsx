@@ -4,7 +4,7 @@ import RatingStar from './RatingStar'
 const ProductCard = () => {
   return (
     <div className='productCard'>
-        <div className='productImg w-64 h-64 bg-gray-700'></div>
+        <div className='productImg w-64 h-64 bg-gray-400'></div>
         <div className='productName'>Some product</div>
         <div className='productRating'>
             <div className='ratingStar'>

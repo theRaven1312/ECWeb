@@ -192,7 +192,7 @@ body {
   }
 
   .productCard {
-    @apply flex flex-col gap-2;
+    @apply flex flex-col gap-2 p-4 rounded-3xl hover:shadow-lg hover:-translate-y-6 z-2 cursor-pointer border-gray-100 transition-all;
   }
 
   .productImg {
