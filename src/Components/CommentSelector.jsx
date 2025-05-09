@@ -2,7 +2,7 @@ import CommentSelectorBtn from "./CommnetSelectorBtn";
 
 export default function CommentSelector({select}) {
     return (
-        <div className="mt-20">
+        <div className="">
             <div className="commentselector flex ">
                 <CommentSelectorBtn
                     btn_content="Product Detail"
