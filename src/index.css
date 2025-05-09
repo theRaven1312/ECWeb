@@ -134,7 +134,7 @@ body {
   }
 
   .commentDisplay {
-    @apply flex flex-col gap-8 items-center overflow-scroll;
+    @apply flex flex-col w-full gap-8 py-8 items-center overflow-scroll;
   }
 
   .commentCard {
@@ -146,7 +146,7 @@ body {
   }
 
   .commentList {
-    @apply gap-8 w-screen flex overflow-x-scroll p-10;
+    @apply gap-8 w-full flex overflow-x-scroll p-10;
   }
 
   .customer {
@@ -170,7 +170,7 @@ body {
   }
 
   .displaySection {
-    @apply flex flex-col gap-16 p-16 items-center;
+    @apply flex flex-col gap-16 p-16 max-sm:p-8 items-center;
   }
 
   .fourDisplay {
