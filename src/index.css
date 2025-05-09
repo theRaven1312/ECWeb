@@ -1,5 +1,12 @@
 @import 'tailwindcss';
 
+:root {
+  --unactive-btn: #f0f0f0;
+  --unactive-btn-text: #6a6a6a;
+  --active-btn-text: white;
+  --active-btn: black;
+}
+
 *
 {
   box-sizing: border-box;
@@ -277,7 +284,7 @@ body {
   }
 
   .product-container {
-    @apply flex-center-around mt-12;
+    @apply flex-center-around mt-12 w-full;
   }
 
   .product-img {
