@@ -124,11 +124,11 @@ body {
   }
 
   .commentCard {
-    @apply flex flex-col gap-2 rounded-xl w-96 h-42 p-4 shadow-xl border-1 border-gray-50;
+    @apply flex flex-col gap-2 rounded-xl w-96 h-42 p-4 shadow-xl border-1 border-gray-50 shrink-0;
   }
 
   .commentList {
-    @apply gap-8 w-screen flex-center overflow-x-scroll p-10;
+    @apply gap-8 w-screen flex overflow-x-scroll p-10;
   }
 
   .customer{
@@ -164,7 +164,7 @@ body {
   }
 
   .itemList {
-    @apply flex justify-center gap-5 max-sm:flex-center flex-wrap max-sm:flex-col max-sm:gap-10;
+    @apply flex lg:justify-center gap-5 overflow-x-scroll p-8 w-full;
   }
 
   .viewAllButton {
