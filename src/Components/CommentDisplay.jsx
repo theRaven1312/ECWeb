@@ -12,7 +12,6 @@ const CommentDisplay = () => {
         <CommentCard/>
         <CommentCard/>
       </div>
-      
     </div>
   )
 }
