@@ -259,6 +259,185 @@ body {
     @apply flex-center gap-4;
   }
 
+  .direction {
+    @apply flex mt-12 text-[#666666]
+  }
+
+  .activeLink {
+    @apply text-black font-bold;
+  }
+
+  .product-container {
+    @apply flex-center-around mt-12;
+  }
+
+  .product-img {
+    @apply w-[48%] mr-10;
+  }
+
+  .img-left {
+    @apply w-38 h-42 object-cover rounded-2xl col-start-1 cursor-pointer;
+  }
+
+  .img-right {
+    @apply w-[444px] h-132.5 rounded-2xl row-end-4 col-end-3 object-cover row-start-1 row-span-3 col-start-2 col-span-1 flex;
+  }
+
+  .productImg-container {
+    @apply grid grid-cols-[1fr_3fr] grid-rows-3 gap-[14.5px]
+  }
+
+  .product-content {
+    @apply w-[51%];
+
+  }
+
+  .product-content__feedback {
+    @apply flex mt-3 mb-3;
+  }
+
+  .product-content__feedback img {
+    @apply mr-2;
+  }
+
+  .product-content__price {
+    @apply flex items-center mb-3 font-[700] text-[32px]
+  }
+
+  .discountPrice {
+    @apply text-[#B3B3B3] line-through mr-4
+  }
+
+  .product-content__discount {
+    @apply text-[#ff3333] bg-[#FFEBEB] font-[500] text-[16px] w-[72px] h-[34px]
+  }
+
+  .product-content__desc {
+    @apply border-[var(--unactive-btn)] border-b-2 pb-5
+  }
+
+  .product-content__choose {
+    @apply mt-5 mb-3
+  }
+
+  .product-content__choose-color {
+    @apply flex gap-3 pb-5 border-[var(--unactive-btn)] border-b-2
+  }
+
+  .product-content__choose-size {
+    @apply flex pb-5 border-[var(--unactive-btn)] border-b-2
+  }
+
+  /*===========================
+    Product Page - CommentsSection
+  ========================= */
+  .comment-heading {
+    @apply font-[700] text-[24px]
+  }
+
+  .comment-header {
+    @apply flex-center-between mt-12
+  }
+
+  .comment-quanity {
+    @apply font-[400] text-[16px] ml-2
+  }
+
+  .comment-header__adjustBtn {
+    @apply w-[48px] h-[48px] flex-center
+  }
+
+  .comment-header__moreBtn {
+    @apply flex-center w-[120px] bg-[var(--unactive-btn)] rounded-full ml-3
+  }
+
+  .commentSelectorButton {
+    @apply w-[414px] border-b-2 border-[var(--unactive-btn)] text-[#666666] cursor-pointer pb-3 hover:text-[var(--active-btn)] hover:font-bold hover:border-[var(--active-btn)]
+  }
+
+  .comment-header__writeBtn {
+    @apply w-[166px] h-[48px] bg-black ml-3
+  }
+
+  .commentselector-button.active {
+    @apply text-[var(--active-btn)] border-[var(--active-btn)]
+  }
+
+  .commentCard {
+    @apply flex flex-col gap-2 rounded-xl w-[610px] h-[241.5789794921875px] p-4 shadow-xl border-1 border-gray-50 justify-center;
+  }
+
+  .ratingStar {
+    @apply flex gap-1;
+  }
+
+  .customer {
+    @apply flex gap-2 font-bold;
+  }
+
+  .comment {
+    @apply overflow-auto text-gray-500;
+  }
+
+  .postDay {
+    @apply text-gray-500;
+  }
+
+  .commentDisplay {
+    @apply grid grid-cols-[1fr_1fr] gap-4 mt-12 mb-12;
+  }
+
+  .learnMoreBtn {
+    @apply w-[230px] h-[52px] border-1 border-gray-500 bg-white hover:opacity-80 hover:text-gray-900 mx-auto
+  }
+
+  /*===========================
+    Product Page - FourItem CSS
+  ========================= */
+  .productCard {
+    @apply flex flex-col gap-2;
+  }
+
+  .productImg {
+    @apply rounded-3xl
+  }
+
+  .productRating {
+    @apply flex gap-15;
+  }
+
+  .fourDisplay {
+    @apply flex flex-col flex-center gap-10 flex-wrap mt-20;
+  }
+
+  .heading {
+    @apply font-integral text-3xl;
+  }
+
+  .itemList {
+    @apply flex justify-center gap-5 max-sm:flex-center flex-wrap max-sm:flex-col max-sm:gap-10;
+  }
+
+  .viewAllButton {
+    @apply border-2 border-gray-400 text-gray-400 w-32 px-6 py-2 rounded-full
+  }
+
+  .productCardImg {
+    @apply rounded-3xl
+  }
+
+  .productCardRating {
+    @apply flex gap-15;
+  }
+
+  .productCardName {
+    @apply font-[700] text-[20px];
+  }
+
+  .productCardPrice {
+    @apply font-[700] text-[24px]
+  }
+
 }
 
 
