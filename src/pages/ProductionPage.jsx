@@ -43,7 +43,7 @@ export default function ProductionPage() {
                     </div>
                     <div className="flex">
                         <button className="primary-btn comment-header__adjustBtn">
-                            <i class="fa-solid fa-sliders "></i>
+                            <i class="fa-solid fa-sliders"></i>
                         </button>
                         <div className="comment-header__moreBtn">
                             <span>Latest</span>
