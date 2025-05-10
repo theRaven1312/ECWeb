@@ -472,7 +472,7 @@ body {
   }
 
   .cart-card {
-    @apply flex-center-between px-5 py-5 w-full relative
+    @apply flex-center-between px-5 py-5 w-full relative max-sm:px-3 max-sm:py-3
   }
 
   .card-detail {
@@ -480,15 +480,15 @@ body {
   }
 
   .cart-detail__name {
-    @apply font-bold text-xl
+    @apply font-bold text-xl max-sm:text-sm
   }
 
   .cart-detail__size, .cart-detail__color {
-    @apply text-sm
+    @apply text-sm max-sm:text-xs
   }
 
   .cart-detail__price {
-    @apply font-bold text-2xl
+    @apply font-bold text-2xl max-sm:text-lg
   }
 
   .card-action__remove {
