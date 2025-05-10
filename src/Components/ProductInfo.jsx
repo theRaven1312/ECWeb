@@ -15,7 +15,7 @@ const ProductInfo = () => {
                     {score}/5
                 </p>
             </div>
-            <div className="product-content__price flex items-center mb-3 font-[700] text-[32px]">
+            <div className="product-content__price">
                 <p className="price">$260</p>
                 <p className="priceDiscount text-[#B3B3B3] line-through mr-4 ml-4">
                     $300
@@ -36,12 +36,12 @@ const ProductInfo = () => {
                 <div className="color-chooser bg-gray-400"></div>
             </div>
             <div className="product-content__choose desc">Choose Size</div>
-            <ul className="product-content__choose-size flex">
+            <div className="product-content__choose-size">
                 <ChooseSizeBtn size="Small" />
                 <ChooseSizeBtn size="Medium" />
                 <ChooseSizeBtn size="Large" />
                 <ChooseSizeBtn size="XLarge" />
-            </ul>
+            </div>
             <div className="product-content__choose-quanity">
                 <QuantitySelector />
             </div>

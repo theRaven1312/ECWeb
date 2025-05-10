@@ -7,8 +7,7 @@
   --active-btn: black;
 }
 
-*
-{
+* {
   box-sizing: border-box;
 }
 
@@ -42,11 +41,11 @@ body {
 }
 
 @utility flex-center {
-    @apply flex items-center justify-center;
+  @apply flex items-center justify-center;
 }
 
 @utility flex-center-around {
-    @apply flex items-center justify-around;
+  @apply flex items-center justify-around;
 }
 
 @utility text-main {
@@ -62,12 +61,11 @@ body {
 }
 
 @utility max-w-calc {
-  max-width: calc(100% - 100px);
+  max-width: calc(100% - 20px);
 }
 
 
-@layer base
-{
+@layer base {
   input {
     @apply outline-none;
   }
@@ -151,7 +149,7 @@ body {
     @apply gap-8 w-screen flex overflow-x-scroll p-10;
   }
 
-  .customer{
+  .customer {
     @apply flex gap-2 font-bold;
   }
 
@@ -212,7 +210,7 @@ body {
   }
 
   .brandList {
-    @apply flex-center-around text-white font-bold text-3xl flex-wrap gap-5 font-integral ;
+    @apply flex-center-around text-white font-bold text-3xl flex-wrap gap-5 font-integral;
   }
 
   .hero {
@@ -281,161 +279,158 @@ body {
 
   @layer components {
     .main-container {
-      @apply flex flex-col flex-center w-screen px-16 py-4 gap-10;
+      @apply flex flex-col flex-center w-screen px-16 py-4 gap-10 max-sm:px-5;
     }
-  
+
     .primary-btn {
-      @apply flex-center bg-[var(--unactive-btn)] text-[var(--unactive-btn-text)] rounded-full w-25 h-11 cursor-pointer hover:bg-[var(--active-btn)] hover:text-white transition-all duration-300 ease-in-out;
+      @apply flex-center bg-[var(--unactive-btn)] text-[var(--unactive-btn-text)] rounded-full px-6 py-3 cursor-pointer hover:bg-[var(--active-btn)] hover:text-white transition-all duration-300 ease-in-out;
     }
-  
+
     .color-chooser {
       @apply w-9 h-9 rounded-full hover:opacity-80 cursor-pointer
     }
-  
+
     .navbar {
       @apply flex-center-between pt-6 pb-6;
     }
-  
+
     .heading {
       @apply font-integral font-[700] text-[40px];
     }
-  
+
     .desc {
       @apply font-satoshi font-[400] text-[16px] text-[#6a6a6a] leading-5.5;
     }
   }
-  
+
   /*==========================
     Product Page CSS
   ========================= */
   .direction {
     @apply flex text-gray-400 self-baseline;
   }
-  
+
   .activeLink {
     @apply text-black font-bold;
   }
-  
+
   .product-container {
-    @apply flex-center-around;
+    @apply flex-center max-sm:flex-col;
   }
-  
+
   .product-img {
-    @apply w-[53%] mr-10;
+    @apply w-[53%] mr-10 max-sm:w-[100%] max-sm:m-0;
   }
-  
+
   .img-left {
-    @apply w-38 h-42 object-cover rounded-2xl col-start-1 cursor-pointer;
+    @apply w-full h-full object-cover rounded-2xl cursor-pointer max-sm:row-start-2 max-sm:max-sm:justify-self-center;
   }
-  
+
   .img-right {
-    @apply w-[444px] h-132.5 rounded-2xl row-end-4 col-end-3 object-cover row-start-1 row-span-3 col-start-2 col-span-1 flex;
+    @apply w-full h-auto rounded-2xl row-end-4 col-end-3 object-cover row-start-1 row-span-3 col-start-2 col-span-1 flex max-sm:row-start-1 max-sm:row-span-1 max-sm:col-start-1 max-sm:col-span-3 max-sm:justify-self-center;
   }
-  
+
   .productImg-container {
-    @apply grid grid-cols-[1fr_3fr] grid-rows-3 gap-[14.5px]
+    @apply grid grid-cols-[1fr_3fr] grid-rows-3 gap-4 max-sm:grid-rows-[3fr_1fr] max-sm:grid-cols-3;
   }
-  
+
   .product-content {
-    @apply w-[47%];
-  
+    @apply w-[47%] max-sm:w-full max-sm:mt-5;
+
   }
-  
+
   .product-content__feedback {
-    @apply flex mt-3 mb-3;
+    @apply flex mt-3 mb-3 items-center max-sm:mt-1 max-sm:mb-1;
   }
-  
+
   .product-content__feedback img {
     @apply mr-2;
   }
-  
+
   .product-content__price {
-    @apply flex items-center mb-3 font-[700] text-[32px]
+    @apply flex flex-wrap items-center mb-3 font-[700] text-[32px] max-sm:mb-1;
   }
-  
+
   .discountPrice {
     @apply text-[#B3B3B3] line-through mr-4
   }
-  
+
   .product-content__discount {
     @apply text-[#ff3333] bg-[#FFEBEB] font-[500] text-[16px] w-[72px] h-[34px]
   }
-  
+
   .product-content__desc {
     @apply border-[var(--unactive-btn)] border-b-2 pb-5
   }
-  
+
   .product-content__choose {
     @apply mt-5 mb-3
   }
-  
+
   .product-content__choose-color {
     @apply flex gap-3 pb-5 border-[var(--unactive-btn)] border-b-2
   }
-  
+
   .product-content__choose-size {
-    @apply flex pb-5 border-[var(--unactive-btn)] border-b-2
+    @apply flex pb-5 border-[var(--unactive-btn)] border-b-2 max-sm:justify-between
   }
-  
+
   /*===========================
     Product Page - CommentsSection
   ========================= */
   .comment-heading {
-    @apply font-[700] text-[24px]
+    @apply font-[700] text-[24px] max-sm:text-[20px]
   }
-  
+
   .comment-header {
-    @apply flex w-full flex-center-between px-8;
+    @apply flex w-full flex-center-between;
   }
-  
+
   .comment-quanity {
-    @apply font-[400] text-[16px] ml-2
+    @apply font-[400] text-[16px] ml-2 max-sm:text-[1px]
   }
-  
+
   .comment-header__adjustBtn {
-    @apply w-[48px] h-[48px] flex-center
+    @apply w-[48px] h-[48px] flex-center max-sm:w-1/10
   }
-  
+
   .comment-header__moreBtn {
-    @apply flex-center w-[120px] bg-[var(--unactive-btn)] rounded-full ml-3
+    @apply flex-center w-[120px] bg-[var(--unactive-btn)] rounded-full ml-3 max-sm:w-1/3
   }
-  
+
+  .commentselector {
+    @apply max-sm:w-full
+  }
+
   .commentSelectorButton {
-    @apply w-[414px] border-b-2 border-[var(--unactive-btn)] text-[#666666] cursor-pointer pb-3 hover:text-[var(--active-btn)] hover:font-bold hover:border-[var(--active-btn)]
+    @apply w-full border-b-2 border-[var(--unactive-btn)] text-[#666666] cursor-pointer pb-3 hover:text-[var(--active-btn)] hover:font-bold hover:border-[var(--active-btn)]
   }
-  
+
   .comment-header__writeBtn {
-    @apply w-[166px] h-[48px] bg-black ml-3
+    @apply w-[166px] h-[48px] bg-black ml-3 max-sm:text-sm
   }
-  
+
   .commentselector-button.active {
     @apply text-[var(--active-btn)] border-[var(--active-btn)]
   }
-  
+
   .ratingStar {
     @apply flex gap-1;
   }
-  
+
   .customer {
     @apply flex gap-2 font-bold;
   }
-  
+
   .comment {
     @apply overflow-auto text-gray-500;
   }
-  
+
   .postDay {
     @apply text-gray-500;
   }
-  
+
   .learnMoreBtn {
     @apply w-[230px] h-[52px] border-1 border-gray-500 bg-white hover:opacity-80 hover:text-gray-900 mx-auto
-  }  
+  }
 }
-
-
-
-
-/*==========================
-  Global CSS
-========================= */

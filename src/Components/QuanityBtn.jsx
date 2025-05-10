@@ -7,8 +7,8 @@ const QuantitySelector = () => {
     const decrease = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
     return (
-        <div className="flex items-center space-x-4 mt-5">
-            <div className="flex-center bg-gray-100 w-[170px] h-[52px] rounded-full">
+        <div className="flex items-center space-x-4 mt-5 max-sm:justify-between">
+            <div className="flex-center bg-gray-100 min-w-[170px] min-h-[52px] rounded-full max-sm:w-1/4">
                 <button
                     onClick={decrease}
                     className="text-xl font-bold px-2 cursor-pointer"
