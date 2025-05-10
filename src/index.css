@@ -434,3 +434,17 @@ body {
     @apply w-[230px] h-[52px] border-1 border-gray-500 bg-white hover:opacity-80 hover:text-gray-900 mx-auto
   }
 }
+
+/*=====================
+    CartPage
+======================*/
+@layer {
+  .cart {
+    @apply flex
+  }
+
+  .cart-list {
+    @apply w-2/3 h-auto border-2 border-gray-300 px-5 py-5 rounded-full
+  }
+
+}

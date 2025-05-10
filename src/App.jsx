@@ -3,6 +3,7 @@ import HomePage from "./pages/HomePage";
 import ProductionPage from "./pages/ProductionPage";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
+import CartPage from "./pages/CartPage";
 
 export const App = () => {
     return (
@@ -10,6 +11,7 @@ export const App = () => {
             <Navbar />
             {/* <HomePage /> */}
             <ProductionPage />
+            {/* <CartPage /> */}
             <Footer />
         </div>
     );
