@@ -315,7 +315,7 @@ body {
   }
 
   .product-container {
-    @apply flex-center max-sm:flex-col;
+    @apply flex-center max-sm:flex-col max-sm:w-full;
   }
 
   .product-img {
@@ -331,12 +331,20 @@ body {
   }
 
   .productImg-container {
-    @apply grid grid-cols-[1fr_3fr] grid-rows-3 gap-4 max-sm:grid-rows-[3fr_1fr] max-sm:grid-cols-3;
+    @apply grid grid-cols-[1fr_3fr] overflow-y-scroll grid-rows-3 gap-4 max-sm:grid-rows-[3fr_1fr] max-sm:grid-cols-3 max-sm:overflow-x-scroll;
   }
 
   .product-content {
     @apply w-[47%] max-sm:w-full max-sm:mt-5;
 
+  }
+
+  .product-content__heading {
+    @apply max-sm:text-2xl
+  }
+
+  .product-content__feedback-score {
+    @apply max-sm:text-sm
   }
 
   .product-content__feedback {
@@ -348,7 +356,7 @@ body {
   }
 
   .product-content__price {
-    @apply flex flex-wrap items-center mb-3 font-[700] text-[32px] max-sm:mb-1;
+    @apply flex flex-wrap items-center mb-3 font-[700] text-[32px] max-sm:mb-1 max-sm:text-xl;
   }
 
   .discountPrice {
@@ -356,30 +364,30 @@ body {
   }
 
   .product-content__discount {
-    @apply text-[#ff3333] bg-[#FFEBEB] font-[500] text-[16px] w-[72px] h-[34px]
+    @apply text-[#ff3333] bg-[#FFEBEB] font-[500] text-[16px] w-[72px] h-[34px] max-sm:w-4 max-sm:h-4 max-sm:text-xs
   }
 
   .product-content__desc {
-    @apply border-[var(--unactive-btn)] border-b-2 pb-5
+    @apply border-[var(--unactive-btn)] border-b-2 pb-5 max-sm:text-sm
   }
 
   .product-content__choose {
-    @apply mt-5 mb-3
+    @apply mt-5 mb-3 max-sm:text-lg
   }
 
   .product-content__choose-color {
-    @apply flex gap-3 pb-5 border-[var(--unactive-btn)] border-b-2
+    @apply flex gap-3 pb-5 border-[var(--unactive-btn)] border-b-2;
   }
 
   .product-content__choose-size {
-    @apply flex pb-5 border-[var(--unactive-btn)] border-b-2 max-sm:justify-between
+    @apply flex gap-3 pb-5 border-[var(--unactive-btn)] border-b-2 max-sm:justify-between max-sm:overflow-x-scroll
   }
 
   /*===========================
     Product Page - CommentsSection
   ========================= */
   .comment-heading {
-    @apply font-[700] text-[24px] max-sm:text-[20px]
+    @apply font-[700] text-[24px] max-sm:text-xl
   }
 
   .comment-header {
@@ -387,23 +395,23 @@ body {
   }
 
   .comment-quanity {
-    @apply font-[400] text-[16px] ml-2 max-sm:text-[1px]
+    @apply font-[400] text-[16px] ml-2 max-sm:text-sm
   }
 
   .comment-header__adjustBtn {
-    @apply w-[48px] h-[48px] flex-center max-sm:w-1/10
+    @apply w-[48px] h-[48px] flex-center max-sm:hidden
   }
 
   .comment-header__moreBtn {
-    @apply flex-center w-[120px] bg-[var(--unactive-btn)] rounded-full ml-3 max-sm:w-1/3
+    @apply flex-center w-[120px] bg-[var(--unactive-btn)] rounded-full ml-3 max-sm:hidden
   }
 
   .commentselector {
-    @apply max-sm:w-full
+    @apply w-full
   }
 
   .commentSelectorButton {
-    @apply w-full border-b-2 border-[var(--unactive-btn)] text-[#666666] cursor-pointer pb-3 hover:text-[var(--active-btn)] hover:font-bold hover:border-[var(--active-btn)]
+    @apply w-full border-b-2 border-[var(--unactive-btn)] text-[#666666] cursor-pointer pb-3 hover:text-[var(--active-btn)] hover:font-bold hover:border-[var(--active-btn)] max-sm:text-base
   }
 
   .comment-header__writeBtn {

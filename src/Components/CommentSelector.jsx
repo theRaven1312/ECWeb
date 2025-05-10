@@ -5,7 +5,7 @@ export default function CommentSelector({select}) {
         <div className="commentselector flex ">
             <CommentSelectorBtn btn_content="Product Detail" select={select} />
             <CommentSelectorBtn
-                btn_content="Rating and Reviews"
+                btn_content="Rating & Reviews"
                 select={select}
             />
             <CommentSelectorBtn btn_content="FAQs" select={select} />
