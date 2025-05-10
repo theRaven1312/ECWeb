@@ -8,20 +8,20 @@ const QuantitySelector = ({quannityClassName}) => {
 
     return (
         <div
-            className={`flex-center bg-gray-300 min-h-[52px] rounded-full w-30% ${quannityClassName}`}
+            className={`flex-center bg-gray-300 py-4 rounded-full w-30% ${quannityClassName}`}
         >
             <button
                 onClick={decrease}
                 className="text-xl font-bold px-4 cursor-pointer w-1/10 flex-center"
             >
-                <i class="fa-solid fa-minus hover:opacity-80"></i>
+                <i class="fa-solid fa-minus hover:opacity-80 max-sm:text-xs"></i>
             </button>
             <span className="mx-4 text-center font-bold">{quantity}</span>
             <button
                 onClick={increase}
                 className="text-xl font-bold px-4 cursor-pointer w-1/10 flex-center"
             >
-                <i class="fa-solid fa-plus hover:opacity-80"></i>
+                <i class="fa-solid fa-plus hover:opacity-80 max-sm:text-xs"></i>
             </button>
         </div>
     );
