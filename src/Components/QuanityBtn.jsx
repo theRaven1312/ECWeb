@@ -23,9 +23,6 @@ const QuantitySelector = () => {
                     +
                 </button>
             </div>
-            <button className="primary-btn bg-black text-white  w-[400px] h-[52px] rounded-full cursor-pointer hover:opacity-80 ">
-                Add to Cart
-            </button>
         </div>
     );
 };

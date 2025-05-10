@@ -452,7 +452,26 @@ body {
   }
 
   .cart-list {
-    @apply w-2/3 h-auto border-2 border-gray-300 px-5 py-5 rounded-full
+    @apply w-2/3 h-auto border-2 border-gray-300 rounded-full
   }
 
+  .cart-card {
+    @apply flex-center-between border-b-2 border-gray-300 px-20 py-5 w-full
+  }
+
+  .card-detail {
+    @apply flex gap-5
+  }
+
+  .cart-detail__name {
+    @apply font-bold text-xl
+  }
+
+  .card-action {
+    @apply relative
+  }
+
+  .card-action__remove {
+    @apply absolute top-0 right-0
+  }
 }
