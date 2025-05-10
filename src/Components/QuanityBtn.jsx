@@ -1,28 +1,28 @@
 import {useState} from "react";
 
-const QuantitySelector = () => {
+const QuantitySelector = ({quannityClassName}) => {
     const [quantity, setQuantity] = useState(1);
 
     const increase = () => setQuantity((prev) => prev + 1);
     const decrease = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
     return (
-        <div className="flex items-center space-x-4 mt-5 max-sm:justify-between">
-            <div className="flex-center bg-gray-100 max-w-[170px] min-h-[52px] rounded-full max-sm:w-[40%]">
-                <button
-                    onClick={decrease}
-                    className="text-xl font-bold px-4 cursor-pointer max-sm:w-1/3"
-                >
-                    -
-                </button>
-                <span className="mx-4 w-4 text-center">{quantity}</span>
-                <button
-                    onClick={increase}
-                    className="text-xl font-bold px-4 cursor-pointer max-sm:w-1/3"
-                >
-                    +
-                </button>
-            </div>
+        <div
+            className={`flex-center bg-gray-300 min-h-[52px] rounded-full w-30% ${quannityClassName}`}
+        >
+            <button
+                onClick={decrease}
+                className="text-xl font-bold px-4 cursor-pointer w-1/10 flex-center"
+            >
+                <i class="fa-solid fa-minus hover:opacity-80"></i>
+            </button>
+            <span className="mx-4 text-center font-bold">{quantity}</span>
+            <button
+                onClick={increase}
+                className="text-xl font-bold px-4 cursor-pointer w-1/10 flex-center"
+            >
+                <i class="fa-solid fa-plus hover:opacity-80"></i>
+            </button>
         </div>
     );
 };

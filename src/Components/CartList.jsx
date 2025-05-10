@@ -8,6 +8,18 @@ const CartList = () => {
                 color="White"
                 price="$145"
             />
+            <CartCard
+                size="Large"
+                name="Gradien Graphic T-shirt"
+                color="White"
+                price="$145"
+            />
+            <CartCard
+                size="Large"
+                name="Gradien Graphic T-shirt"
+                color="White"
+                price="$145"
+            />
         </div>
     );
 };

@@ -4,6 +4,9 @@ import RatingStar from "./RatingStar";
 
 const ProductInfo = () => {
     const score = 4.5;
+    const price = 300;
+    const discountPrice = 200;
+    const discount = 40;
     return (
         <>
             <h1 className="product-content__heading heading">
@@ -16,12 +19,12 @@ const ProductInfo = () => {
                 </p>
             </div>
             <div className="product-content__price">
-                <p className="price">$260</p>
+                <p className="price">${discountPrice}</p>
                 <p className="priceDiscount text-[#B3B3B3] line-through mr-4 ml-4">
-                    $300
+                    ${price}
                 </p>
                 <div className="product-content__discount primary-btn">
-                    -40%
+                    -{discount}%
                 </div>
             </div>
             <div className="product-content__desc desc">
@@ -42,9 +45,9 @@ const ProductInfo = () => {
                 <ChooseSizeBtn size="Large" />
                 <ChooseSizeBtn size="XLarge" />
             </div>
-            <div className="product-content__choose-quanity">
+            <div className="product-content__choose-quanity flex gap-5 mt-5">
                 <QuantitySelector />
-                <button className="primary-btn bg-black text-white  w-[400px] h-[52px] rounded-full cursor-pointer hover:opacity-80 ">
+                <button className="product-content__cartbtn primary-btn">
                     Add to Cart
                 </button>
             </div>
