@@ -1,8 +1,3 @@
 export default function ChooseSizeBtn({size}) {
-    
-    return (
-        <li className="mr-4">
-            <button className="primary-btn">{size}</button>
-        </li>
-    );
+    return <button className="primary-btn mr-4 max-sm:w-full">{size}</button>;
 }

@@ -13,8 +13,8 @@ import CommentCard from "../Components/CommentCard.jsx";
 export default function ProductionPage() {
     return (
         <>
-            <div class='flex flex-col flex-center'>
-                <div className='w-[80%] h-px bg-gray-300'></div>
+            <div class="flex flex-col flex-center">
+                <div className="w-[80%] h-px bg-gray-300"></div>
             </div>
             <MainContainer>
                 {/* ProductDetail */}
@@ -39,7 +39,6 @@ export default function ProductionPage() {
                 <CommentSelector />
 
                 <div className="comment-header">
-
                     <div className="flex items-center">
                         <h1 className="comment-heading">All reviews</h1>
                         <span className="comment-quanity">(451)</span>
@@ -51,7 +50,7 @@ export default function ProductionPage() {
                         </button>
 
                         <div className="comment-header__moreBtn">
-                            <span>Latest</span>
+                            <span className="max-sm:text-sm">Latest</span>
                             <button className="w-[16px] h-[16px] cursor-pointer flex-center ml-2 hover:bg-gray-100 rounded-full">
                                 <i class="fa-solid fa-angle-down "></i>
                             </button>
@@ -61,15 +60,14 @@ export default function ProductionPage() {
                             Write a preview
                         </button>
                     </div>
-
                 </div>
-                <div className='commentSection'>
-                    <CommentCard/>
-                    <CommentCard/>
-                    <CommentCard/>
-                    <CommentCard/>
-                    <CommentCard/>
-                    <CommentCard/>
+                <div className="commentSection">
+                    <CommentCard />
+                    <CommentCard />
+                    <CommentCard />
+                    <CommentCard />
+                    <CommentCard />
+                    <CommentCard />
                 </div>
                 <button className="primary-btn learnMoreBtn">
                     Learn More Reviews

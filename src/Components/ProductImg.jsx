@@ -26,7 +26,7 @@ const ProductImg = () => {
             <div className="img-right ">
                 <img
                     src={selectedImage}
-                    className="rounded-2xl max-w-md"
+                    className="rounded-2xl w-full h-full"
                     alt="main"
                 />
             </div>
