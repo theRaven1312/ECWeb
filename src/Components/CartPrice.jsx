@@ -3,7 +3,7 @@ import PriceDiscount from "./PriceDiscount";
 const CartPrice = () => {
     return (
         <div className="cart-price">
-            <div className="p-5 flex flex-col gap-5">
+            <div className="p-5 flex flex-col gap-5 max-sm:gap-3">
                 <h1 className="cart-price__heading">Order Summary</h1>
                 <ol className="cart-price__detail">
                     <li className="price-item ">
@@ -18,7 +18,7 @@ const CartPrice = () => {
                         <p className="price-item__price ">$15</p>
                     </li>
                 </ol>
-                <div className="w-[80%] h-px bg-gray-300 mx-auto"></div>
+                <div className="w-[90%] h-px bg-gray-300 mx-auto"></div>
                 <div className="cart-price__total">
                     <p className="cart-price__total--desc">Total</p>
                     <p className="cart-price__total--price">$467</p>
