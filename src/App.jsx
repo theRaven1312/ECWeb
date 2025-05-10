@@ -10,8 +10,8 @@ export const App = () => {
         <div>
             <Navbar />
             {/* <HomePage /> */}
-            <ProductionPage />
-            {/* <CartPage /> */}
+            {/* <ProductionPage /> */}
+            <CartPage />
             <Footer />
         </div>
     );
