@@ -339,6 +339,10 @@ body {
 
   }
 
+  .product-content__cartbtn {
+    @apply bg-black text-white w-[400px] h-[52px] rounded-full cursor-pointer hover:opacity-80 max-sm:w-[60%]
+  }
+
   .product-content__heading {
     @apply max-sm:text-2xl
   }
@@ -448,15 +452,27 @@ body {
 ======================*/
 @layer {
   .cart {
-    @apply flex
+    @apply flex gap-5 max-sm:flex-col
   }
 
+  .cart-page {
+    @apply flex flex-col px-16 py-4 gap-5 max-sm:px-5
+  }
+
+  .cart-heading {
+    @apply font-bold text-4xl font-integral
+  }
+
+  /* =======================
+      Cart-list
+  =========================*/
+
   .cart-list {
-    @apply w-2/3 h-auto border-2 border-gray-300 rounded-full
+    @apply w-[57.6%] h-full border-2 border-gray-300 rounded-2xl max-sm:w-full
   }
 
   .cart-card {
-    @apply flex-center-between border-b-2 border-gray-300 px-20 py-5 w-full
+    @apply flex-center-between px-5 py-5 w-full relative
   }
 
   .card-detail {
@@ -467,11 +483,85 @@ body {
     @apply font-bold text-xl
   }
 
-  .card-action {
-    @apply relative
+  .cart-detail__size, .cart-detail__color {
+    @apply text-sm
+  }
+
+  .cart-detail__price {
+    @apply font-bold text-2xl
   }
 
   .card-action__remove {
-    @apply absolute top-0 right-0
+    @apply absolute top-5 right-5
+  }
+
+  .card-action__remove i {
+    @apply text-red-600 cursor-pointer hover:opacity-80
+  }
+
+  .cart-card:not(:last-child)::after {
+    content: "";
+    @apply block w-[93.3%] h-0.5 bg-gray-300 left-1/2 absolute bottom-0;
+    transform: translateX(-50%);
+  }
+
+  /* =======================
+    Cart-price
+  =========================*/
+  .cart-price {
+    @apply w-[41%] h-full border-2 border-gray-300 rounded-2xl max-sm:w-full
+  }
+
+  .cart-price__heading {
+    @apply font-bold text-2xl
+  }
+
+  .cart-price__total,
+  .price-item {
+    @apply flex-center-between
+  }
+
+  .cart-price__total--desc,
+  .price-item__desc {
+    @apply text-xl font-normal text-gray-400
+  }
+
+  .cart-price__total--price,
+  .price-item__price {
+    @apply text-xl font-bold
+  }
+
+
+  .cart-price__total--desc {
+    @apply text-black
+  }
+
+  .cart-price__total--price {
+    @apply text-2xl
+  }
+
+  .cart-price__detail {
+    @apply flex flex-col gap-5
+  }
+
+  .cart-price__promocode {
+    @apply flex-center-between relative gap-3
+  }
+
+  .cart-price__promocode i {
+    @apply absolute left-4 text-gray-400
+  }
+
+  .cart-price__promocode--input {
+    @apply bg-gray-300 px-2 w-[71%] py-3 rounded-2xl pl-10 flex-center text-base text-gray-500 font-normal
+  }
+
+  .cart-price__btn,
+  .cart-price__promocode--sumbit {
+    @apply bg-black text-white p-3 rounded-full w-[35%] text-base font-medium cursor-pointer hover:opacity-80
+  }
+
+  .cart-price__btn {
+    @apply w-full
   }
 }

@@ -9,20 +9,21 @@ const CartPage = () => {
             <div class="flex flex-col flex-center">
                 <div className="w-[80%] h-px bg-gray-300"></div>
             </div>
+            <div className="cart-page">
+                {/* Direction Link */}
+                <ol className="direction">
+                    <a href="#!">Home</a>
+                    <DirectLink link="Cart" linkClassName="activeLink" />
+                </ol>
 
-            {/* Direction Link */}
-            <ol className="direction">
-                <a href="#!">Home</a>
-                <DirectLink link="Cart" linkClassName="activeLink" />
-            </ol>
+                {/* Cart-heading */}
+                <h1 className="cart-heading">YOUR CART</h1>
 
-            {/* Cart-heading */}
-            <h1 className="cart-heading heading">YOUR CART</h1>
-
-            {/* Cart */}
-            <div className="cart">
-                <CartList />
-                <CartPrice />
+                {/* Cart */}
+                <div className="cart">
+                    <CartList />
+                    <CartPrice />
+                </div>
             </div>
         </>
     );
