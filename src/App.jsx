@@ -4,6 +4,7 @@ import ProductionPage from "./pages/ProductionPage";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 import CartPage from "./pages/CartPage";
+import CategoryPage from "./pages/CategoryPage";
 
 export const App = () => {
     return (
@@ -11,7 +12,8 @@ export const App = () => {
             <Navbar />
             {/* <HomePage /> */}
             {/* <ProductionPage /> */}
-            <CartPage />
+            {/* <CartPage /> */}
+            <CategoryPage/>
             <Footer />
         </div>
     );
