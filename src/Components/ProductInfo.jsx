@@ -1,4 +1,5 @@
 import ChooseSizeBtn from "./ChooseSizeBtn";
+import ColorPicker from "./ColorPicker";
 import QuantitySelector from "./QuanityBtn";
 import RatingStar from "./RatingStar";
 
@@ -7,6 +8,7 @@ const ProductInfo = () => {
     const price = 300;
     const discountPrice = 200;
     const discount = 40;
+    const COLORS = ["gray", "blue", "red"];
     return (
         <>
             <h1 className="product-content__heading heading">
@@ -33,11 +35,7 @@ const ProductInfo = () => {
                 and style.
             </div>
             <div className="product-content__choose desc">Select Color</div>
-            <div className="product-content__choose-color ">
-                <div className="color-chooser bg-red-500"></div>
-                <div className="color-chooser bg-blue-400"></div>
-                <div className="color-chooser bg-gray-400"></div>
-            </div>
+            <ColorPicker colors={COLORS} />
             <div className="product-content__choose desc">Choose Size</div>
             <div className="product-content__choose-size">
                 <ChooseSizeBtn size="Small" />

@@ -10,10 +10,10 @@ export const App = () => {
     return (
         <div>
             <Navbar />
-            {/* <HomePage /> */}
-            {/* <ProductionPage /> */}
-            {/* <CartPage /> */}
-            <CategoryPage/>
+            <HomePage />
+            <ProductionPage />
+            <CartPage />
+            <CategoryPage />
             <Footer />
         </div>
     );
