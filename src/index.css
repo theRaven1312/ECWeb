@@ -73,6 +73,17 @@ body {
 
 @layer components {
 
+  .filter-productTypeList-item {
+    @apply flex-center-between;
+  }
+
+  .filter-heading {
+    @apply font-bold text-xl text-black;
+  }
+  .divider {
+    @apply w-full h-px bg-gray-400
+  }
+
   .footer {
     @apply flex-center flex-col mt-20;
   }
@@ -190,7 +201,7 @@ body {
   }
 
   .productCard {
-    @apply flex flex-col gap-2 p-4 rounded-3xl hover:shadow-lg hover:-translate-y-6 z-2 cursor-pointer border-gray-100 transition-all;
+    @apply flex flex-col gap-2 rounded-3xl hover:-translate-y-6 z-2 cursor-pointer border-gray-100 transition-all;
   }
 
   .productImg {
