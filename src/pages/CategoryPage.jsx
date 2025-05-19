@@ -165,7 +165,7 @@ const CategoryPage = () => {
                                 <li>10</li>
                             </ul>
 
-                            <div className="page-bth flex-center-between gap-2 gap-2 py-2 px-4 rounded-2xl border-1 border-gray-300">
+                            <div className="page-bth flex-center-between gap-2 py-2 px-4 rounded-2xl border-1 border-gray-300">
                                 <div>Next</div>
                                 <i class="fa-solid fa-arrow-right"></i>
                             </div>

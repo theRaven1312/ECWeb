@@ -80,6 +80,7 @@ body {
   .filter-heading {
     @apply font-bold text-xl text-black;
   }
+
   .divider {
     @apply w-full h-px bg-gray-400
   }
@@ -575,4 +576,91 @@ body {
   .cart-price__btn {
     @apply w-full
   }
+}
+
+/*=======================
+    LoginPage-Login
+=======================*/
+
+.login-page {
+  @apply w-screen h-screen flex-center bg-linear-to-r from-[#e2e2e2] to-[#c9d6ff]
+}
+
+.login-container {
+  @apply w-212 h-137 relative flex-center bg-white rounded-3xl shadow-2xl overflow-hidden
+}
+
+.register-form,
+.login-form {
+  @apply absolute right-0 w-1/2 h-full flex items-center text-center p-10 bg-white z-1
+}
+
+.register-form form,
+.login-form form {
+  @apply w-full flex flex-col gap-4
+}
+
+.login-form__heading {
+  @apply text-4xl
+}
+
+.login-form__input {
+  @apply flex-center relative
+}
+
+.login-form__input input {
+  @apply bg-gray-300 p-3 rounded-xl pl-10 flex-center text-black w-full text-base font-bold
+}
+
+.login-form__input i {
+  @apply absolute right-5 top-[50%] translate-y-[-50%]
+}
+
+.login-form__btn {
+  @apply p-3 rounded-xl bg-black w-full mx-auto text-white cursor-pointer hover:opacity-80 font-bold shadow-lg
+}
+
+.login-form__other {
+  @apply flex-center gap-5
+}
+
+.login-form__other i {
+  @apply border-2 px-3 py-2 text-lg rounded-xl border-gray-300
+}
+
+/*=======================
+    LoginPage-Register
+=======================*/
+.register-form {
+  @apply hidden
+}
+
+/*=======================
+    LoginPage-ToggleBox
+=======================*/
+.toggle-box {
+  @apply w-full h-full absolute bg-black
+}
+
+.toggle-box::before {
+  content: ' ';
+  width: 300%;
+  left: -250%;
+  height: 100%;
+  background: black;
+  position: absolute;
+  border-radius: 150%;
+  z-index: 2;
+}
+
+.toggle-container {
+  @apply w-[50%] h-full flex-center flex-col gap-4 p-10 absolute z-1
+}
+
+.toggle-left {
+  @apply absolute left-0
+}
+
+.toggle-btn {
+  @apply bg-transparent border-2 border-white shadow-none w-40
 }

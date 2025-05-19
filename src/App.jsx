@@ -5,16 +5,18 @@ import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 import CartPage from "./pages/CartPage";
 import CategoryPage from "./pages/CategoryPage";
+import LoginPage from "./pages/LoginPage";
 
 export const App = () => {
     return (
         <div>
-            <Navbar />
+            <LoginPage />
+            {/* <Navbar />
             <HomePage />
             <ProductionPage />
             <CartPage />
             <CategoryPage />
-            <Footer />
+            <Footer /> */}
         </div>
     );
 };
