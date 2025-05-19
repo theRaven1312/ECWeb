@@ -12,11 +12,13 @@ export const App = () => {
         <div>
             <LoginPage />
             {/* <Navbar />
+            <Navbar />
             <HomePage />
             <ProductionPage />
             <CartPage />
             <CategoryPage />
-            <Footer /> */}
+            <Footer />
+            */}
         </div>
     );
 };
