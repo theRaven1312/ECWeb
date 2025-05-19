@@ -1,8 +1,16 @@
+import {useState} from "react";
+
 const LoginPage = () => {
+    let [isActive, setIsActive] = useState(null);
+
+    const handleAddClass = () => setIsActive(true);
+    const handleRemoveClass = () => setIsActive(false);
+    console.log(isActive);
+
     return (
         <div className="login-page">
-            <div className="login-container">
-                <div className="login-form">
+            <div className={`login-container ${isActive ? "active" : ""}`}>
+                <div className="login-form form-box">
                     <form action=" ">
                         <h1 className="login-form__heading heading">Login</h1>
                         <div className="login-form__input">
@@ -30,7 +38,7 @@ const LoginPage = () => {
                         <p>or login with other platform</p>
                         <div className="login-form__other">
                             <a href="#">
-                                <i class="fa-solid fa-envelope"></i>
+                                <i class="fa-brands fa-google"></i>
                             </a>
                             <a href="#">
                                 <i class="fa-brands fa-facebook"></i>
@@ -45,10 +53,10 @@ const LoginPage = () => {
                     </form>
                 </div>
 
-                <div className="register-form">
+                <div className="register-form form-box">
                     <form action=" ">
                         <h1 className="login-form__heading heading">
-                            Register
+                            Registration
                         </h1>
                         <div className="login-form__input">
                             <input
@@ -79,7 +87,7 @@ const LoginPage = () => {
                         <p>or register with other platform</p>
                         <div className="login-form__other">
                             <a href="#">
-                                <i class="fa-solid fa-google"></i>
+                                <i class="fa-brands fa-google"></i>
                             </a>
                             <a href="#">
                                 <i class="fa-brands fa-facebook"></i>
@@ -96,10 +104,28 @@ const LoginPage = () => {
 
                 <div className="toggle-box">
                     <div className="toggle-container toggle-left">
-                        <h1 className="heading text-white">Welcome Back</h1>
-                        <p className="text-white">Don't have an account</p>
-                        <button className="login-form__btn toggle-btn">
+                        <h1 className="heading text-white max-sm:text-2xl">
+                            Welcome Back
+                        </h1>
+                        <p className="text-white">Don't have an account?</p>
+                        <button
+                            className="login-form__btn toggle-btn"
+                            onClick={handleAddClass}
+                        >
                             Register
+                        </button>
+                    </div>
+
+                    <div className="toggle-container toggle-right">
+                        <h1 className="heading text-white max-sm:text-xl max-xl:text-2xl">
+                            Hello, Welcome
+                        </h1>
+                        <p className="text-white">Already have an account?</p>
+                        <button
+                            className="login-form__btn toggle-btn"
+                            onClick={handleRemoveClass}
+                        >
+                            Login
                         </button>
                     </div>
                 </div>
