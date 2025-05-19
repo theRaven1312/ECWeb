@@ -6,25 +6,33 @@ import Footer from "./Components/Footer";
 import CartPage from "./pages/CartPage";
 import CategoryPage from "./pages/CategoryPage";
 import LoginPage from "./pages/LoginPage";
-import {BrowserRouter as Router, Routes, Route,} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 
+const AppContent = () => {
+  const location = useLocation();
+  const hideLayout = location.pathname === "/login";
 
-export const App = () => {
-    return (
-        <Router>
-            <div>
-                <Navbar/>
-                    <Routes>
-                        <Route path='/' element={<HomePage/>}/>
-                        <Route path='/login' element={<LoginPage/>}/>
-                        <Route path='/products' element={<ProductionPage/>}/>
-                        <Route path='/category' element={<CategoryPage/>}/>
-                        <Route path='/cart' element={<CartPage/>}/>
-                    </Routes>
-                <Footer/>
-            </div>
-        </Router>
-    );
+  return (
+    <>
+      <Navbar/>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/products" element={<ProductionPage />} />
+        <Route path="/category" element={<CategoryPage />} />
+        <Route path="/cart" element={<CartPage />} />
+      </Routes>
+      {!hideLayout && <Footer />}
+    </>
+  );
+};
+
+const App = () => {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
+  );
 };
 
 export default App;
