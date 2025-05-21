@@ -119,3 +119,20 @@ Quy định chung.
 
 ---
 > Đây là quy tắc sống của dự án. Nếu có thay đổi, toàn nhóm phải đồng thuận và cập nhật file ROC.md.
+
+## VII. Backend file structure
+Thiết kế hệ thống file backend như sau.
+```
+backend/
+├── controllers/
+│   └── userController.js
+├── models/
+│   └── userModel.js
+├── routes/
+│   └── userRoutes.js
+├── config/
+│   └── db.js
+├── app.js
+├── .env
+├── package.json
+```
