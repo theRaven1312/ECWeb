@@ -125,12 +125,14 @@ Quy định chung.
 Thiết kế hệ thống file backend như sau.
 ```
 backend/
+├── middelwares/
+│   └── error.middleware.js
 ├── controllers/
-│   └── userController.js
+│   └── user.controller.js
 ├── models/
-│   └── userModel.js
+│   └── user.model.js
 ├── routes/
-│   └── userRoutes.js
+│   └── user.route.js
 ├── config/
 │   └── db.js
 ├── app.js
