@@ -40,6 +40,7 @@ Quy định chung.
 | Sửa lỗi   | `bugfix/`   | `bugfix/fix-cart-update` |
 | Refactor  | `refactor/` | `refactor/navbar-ui`     |
 | Hotfix    | `hotfix/`   | `hotfix/crash-on-login`  |
+| Dev       | `dev/`      | `dev/new-thing`          |
 
 ---
 
