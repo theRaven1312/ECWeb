@@ -28,12 +28,16 @@ app.use(express.json());
 // // Enable CORS
 // app.use(cors());
 
-//Connect MongoDB
-
 const port = process.env.PORT || 3000;
 
 app.use(`${api}/user`, userRouter);
+
 app.use(`${api}/products`, productRouter);
+
+//test
+app.get(`/`, (req, res) => {
+    res.send("API is running...");
+});
 
 app.listen(port, () => {
     console.log(`Server is runiing on http://localhost:${port}`);
