@@ -1,6 +1,5 @@
 //Thư viện
 import express from "express";
-import mongoose from "mongoose";
 import "dotenv/config";
 import morgan from "morgan";
 import cors from "cors";

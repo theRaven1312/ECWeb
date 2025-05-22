@@ -1,4 +1,4 @@
-# Rule of Code
+k # Rule of Code
 
 Quy định chung.
 
@@ -8,23 +8,23 @@ Quy định chung.
 
 1. **Tuyệt đối không commit trực tiếp lên:**`main`
 
-   * Luôn tạo nhánh mới để phát triển: `git checkout -b feature/ten-chuc-nang`
+    - Luôn tạo nhánh mới để phát triển: `git checkout -b feature/ten-chuc-nang`
 
 2. **Cập nhật nhánh chính trước khi phát triển:**
 
-   ```bash
-   git checkout main
-   git pull origin main
-   git checkout feature/ten-chuc-nang
-   git merge main
-   ```
+    ```bash
+    git checkout main
+    git pull origin main
+    git checkout feature/ten-chuc-nang
+    git merge main
+    ```
 
 3. **Commit message rõ ràng, nhất quán và có ý nghĩa cụ thể.**
 
-   ```
-   feat: thêm giao diện giỏ hàng
-   fix: sửa lỗi responsive header
-   ```
+    ```
+    feat: thêm giao diện giỏ hàng
+    fix: sửa lỗi responsive header
+    ```
 
 4. **Đẩy code thường xuyên** để tránh xung đột và mất dữ liệu.
 
@@ -90,22 +90,23 @@ Quy định chung.
 | ------- | ------------------ | --------------------------- |
 | Biến    | camelCase          | `userList`, `productDetail` |
 | Hàm     | camelCase          | `handleClick`, `fetchData`  |
-| Hằng số | UPPER\_SNAKE\_CASE | `API_URL`, `MAX_RETRY`      |
+| Hằng số | UPPER_SNAKE_CASE   | `API_URL`, `MAX_RETRY`      |
 | Hook    | Bắt đầu bằng `use` | `useAuth()`, `useCart()`    |
 
 ---
 
-
 ### 3. Khi dùng Tailwind CSS
-- Sử dụng trực tiếp utility classes trong JSX/HTML.
-- Không cần đặt class riêng nếu không tái sử dụng.
+
+-   Sử dụng trực tiếp utility classes trong JSX/HTML.
+-   Không cần đặt class riêng nếu không tái sử dụng.
 
 ### 4. Sử dụng CSS theo chuẩn BEM
-- Cấu trúc: block__element--modifier
 
-``` css
+-   Cấu trúc: block\_\_element--modifier
+
+```css
 .nav__item--active {
-  font-weight: bold;
+    font-weight: bold;
 }
 ```
 
@@ -119,10 +120,13 @@ Quy định chung.
 4. Tránh viết CSS tay nếu Tailwind có hỗ trợ.
 
 ---
+
 > Đây là quy tắc sống của dự án. Nếu có thay đổi, toàn nhóm phải đồng thuận và cập nhật file ROC.md.
 
 ## VII. Backend file structure
+
 Thiết kế hệ thống file backend như sau.
+
 ```
 backend/
 ├── middelwares/

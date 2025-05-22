@@ -1,7 +1,8 @@
 import userService from "../services/user.service.js";
+
+//Đăng kí tài khoản
 const createUser = async (req, res) => {
     try {
-        console.log(req.body);
         const {name, email, password, phone} = req.body;
         const respone = await userService.createUser(req.body);
         return res.status(200).json(respone);
@@ -28,4 +29,25 @@ const createUser = async (req, res) => {
     }
 };
 
-export default {createUser};
+//Đăng nhập tài khoản
+const logInUser = async (req, res) => {
+    try {
+        const {email, password} = req.body;
+        const respone = await userService.logInUser(req.body);
+        return res.status(200).json(respone);
+    } catch (err) {
+        console.error("ERROR:", err);
+
+        if (err.name === "ValidationError") {
+            const messages = Object.values(err.errors).map(
+                (val) => val.message
+            );
+            return res.status(400).json({success: false, errors: messages});
+        }
+
+        // Lỗi khác
+        res.status(500).json({success: false, error: "Lỗi server"});
+    }
+};
+
+export default {createUser, logInUser};
