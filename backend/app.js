@@ -10,7 +10,7 @@ import path from "path";
 import "./config/mongodb.js";
 
 //Router files
-import userRouter from "./routes/UserRouter.js";
+import userRouter from "./routes/user.routes.js";
 import productRouter from "./routes/product.routes.js";
 
 const app = express();
@@ -28,12 +28,16 @@ app.use(express.json());
 // // Enable CORS
 // app.use(cors());
 
-//Connect MongoDB
-
 const port = process.env.PORT || 3000;
 
 app.use(`${api}/users`, userRouter);
+
 app.use(`${api}/products`, productRouter);
+
+//test
+app.get(`/`, (req, res) => {
+    res.send("API is running...");
+});
 
 app.listen(port, () => {
     console.log(`Server is runiing on http://localhost:${port}`);
