@@ -12,6 +12,7 @@ import "./config/mongodb.js";
 //Router files
 import userRouter from "./routes/user.routes.js";
 import productRouter from "./routes/product.routes.js";
+import categoryRouter from "./routes/category.routes.js";
 
 const app = express();
 const api = process.env.API_URL;
@@ -33,6 +34,8 @@ const port = process.env.PORT || 3000;
 app.use(`${api}/users`, userRouter);
 
 app.use(`${api}/products`, productRouter);
+
+app.use(`${api}/categories`, categoryRouter);
 
 //test
 app.get(`/`, (req, res) => {
