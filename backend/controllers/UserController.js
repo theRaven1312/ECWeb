@@ -1,5 +1,4 @@
-const userService = require("../services/UserService");
-
+import userService from "../services/UserService.js";
 const createUser = async (req, res) => {
     try {
         console.log(req.body);
@@ -29,4 +28,4 @@ const createUser = async (req, res) => {
     }
 };
 
-module.exports = {createUser};
+export default {createUser};

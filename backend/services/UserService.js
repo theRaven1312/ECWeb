@@ -1,5 +1,4 @@
-const User = require("../models/UserModel");
-
+import User from "../models/UserModel.js";
 const createUser = (newUser) => {
     return new Promise(async (resolve, reject) => {
         const {name, email, password, phone} = newUser;
@@ -23,4 +22,4 @@ const createUser = (newUser) => {
     });
 };
 
-module.exports = {createUser};
+export default {createUser};

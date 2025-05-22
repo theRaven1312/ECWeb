@@ -1,16 +1,15 @@
 //Thư viện
-const express = require("express");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-const cors = require("cors");
-const morgan = require("morgan");
-const helmet = require("helmet");
-const path = require("path");
-
-require("dotenv").config({path: "../.env"});
+import express from "express";
+import mongoose from "mongoose";
+import "dotenv/config";
+import morgan from "morgan";
+import cors from "cors";
+import helmet from "helmet";
+import path from "path";
 
 //Router files
-const userRouter = require("./routes/UserRouter");
+import userRouter from "./routes/UserRouter.js";
+import productRouter from "./routes/product.routes.js";
 
 const app = express();
 
@@ -27,10 +26,12 @@ app.use(helmet());
 app.use(cors());
 
 //Connect MongoDB
-require("./config/mongodb");
+import "./config/mongodb.js";
+
 const port = process.env.PORT || 3000;
 
 app.use("/api/user", userRouter);
+app.use("/api/product", productRouter);
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);

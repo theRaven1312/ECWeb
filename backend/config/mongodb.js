@@ -1,8 +1,6 @@
-//LP0pPUs3Rn9nmbtn;
+import "dotenv/config";
 
-require("dotenv").config({path: "../.env"});
-
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 console.log("Mongo URI:", process.env.MONGO_URI);
 
 mongoose
