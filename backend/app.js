@@ -7,33 +7,34 @@ import morgan from "morgan";
 import cors from "cors";
 import helmet from "helmet";
 import path from "path";
+import "./config/mongodb.js";
 
 //Router files
 import userRouter from "./routes/UserRouter.js";
 import productRouter from "./routes/product.routes.js";
 
 const app = express();
+const api = process.env.API_URL;
 
 // Body parser
 app.use(express.json());
 
-// Dev logging middleware
-if (process.env.NODE_ENV === "development") {
-    app.use(morgan("dev"));
-}
-// Security headers
-app.use(helmet());
-// Enable CORS
-app.use(cors());
+// // Dev logging middleware
+// if (process.env.NODE_ENV === "development") {
+//     app.use(morgan("dev"));
+// }
+// // Security headers
+// app.use(helmet());
+// // Enable CORS
+// app.use(cors());
 
 //Connect MongoDB
-import "./config/mongodb.js";
 
 const port = process.env.PORT || 3000;
 
-app.use("/api/user", userRouter);
-app.use("/api/product", productRouter);
+app.use(`${api}/user`, userRouter);
+app.use(`${api}/products`, productRouter);
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
+    console.log(`Server is runiing on http://localhost:${port}`);
 });
