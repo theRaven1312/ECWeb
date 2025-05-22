@@ -10,7 +10,7 @@ import path from "path";
 import "./config/mongodb.js";
 
 //Router files
-import userRouter from "./routes/UserRouter.js";
+import userRouter from "./routes/user.routes.js";
 import productRouter from "./routes/product.routes.js";
 
 const app = express();
