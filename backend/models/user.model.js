@@ -27,28 +27,18 @@ const UserSchema = new mongoose.Schema(
         phone: {
             type: String,
             trim: true,
+            default: "",
         },
         role: {
             type: String,
             enum: ["user", "admin"],
             default: "user",
         },
-        // addresses: [
-        //     {
-        //         street: String,
-        //         city: String,
-        //         // state: String,
-        //         // postalCode: String,
-        //         // country: {
-        //         //     type: String,
-        //         //     default: "Vietnam",
-        //         // },
-        //         // isDefault: {
-        //         //     type: Boolean,
-        //         //     default: false,
-        //         // },
-        //     },
-        // ],
+        address: {
+            type: String,
+            default: "",
+        },
+
         resetPasswordToken: String,
         resetPasswordExpire: Date,
     },

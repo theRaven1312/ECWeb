@@ -5,13 +5,12 @@ import userToken from "./jwt.service.js";
 //Đăng kí tài khoản
 const createUser = (newUser) => {
     return new Promise(async (resolve, reject) => {
-        const {name, email, password, phone} = newUser;
+        const {name, email, password} = newUser;
         try {
             const createUser = await User.create({
                 name,
                 email,
                 password,
-                phone,
             });
             if (createUser) {
                 resolve({
@@ -77,4 +76,36 @@ const logInUser = (userLogIn) => {
     });
 };
 
-export default {createUser, logInUser};
+//Chỉnh sửa thông tin tài khoản
+const updateUser = (userId, dataUpdate) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //Tìm user có id trong route và kiểm tra user đó có tồn tại hay không
+            const checkUser = await User.findById(userId);
+            console.log(checkUser);
+            if (checkUser == null) {
+                resolve({
+                    status: "ERROR",
+                    message: "Tài khoản không tồn tại",
+                });
+            }
+
+            //Tìm user có id trong route và cập nhật bằng dataUpdate
+            //{new: true} dùng để data trả về là data đã được cập nhật
+            const hasUpdateUser = await User.findByIdAndUpdate(
+                userId,
+                dataUpdate,
+                {new: true}
+            );
+            resolve({
+                status: "OK",
+                message: "Chỉnh sửa thành công",
+                data: hasUpdateUser,
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
+export default {createUser, logInUser, updateUser};

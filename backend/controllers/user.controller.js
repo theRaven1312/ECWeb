@@ -50,4 +50,26 @@ const logInUser = async (req, res) => {
     }
 };
 
-export default {createUser, logInUser};
+//Chỉnh sửa thông tin tài khoản
+const updateUser = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const dataUpdate = req.body;
+        const respone = await userService.updateUser(userId, dataUpdate);
+        return res.status(200).json(respone);
+    } catch (err) {
+        console.error("ERROR:", err);
+
+        if (err.name === "ValidationError") {
+            const messages = Object.values(err.errors).map(
+                (val) => val.message
+            );
+            return res.status(400).json({success: false, errors: messages});
+        }
+
+        // Lỗi khác
+        res.status(500).json({success: false, error: "Lỗi server"});
+    }
+};
+
+export default {createUser, logInUser, updateUser};
