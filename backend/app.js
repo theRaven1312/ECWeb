@@ -1,33 +1,39 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import bodyParser from 'body-parser';
-import morgan from 'morgan';
-import "dotenv/config";
-import productsRouter from './routes/product.routes.js';
-import cors from 'cors';
 
+//Thư viện
+import express from "express";
+import mongoose from "mongoose";
+import "dotenv/config";
+import morgan from "morgan";
+import cors from "cors";
+import helmet from "helmet";
+import path from "path";
+
+//Router files
+import userRouter from "./routes/UserRouter.js";
+import productRouter from "./routes/product.routes.js";
 
 const app = express();
-const api = process.env.API_URL;
 
-app.use(cors({
-    origin: '*'
-}));
+// Body parser
+app.use(express.json());
 
-// Middleware
-app.use(bodyParser.json());
-app.use(morgan('tiny'));
+// Dev logging middleware
+if (process.env.NODE_ENV === "development") {
+    app.use(morgan("dev"));
+}
+// Security headers
+app.use(helmet());
+// Enable CORS
+app.use(cors());
 
-// Routes
-app.use(`${api}/products`, productsRouter)
+//Connect MongoDB
+import "./config/mongodb.js";
 
+const port = process.env.PORT || 3000;
 
-// Database connection
-mongoose.connect(process.env.DB_URI )
-.then(() => {console.log('Database connection is ready')})
-.catch((err) => {console.log(err)})
+app.use("/api/user", userRouter);
+app.use("/api/product", productRouter);
 
-app.listen(3000, () => {
-    console.log(api);
-    console.log('Server is running http://localhost:3000');
-})
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`);
+});
