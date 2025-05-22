@@ -32,7 +32,7 @@ app.use(express.json());
 
 const port = process.env.PORT || 3000;
 
-app.use(`${api}/user`, userRouter);
+app.use(`${api}/users`, userRouter);
 app.use(`${api}/products`, productRouter);
 
 app.listen(port, () => {
