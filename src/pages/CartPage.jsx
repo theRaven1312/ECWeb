@@ -10,11 +10,6 @@ const CartPage = () => {
                 <div className="w-[80%] h-px bg-gray-300"></div>
             </div>
             <div className="cart-page">
-                {/* Direction Link */}
-                <ol className="direction">
-                    <a href="#!">Home</a>
-                    <DirectLink link="Cart" linkClassName="activeLink" />
-                </ol>
 
                 {/* Cart-heading */}
                 <h1 className="cart-heading">YOUR CART</h1>

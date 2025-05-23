@@ -17,13 +17,6 @@ export default function ProductionPage() {
                 <div className="w-[80%] h-px bg-gray-300"></div>
             </div>
             <MainContainer>
-                {/* ProductDetail */}
-                <ol className="direction">
-                    <a href="#!">Home</a>
-                    <DirectLink link="Shop" />
-                    <DirectLink link="Men" />
-                    <DirectLink link="T-Shirt" linkClassName="activeLink" />
-                </ol>
 
                 <div className="product-container">
                     <div className="product-img">

@@ -19,7 +19,6 @@ const api = process.env.API_URL;
 
 // Body parser
 app.use(express.json());
-
 // // Dev logging middleware
 app.use(morgan("dev"));
 // // Security headers

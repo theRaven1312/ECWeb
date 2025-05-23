@@ -19,7 +19,7 @@ const AppContent = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/product" element={<ProductionPage />} />
-        <Route path="/category" element={<CategoryPage />} />
+        <Route path="/category" element={<CategoryPage/>} />
         <Route path="/cart" element={<CartPage />} />
       </Routes>
       {!hideLayout && <Footer />}

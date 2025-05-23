@@ -18,10 +18,12 @@ const CategoryPage = () => {
         "#F9FAFB",
         "#000000",
     ];
+
     return (
         <div className="main-container items-baseline">
             <div className="divider"></div>
-            <DirectLink />
+
+
             <div className="flex w-full gap-12 ">
                 <div className="filter flex flex-col gap-4 p-4 w-1/4 text-gray-500 border-1 border-gray-300 rounded-3xl max-sm:hidden">
                     <div className="filter-heading flex justify-between items-center">
