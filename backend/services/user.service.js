@@ -7,6 +7,7 @@ const createUser = (newUser) => {
     return new Promise(async (resolve, reject) => {
         const {name, email, password} = newUser;
         try {
+            //Khởi tạo user
             const createUser = await User.create({
                 name,
                 email,
@@ -30,6 +31,7 @@ const logInUser = (userLogIn) => {
     return new Promise(async (resolve, reject) => {
         const {email, password} = userLogIn;
         try {
+            //Kiểm tra email và password được nhập hay chưa
             if (!email || !password) {
                 resolve({
                     status: "ERROR",
@@ -37,6 +39,7 @@ const logInUser = (userLogIn) => {
                 });
             }
 
+            //KIểm tra email có tồn tại không
             const checkUser = await User.findOne({email}).select("+password");
             if (checkUser == null) {
                 resolve({
@@ -44,6 +47,8 @@ const logInUser = (userLogIn) => {
                     message: "Tài khoản không tồn tại",
                 });
             }
+
+            //Kiểm tra mật khẩu
             const comparePassword = bcrypt.compareSync(
                 password,
                 checkUser.password
@@ -54,11 +59,13 @@ const logInUser = (userLogIn) => {
                     message: "Mật khẩu sai",
                 });
             }
+            //Cung cấp access_token khi đăng nhập thành công
             const accessToken = await userToken.generateAccessToken({
                 id: checkUser.id,
                 role: checkUser.role,
             });
 
+            //Refresh token khi hết hạn
             const refreshToken = await userToken.generateRefreshToken({
                 id: checkUser.id,
                 role: checkUser.role,
@@ -82,7 +89,6 @@ const updateUser = (userId, dataUpdate) => {
         try {
             //Tìm user có id trong route và kiểm tra user đó có tồn tại hay không
             const checkUser = await User.findById(userId);
-            console.log(checkUser);
             if (checkUser == null) {
                 resolve({
                     status: "ERROR",
@@ -91,7 +97,6 @@ const updateUser = (userId, dataUpdate) => {
             }
 
             //Tìm user có id trong route và cập nhật bằng dataUpdate
-            //{new: true} dùng để data trả về là data đã được cập nhật
             const hasUpdateUser = await User.findByIdAndUpdate(
                 userId,
                 dataUpdate,
@@ -108,4 +113,28 @@ const updateUser = (userId, dataUpdate) => {
     });
 };
 
-export default {createUser, logInUser, updateUser};
+const deleteUser = (userId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //Kiểm tra tài userId đó có tồn tại không
+            const checkUser = await User.findById(userId);
+            if (checkUser == null) {
+                resolve({
+                    status: "ERROR",
+                    message: "Tài khoản không tồn tại",
+                });
+            }
+
+            //Tìm user có id trong route và xóa
+            await User.findByIdAndDelete(userId);
+            resolve({
+                status: "OK",
+                message: "Xóa thành công",
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
+export default {createUser, logInUser, updateUser, deleteUser};
