@@ -79,7 +79,6 @@ const deleteUser = async (req, res) => {
     try {
         //Truyền vào hàm deleteUser giá trị id
         const userId = req.params.id;
-        console.log(userId);
         const respone = await userService.deleteUser(userId);
         return res.status(200).json(respone);
     } catch (err) {
