@@ -12,6 +12,7 @@ import "./config/mongodb.js";
 import userRouter from "./routes/user.routes.js";
 import productRouter from "./routes/product.routes.js";
 import categoryRouter from "./routes/category.routes.js";
+import orderRouter from "./routes/order.routes.js";
 
 const app = express();
 const api = process.env.API_URL;
@@ -34,6 +35,7 @@ app.use(`${api}/products`, productRouter);
 
 app.use(`${api}/categories`, categoryRouter);
 
+app.use(`${api}/orders`, orderRouter);
 
 app.get(`/`, (req, res) => {
     res.send("API is running...");
