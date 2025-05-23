@@ -37,6 +37,7 @@ app.use(`${api}/categories`, categoryRouter);
 
 app.use(`${api}/orders`, orderRouter);
 
+// Static
 app.get(`/`, (req, res) => {
     res.send("API is running...");
 });
