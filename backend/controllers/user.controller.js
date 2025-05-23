@@ -1,3 +1,4 @@
+import jwtService from "../services/jwt.service.js";
 import userService from "../services/user.service.js";
 
 //Đăng kí tài khoản
@@ -38,8 +39,6 @@ const logInUser = async (req, res) => {
         const respone = await userService.logInUser(req.body);
         return res.status(200).json(respone);
     } catch (err) {
-        console.error("ERROR:", err);
-
         if (err.name === "ValidationError") {
             const messages = Object.values(err.errors).map(
                 (val) => val.message
@@ -75,6 +74,7 @@ const updateUser = async (req, res) => {
     }
 };
 
+//Xóa user
 const deleteUser = async (req, res) => {
     try {
         //Truyền vào hàm deleteUser giá trị id
@@ -95,4 +95,51 @@ const deleteUser = async (req, res) => {
         res.status(500).json({success: false, error: "Lỗi server"});
     }
 };
-export default {createUser, logInUser, updateUser, deleteUser};
+
+//Get All Users
+const getAllUsers = async (req, res) => {
+    try {
+        const respone = await userService.getAllUsers();
+        return res.status(200).json(respone);
+    } catch (err) {
+        res.status(500).json({success: false, error: "Lỗi server"});
+    }
+};
+
+//Get users by Id
+const getUserById = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const respone = await userService.getUserById(userId);
+        return res.status(200).json(respone);
+    } catch (err) {
+        res.status(500).json({success: false, error: "Lỗi server"});
+    }
+};
+
+const refreshToken = async (req, res) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1];
+        if (!token) {
+            return res.status(404).json({
+                success: false,
+                error: "Token is invalid",
+            });
+        }
+        const respone = await jwtService.refreshToken(token);
+        return res.status(200).json(respone);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({success: false, error: "Lỗi server"});
+    }
+};
+
+export default {
+    createUser,
+    logInUser,
+    updateUser,
+    deleteUser,
+    getAllUsers,
+    getUserById,
+    refreshToken,
+};

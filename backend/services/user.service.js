@@ -113,6 +113,7 @@ const updateUser = (userId, dataUpdate) => {
     });
 };
 
+//Xóa User
 const deleteUser = (userId) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -137,4 +138,49 @@ const deleteUser = (userId) => {
     });
 };
 
-export default {createUser, logInUser, updateUser, deleteUser};
+//Get all users
+const getAllUsers = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const users = await User.find();
+            resolve({
+                status: "OK",
+                message: "Hiện thông tin users thành công",
+                data: users,
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
+//Get users by id
+const getUserById = (userId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const user = await User.findById(userId);
+            if (!user) {
+                resolve({
+                    status: "ERROR",
+                    message: "Tài khoản không tồn tại",
+                });
+            }
+            resolve({
+                status: "OK",
+                message: "Hiện thông tin user thành công",
+                data: user,
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
+export default {
+    createUser,
+    logInUser,
+    updateUser,
+    deleteUser,
+    getAllUsers,
+    getUserById,
+};
