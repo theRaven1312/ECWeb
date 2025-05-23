@@ -31,14 +31,6 @@ const logInUser = (userLogIn) => {
     return new Promise(async (resolve, reject) => {
         const {email, password} = userLogIn;
         try {
-            //Kiểm tra email và password được nhập hay chưa
-            if (!email || !password) {
-                resolve({
-                    status: "ERROR",
-                    message: "Vui lòng cung cấp email và mật khẩu",
-                });
-            }
-
             //KIểm tra email có tồn tại không
             const checkUser = await User.findOne({email}).select("+password");
             if (checkUser == null) {
