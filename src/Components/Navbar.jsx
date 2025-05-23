@@ -5,6 +5,8 @@ import cartIcon from '../../public/Assets/cart.svg'
 import profile from '../../public/Assets/profile.svg'
 import menu from '../../public/Assets/menu.svg'
 import { Link } from 'react-router-dom';
+import { Search } from 'lucide-react'
+import SearchBar from './SearchBar'
 
 
 const Navbar = () => {
@@ -23,10 +25,9 @@ const Navbar = () => {
             <li><Link to ='/category'>New Arrivals</Link></li>
             <li><Link to ='/category'>Categories</Link></li>
         </ul>
-        <div className='navbarSearch'>
-            <img src={searchIcon} alt="search" />
-            <input type="text" placeholder='Search for products' />
-        </div>
+
+        <SearchBar/>
+        
         <div className = 'navbarCartProfile'>
             <Link to ='/cart'><img src = {cartIcon} /></Link>
             <Link to = '/login'><img src = {profile} /></Link>

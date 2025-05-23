@@ -7,12 +7,28 @@ const router = express.Router();
 import * as ProductController from '../controllers/product.controller.js';
 
 router.get('/', ProductController.getAll);
-router.get('/:id', ProductController.getById);
 router.post('/', ProductController.create);
 router.put('/:id', ProductController.update);
 router.delete('/:id', ProductController.remove);
 router.get('/get/count', ProductController.getCount);
 router.get('/get/featured/:count', ProductController.getFeatured);
+
+router.get('/search', async (req, res) => {
+    const query = req.query.q;
+    
+    try {
+        const products = await Product.find({
+            name: { $regex: query, $options: 'i' } // tìm không phân biệt hoa thường
+        })
+        
+        res.json(products);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: 'Search failed', error: err.message });
+    }
+});
+
+router.get('/:id', ProductController.getById);
 
 export default router;
 
