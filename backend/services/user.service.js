@@ -137,4 +137,7 @@ const deleteUser = (userId) => {
     });
 };
 
+//getUserById
+//getAllUser
+
 export default {createUser, logInUser, updateUser, deleteUser};
