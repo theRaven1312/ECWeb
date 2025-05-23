@@ -20,13 +20,11 @@ const api = process.env.API_URL;
 app.use(express.json());
 
 // // Dev logging middleware
-// if (process.env.NODE_ENV === "development") {
-//     app.use(morgan("dev"));
-// }
+app.use(morgan("dev"));
 // // Security headers
-// app.use(helmet());
+app.use(helmet());
 // // Enable CORS
-// app.use(cors());
+app.use(cors());
 
 const port = process.env.PORT || 3000;
 
@@ -36,7 +34,7 @@ app.use(`${api}/products`, productRouter);
 
 app.use(`${api}/categories`, categoryRouter);
 
-//test
+
 app.get(`/`, (req, res) => {
     res.send("API is running...");
 });
