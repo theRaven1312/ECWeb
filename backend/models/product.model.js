@@ -2,9 +2,9 @@ import mongoose from "mongoose"
 
 const productSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    color: { type: String, default: ''},
+    colors: [{ type: String }],
+    sizes: [{ type: String }], 
     description: { type: String, default: ''},
-    richDescription: { type: String, default: ''},
     image_url: {type: String},
     images: [{type:String}],
     brand: {type: String, default: ''},
@@ -15,6 +15,7 @@ const productSchema = new mongoose.Schema({
     numReviews: {type: Number, default: 0},
     isFeatured: {type: Boolean, default: false},
     isSale : {type: Boolean, default: false},
+    coupon: {type: String, default: ''},
     dateCreated: {type: Date, default: Date.now}, 
 })
 
