@@ -20,7 +20,7 @@ const AppContent = () => {
 
     return (
         <>
-            {/* <Navbar />
+            <Navbar />
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />
@@ -40,8 +40,8 @@ const AppContent = () => {
                 />
                 <Route path="/cart" element={<CartPage />} />
             </Routes>
-            {!hideLayout && <Footer />} */}
-            <ProfilePage></ProfilePage>
+            {!hideLayout && <Footer />}
+            {/* <ProfilePage></ProfilePage> */}
         </>
     );
 };
