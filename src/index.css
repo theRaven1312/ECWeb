@@ -585,8 +585,44 @@ body {
     LoginPage-Login
 =======================*/
 
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-5px);
+  }
+
+  40% {
+    transform: translateX(5px);
+  }
+
+  60% {
+    transform: translateX(-5px);
+  }
+
+  80% {
+    transform: translateX(5px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.shake {
+  animation: shake 0.4s ease-in-out;
+
+}
+
+.shake:not(i) {
+  border: 1px solid red;
+}
+
 .login-page {
-  @apply w-screen h-screen flex-center bg-linear-to-r from-[#e2e2e2] to-[#c9d6ff]
+  @apply w-screen h-screen flex-center bg-linear-to-r from-[#e2e2e2] to-[#c9d6ff] overflow-hidden
 }
 
 .login-container {
@@ -603,7 +639,7 @@ body {
 }
 
 .register-form form {
-  @apply max-xl:gap-2
+  @apply max-xl:gap-6
 }
 
 .login-container.active .form-box {

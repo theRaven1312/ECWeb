@@ -1,36 +1,164 @@
 import {useState} from "react";
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
+import {jwtDecode} from "jwt-decode";
+import {useDispatch} from "react-redux";
+import {updateUser} from "../redux/UserSlice.js";
 
 const LoginPage = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     let [isActive, setIsActive] = useState(null);
 
     const handleAddClass = () => setIsActive(true);
     const handleRemoveClass = () => setIsActive(false);
-    console.log(isActive);
+
+    const [visible, setVisible] = useState(false);
+    const handleVisible = () => setVisible((prev) => !prev);
+
+    //Kết nối API đăng nhập với backend
+    const [logInEmail, setLogInEmail] = useState("");
+    const [logInPassword, setLogInPassword] = useState("");
+    const [logInStatus, setLogInStatus] = useState("");
+    const [logInMessage, setLogInMessage] = useState("");
+
+    const handleLogInSumbit = (e) => {
+        e.preventDefault();
+        axios
+            .post(`/api/v1/users/log-in`, {
+                email: logInEmail,
+                password: logInPassword,
+            })
+            .then((res) => {
+                if (res.data.status === "OK") {
+                    // navigate("/");
+                    localStorage.setItem("access_token", res.data.accessToken);
+                    const token = res.data.accessToken;
+                    if (res.data.accessToken) {
+                        const decode = jwtDecode(token);
+                        if (decode.id) {
+                            axios
+                                .get(`/api/v1/users/${decode.id}`, {
+                                    headers: {
+                                        Authorization: `Bearer ${token}`,
+                                    },
+                                })
+                                .then((res) => {
+                                    const user = res.data.data;
+                                    dispatch(
+                                        updateUser({
+                                            ...user,
+                                            access_token: token,
+                                        })
+                                    );
+                                });
+                        }
+                    }
+                } else {
+                    setLogInStatus(res.data.status);
+                    setLogInMessage(res.data.message);
+                }
+            })
+            .catch((err) => console.log(err));
+    };
+
+    //Kết nối API đăng kí với backend
+    const [registerName, setRegisterName] = useState("");
+    const [registerEmail, setRegisterEmail] = useState("");
+    const [registerPassword, setRegisterPassword] = useState("");
+    const [registerStatus, setRegisterStatus] = useState("");
+    const [registerMessages, setRegisterMessages] = useState([]);
+
+    const handleRegisterSumbit = (e) => {
+        e.preventDefault();
+        axios
+            .post(`/api/v1/users/sign-in`, {
+                name: registerName,
+                email: registerEmail,
+                password: registerPassword,
+            })
+            .then((res) => {
+                if (res.data.status === "OK") {
+                    handleRemoveClass();
+                    setTimeout(() => {
+                        setRegisterName("");
+                        setRegisterEmail("");
+                        setRegisterPassword("");
+                    }, 600);
+                }
+            })
+            .catch((err) => {
+                if (err.response.data.status === "ERROR") {
+                    setRegisterStatus("ERROR");
+                    setRegisterMessages(
+                        err.response.data.messages
+                            ? err.response.data.messages
+                            : [err.response.data.message]
+                    );
+                }
+            });
+    };
 
     return (
         <div className="login-page">
             <div className={`login-container ${isActive ? "active" : ""}`}>
+                {/* Đăng nhập */}
                 <div className="login-form form-box">
-                    <form action=" ">
+                    <form onSubmit={handleLogInSumbit}>
                         <h1 className="login-form__heading heading">Login</h1>
 
                         <div className="login-form__input">
                             <input
+                                className={`${
+                                    logInStatus === "ERROR" ? "shake" : ""
+                                }`}
                                 type="text"
-                                placeholder="Username"
+                                placeholder="Email"
+                                name="email"
+                                value={logInEmail}
                                 required
+                                onChange={(e) => {
+                                    setLogInEmail(e.target.value);
+                                    setLogInStatus("");
+                                }}
                             />
-                            <i class="fa-solid fa-user"></i>
+                            <i
+                                class={`fa-solid fa-envelope ${
+                                    logInStatus === "ERROR" ? "shake" : ""
+                                }`}
+                            ></i>
                         </div>
 
                         <div className="login-form__input">
                             <input
-                                type="password"
+                                className={`${
+                                    logInStatus === "ERROR" ? "shake" : ""
+                                }`}
+                                type={visible ? "text" : "password"}
                                 placeholder="Password"
+                                name="password"
+                                value={logInPassword}
                                 required
+                                onChange={(e) => {
+                                    setLogInPassword(e.target.value);
+                                    setLogInStatus("");
+                                }}
                             />
-                            <i class="fa-solid fa-lock"></i>
+                            <i
+                                className={`fa-solid ${
+                                    visible ? "fa-eye-slash" : "fa-eye"
+                                } cursor-pointer ${
+                                    logInStatus === "ERROR" ? "shake" : ""
+                                }`}
+                                onClick={handleVisible}
+                            ></i>
                         </div>
+
+                        {logInStatus === "ERROR" && (
+                            <span className="text-base text-red-600 font-sans font-bold">
+                                {logInMessage}
+                            </span>
+                        )}
 
                         <div className="login-form__forgot-link">
                             <a href="#">Forgot password?</a>
@@ -39,83 +167,101 @@ const LoginPage = () => {
                         <button type="submit" className="login-form__btn">
                             Login
                         </button>
-
-                        <p>or login with other platform</p>
-
-                        <div className="login-form__other">
-                            <a href="#">
-                                <i class="fa-brands fa-google"></i>
-                            </a>
-
-                            <a href="#">
-                                <i class="fa-brands fa-facebook"></i>
-                            </a>
-
-                            <a href="#">
-                                <i class="fa-brands fa-square-instagram"></i>
-                            </a>
-
-                            <a href="#">
-                                <i class="fa-brands fa-square-x-twitter"></i>
-                            </a>
-
-                        </div>
                     </form>
                 </div>
 
+                {/* Đăng kí */}
                 <div className="register-form form-box">
-                    <form action=" ">
+                    <form onSubmit={handleRegisterSumbit}>
                         <h1 className="login-form__heading heading">
                             Registration
                         </h1>
 
-                        <div className="login-form__input">
+                        <div className="login-form__input ">
                             <input
+                                className={`${
+                                    registerStatus === "ERROR" ? "shake" : ""
+                                }`}
                                 type="text"
                                 placeholder="Username"
+                                name="name"
+                                value={registerName}
                                 required
+                                onChange={(e) => {
+                                    setRegisterName(e.target.value);
+                                    setRegisterStatus("");
+                                    setRegisterMessages([]);
+                                }}
                             />
-                            <i class="fa-solid fa-user"></i>
-                        </div>
-
-                        <div className="login-form__input">
-                            <input type="text" placeholder="Email" required />
-                            <i class="fa-solid fa-envelope"></i>
+                            <i
+                                class={`fa-solid fa-user ${
+                                    registerStatus === "ERROR" ? "shake" : ""
+                                }`}
+                            ></i>
                         </div>
 
                         <div className="login-form__input">
                             <input
-                                type="password"
+                                className={`${
+                                    registerStatus === "ERROR" ? "shake" : ""
+                                }`}
+                                type="text"
+                                placeholder="Email"
+                                name="email"
+                                value={registerEmail}
+                                required
+                                onChange={(e) => {
+                                    setRegisterEmail(e.target.value);
+                                    setRegisterStatus("");
+                                    setRegisterMessages([]);
+                                }}
+                            />
+                            <i
+                                class={`fa-solid fa-envelope ${
+                                    registerStatus === "ERROR" ? "shake" : ""
+                                }`}
+                            ></i>
+                        </div>
+
+                        <div className="login-form__input">
+                            <input
+                                className={`${
+                                    registerStatus === "ERROR" ? "shake" : ""
+                                }`}
+                                type={visible ? "text" : "password"}
                                 placeholder="Password"
                                 required
+                                name="password"
+                                value={registerPassword}
+                                onChange={(e) => {
+                                    setRegisterPassword(e.target.value);
+                                    setRegisterStatus("");
+                                    setRegisterMessages([]);
+                                }}
                             />
-                            <i class="fa-solid fa-lock"></i>
+                            <i
+                                className={`fa-solid ${
+                                    visible ? "fa-eye-slash" : "fa-eye"
+                                } cursor-pointer ${
+                                    registerStatus === "ERROR" ? "shake" : ""
+                                }`}
+                                onClick={handleVisible}
+                            ></i>
                         </div>
 
-                        <div className="login-form__forgot-link">
-                            <a href="#">Forgot password?</a>
-                        </div>
+                        {registerStatus === "ERROR" && (
+                            <div className="text-base text-red-600 font-sans font-bold">
+                                {registerMessages.map((msg, index) => (
+                                    <span key={index} className="block">
+                                        {msg}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
 
-                        <button type="sumbit" className="login-form__btn">
+                        <button type="submit" className="login-form__btn">
                             Register
                         </button>
-
-                        <p>or register with other platform</p>
-                        <div className="login-form__other">
-                            <a href="#">
-                                <i class="fa-brands fa-google"></i>
-                            </a>
-                            <a href="#">
-                                <i class="fa-brands fa-facebook"></i>
-                            </a>
-                            <a href="#">
-                                <i class="fa-brands fa-square-instagram"></i>
-                            </a>
-                            <a href="#">
-                                <i class="fa-brands fa-square-x-twitter"></i>
-                            </a>
-                        </div>
-                        
                     </form>
                 </div>
 

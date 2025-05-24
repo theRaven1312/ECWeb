@@ -7,27 +7,27 @@ const createUser = async (req, res) => {
         //Khởi tạo tài khoản bằng các trường name, email, pass
         const {name, email, password} = req.body;
         const respone = await userService.createUser(req.body);
+
         return res.status(200).json(respone);
     } catch (err) {
         //Xuất các kết quả lỗi theo thư viện moogose
 
         if (err.name === "ValidationError") {
-            const messages = Object.values(err.errors).map(
+            const messagesError = Object.values(err.errors).map(
                 (val) => val.message
             );
-            return res.status(400).json({success: false, errors: messages});
+            return res
+                .status(400)
+                .json({status: "ERROR", messages: messagesError});
         }
 
         if (err.code === 11000) {
             return res
                 .status(400)
-                .json({success: false, message: "Email đã tồn tại"});
+                .json({status: "ERROR", message: "Email đã tồn tại"});
         }
 
-        return res.status(500).json({success: false, message: "Lỗi server"});
-
-        // Lỗi khác
-        res.status(500).json({success: false, error: "Lỗi server"});
+        return res.status(500).json({status: "ERROR", message: "Lỗi server"});
     }
 };
 
@@ -37,7 +37,13 @@ const logInUser = async (req, res) => {
         //Truyền giá trị email, password vào hàm logInUser
         const {email, password} = req.body;
         const respone = await userService.logInUser(req.body);
-        return res.status(200).json(respone);
+        const {refreshToken, ...newRespone} = respone;
+        console.log(newRespone);
+        res.cookie("refresh_token", refreshToken, {
+            HttpOnly: true,
+            Secure: true,
+        });
+        return res.status(200).json(newRespone);
     } catch (err) {
         if (err.name === "ValidationError") {
             const messages = Object.values(err.errors).map(
@@ -119,7 +125,8 @@ const getUserById = async (req, res) => {
 
 const refreshToken = async (req, res) => {
     try {
-        const token = req.headers.authorization.split(" ")[1];
+        const token = req.cookies.refresh_token;
+        console.log(token);
         if (!token) {
             return res.status(404).json({
                 success: false,
