@@ -1,10 +1,13 @@
 import {useState} from "react";
 import axios from "axios";
-const apiUrl = import.meta.env.VITE_API_URL;
 import {useNavigate} from "react-router-dom";
+import {jwtDecode} from "jwt-decode";
+import {useDispatch} from "react-redux";
+import {updateUser} from "../redux/UserSlice.js";
 
 const LoginPage = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     let [isActive, setIsActive] = useState(null);
 
     const handleAddClass = () => setIsActive(true);
@@ -22,15 +25,35 @@ const LoginPage = () => {
     const handleLogInSumbit = (e) => {
         e.preventDefault();
         axios
-            .post(`${apiUrl}/users/log-in`, {
+            .post(`/api/v1/users/log-in`, {
                 email: logInEmail,
                 password: logInPassword,
             })
             .then((res) => {
                 if (res.data.status === "OK") {
                     // navigate("/");
-                    console.log(res.data);
                     localStorage.setItem("access_token", res.data.accessToken);
+                    const token = res.data.accessToken;
+                    if (res.data.accessToken) {
+                        const decode = jwtDecode(token);
+                        if (decode.id) {
+                            axios
+                                .get(`/api/v1/users/${decode.id}`, {
+                                    headers: {
+                                        Authorization: `Bearer ${token}`,
+                                    },
+                                })
+                                .then((res) => {
+                                    const user = res.data.data;
+                                    dispatch(
+                                        updateUser({
+                                            ...user,
+                                            access_token: token,
+                                        })
+                                    );
+                                });
+                        }
+                    }
                 } else {
                     setLogInStatus(res.data.status);
                     setLogInMessage(res.data.message);
@@ -49,7 +72,7 @@ const LoginPage = () => {
     const handleRegisterSumbit = (e) => {
         e.preventDefault();
         axios
-            .post(`${apiUrl}/users/sign-in`, {
+            .post(`/api/v1/users/sign-in`, {
                 name: registerName,
                 email: registerEmail,
                 password: registerPassword,

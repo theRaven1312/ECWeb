@@ -11,6 +11,7 @@
         "start": "nodemon ./backend/app.js"
     },
     "dependencies": {
+        "@reduxjs/toolkit": "^2.8.2",
         "@tailwindcss/vite": "^4.1.5",
         "@tanstack/react-query": "^5.76.2",
         "@tanstack/react-query-devtools": "^5.76.2",
@@ -22,6 +23,7 @@
         "dotenv": "^16.5.0",
         "helmet": "^8.1.0",
         "jsonwebtoken": "^9.0.2",
+        "jwt-decode": "^4.0.0",
         "lucide-react": "^0.509.0",
         "mongodb": "^6.16.0",
         "mongoose": "^8.15.0",
@@ -32,6 +34,7 @@
         "react-dom": "^19.1.0",
         "react-query": "^3.39.3",
         "react-range": "^1.10.0",
+        "react-redux": "^9.2.0",
         "react-router-dom": "^7.6.0",
         "tailwindcss": "^4.1.5"
     },
