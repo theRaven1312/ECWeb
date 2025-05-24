@@ -12,6 +12,7 @@ import {
     Route,
     useLocation,
 } from "react-router-dom";
+import {ProfilePage} from "./pages/ProfilePage";
 
 const AppContent = () => {
     const location = useLocation();
@@ -19,7 +20,7 @@ const AppContent = () => {
 
     return (
         <>
-            <Navbar />
+            {/* <Navbar />
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />
@@ -39,7 +40,8 @@ const AppContent = () => {
                 />
                 <Route path="/cart" element={<CartPage />} />
             </Routes>
-            {!hideLayout && <Footer />}
+            {!hideLayout && <Footer />} */}
+            <ProfilePage></ProfilePage>
         </>
     );
 };
