@@ -16,8 +16,8 @@ const LoginPage = () => {
     //Kết nối API đăng nhập với backend
     const [logInEmail, setLogInEmail] = useState("");
     const [logInPassword, setLogInPassword] = useState("");
-    const [status, setStatus] = useState("");
-    const [message, setMessage] = useState("");
+    const [logInStatus, setLogInStatus] = useState("");
+    const [logInMessage, setLogInMessage] = useState("");
 
     const handleLogInSumbit = (e) => {
         e.preventDefault();
@@ -28,19 +28,23 @@ const LoginPage = () => {
             })
             .then((res) => {
                 if (res.data.status === "OK") {
-                    navigate("/");
+                    // navigate("/");
+                    console.log(res.data);
+                    localStorage.setItem("access_token", res.data.accessToken);
                 } else {
-                    setStatus(res.data.status);
-                    setMessage(res.data.message);
+                    setLogInStatus(res.data.status);
+                    setLogInMessage(res.data.message);
                 }
             })
             .catch((err) => console.log(err));
     };
 
-    //Kết nối API đăng nhập với backend
+    //Kết nối API đăng kí với backend
     const [registerName, setRegisterName] = useState("");
     const [registerEmail, setRegisterEmail] = useState("");
     const [registerPassword, setRegisterPassword] = useState("");
+    const [registerStatus, setRegisterStatus] = useState("");
+    const [registerMessages, setRegisterMessages] = useState([]);
 
     const handleRegisterSumbit = (e) => {
         e.preventDefault();
@@ -52,10 +56,24 @@ const LoginPage = () => {
             })
             .then((res) => {
                 if (res.data.status === "OK") {
-                    navigate("/");
+                    handleRemoveClass();
+                    setTimeout(() => {
+                        setRegisterName("");
+                        setRegisterEmail("");
+                        setRegisterPassword("");
+                    }, 600);
                 }
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                if (err.response.data.status === "ERROR") {
+                    setRegisterStatus("ERROR");
+                    setRegisterMessages(
+                        err.response.data.messages
+                            ? err.response.data.messages
+                            : [err.response.data.message]
+                    );
+                }
+            });
     };
 
     return (
@@ -69,20 +87,21 @@ const LoginPage = () => {
                         <div className="login-form__input">
                             <input
                                 className={`${
-                                    status === "ERROR" ? "shake" : ""
+                                    logInStatus === "ERROR" ? "shake" : ""
                                 }`}
                                 type="text"
-                                placeholder="Username"
-                                name="name"
+                                placeholder="Email"
+                                name="email"
+                                value={logInEmail}
                                 required
                                 onChange={(e) => {
                                     setLogInEmail(e.target.value);
-                                    setStatus("");
+                                    setLogInStatus("");
                                 }}
                             />
                             <i
-                                class={`fa-solid fa-user ${
-                                    status === "ERROR" ? "shake" : ""
+                                class={`fa-solid fa-envelope ${
+                                    logInStatus === "ERROR" ? "shake" : ""
                                 }`}
                             ></i>
                         </div>
@@ -90,30 +109,31 @@ const LoginPage = () => {
                         <div className="login-form__input">
                             <input
                                 className={`${
-                                    status === "ERROR" ? "shake" : ""
+                                    logInStatus === "ERROR" ? "shake" : ""
                                 }`}
                                 type={visible ? "text" : "password"}
                                 placeholder="Password"
                                 name="password"
+                                value={logInPassword}
                                 required
                                 onChange={(e) => {
                                     setLogInPassword(e.target.value);
-                                    setStatus("");
+                                    setLogInStatus("");
                                 }}
                             />
                             <i
                                 className={`fa-solid ${
                                     visible ? "fa-eye-slash" : "fa-eye"
                                 } cursor-pointer ${
-                                    status === "ERROR" ? "shake" : ""
+                                    logInStatus === "ERROR" ? "shake" : ""
                                 }`}
                                 onClick={handleVisible}
                             ></i>
                         </div>
 
-                        {status === "ERROR" && (
-                            <span className="text-base text-red-600 font-sans font-bold flex-start">
-                                {message}
+                        {logInStatus === "ERROR" && (
+                            <span className="text-base text-red-600 font-sans font-bold">
+                                {logInMessage}
                             </span>
                         )}
 
@@ -134,49 +154,87 @@ const LoginPage = () => {
                             Registration
                         </h1>
 
-                        <div className="login-form__input">
+                        <div className="login-form__input ">
                             <input
+                                className={`${
+                                    registerStatus === "ERROR" ? "shake" : ""
+                                }`}
                                 type="text"
                                 placeholder="Username"
                                 name="name"
+                                value={registerName}
                                 required
-                                onChange={(e) =>
-                                    setRegisterName(e.target.value)
-                                }
+                                onChange={(e) => {
+                                    setRegisterName(e.target.value);
+                                    setRegisterStatus("");
+                                    setRegisterMessages([]);
+                                }}
                             />
-                            <i className="fa-solid fa-user"></i>
+                            <i
+                                class={`fa-solid fa-user ${
+                                    registerStatus === "ERROR" ? "shake" : ""
+                                }`}
+                            ></i>
                         </div>
 
                         <div className="login-form__input">
                             <input
+                                className={`${
+                                    registerStatus === "ERROR" ? "shake" : ""
+                                }`}
                                 type="text"
                                 placeholder="Email"
                                 name="email"
+                                value={registerEmail}
                                 required
-                                onChange={(e) =>
-                                    setRegisterEmail(e.target.value)
-                                }
+                                onChange={(e) => {
+                                    setRegisterEmail(e.target.value);
+                                    setRegisterStatus("");
+                                    setRegisterMessages([]);
+                                }}
                             />
-                            <i class="fa-solid fa-envelope"></i>
+                            <i
+                                class={`fa-solid fa-envelope ${
+                                    registerStatus === "ERROR" ? "shake" : ""
+                                }`}
+                            ></i>
                         </div>
 
                         <div className="login-form__input">
                             <input
+                                className={`${
+                                    registerStatus === "ERROR" ? "shake" : ""
+                                }`}
                                 type={visible ? "text" : "password"}
                                 placeholder="Password"
                                 required
                                 name="password"
-                                onChange={(e) =>
-                                    setRegisterPassword(e.target.value)
-                                }
+                                value={registerPassword}
+                                onChange={(e) => {
+                                    setRegisterPassword(e.target.value);
+                                    setRegisterStatus("");
+                                    setRegisterMessages([]);
+                                }}
                             />
                             <i
                                 className={`fa-solid ${
                                     visible ? "fa-eye-slash" : "fa-eye"
-                                } cursor-pointer`}
+                                } cursor-pointer ${
+                                    registerStatus === "ERROR" ? "shake" : ""
+                                }`}
                                 onClick={handleVisible}
                             ></i>
                         </div>
+
+                        {registerStatus === "ERROR" && (
+                            <div className="text-base text-red-600 font-sans font-bold">
+                                {registerMessages.map((msg, index) => (
+                                    <span key={index} className="block">
+                                        {msg}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
 
                         <button type="submit" className="login-form__btn">
                             Register

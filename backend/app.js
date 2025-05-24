@@ -1,4 +1,3 @@
-
 //Thư viện
 import express from "express";
 import "dotenv/config";
@@ -7,6 +6,7 @@ import cors from "cors";
 import helmet from "helmet";
 import path from "path";
 import "./config/mongodb.js";
+import cookieParser from "cookie-parser";
 
 //Router files
 import userRouter from "./routes/user.routes.js";
@@ -25,6 +25,8 @@ app.use(morgan("dev"));
 app.use(helmet());
 // // Enable CORS
 app.use(cors());
+//Cookie P
+app.use(cookieParser());
 
 const port = process.env.PORT || 3000;
 
