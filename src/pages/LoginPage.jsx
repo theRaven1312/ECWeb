@@ -31,10 +31,11 @@ const LoginPage = () => {
             })
             .then((res) => {
                 if (res.data.status === "OK") {
-                    // navigate("/");
-                    localStorage.setItem("access_token", res.data.accessToken);
+                    navigate("/");
                     const token = res.data.accessToken;
-                    if (res.data.accessToken) {
+                    localStorage.setItem("access_token", token);
+
+                    if (token) {
                         const decode = jwtDecode(token);
                         if (decode.id) {
                             axios
