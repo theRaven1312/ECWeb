@@ -17,9 +17,9 @@ const HomePage = () => {
         <BlackStripe/>
 
         <div className ='displaySection'>
-            <FourItemDisplay heading='New Arrivals'/>
+            <FourItemDisplay heading='New Arrivals' links = 'new-arrivals'/>
             <div className="w-[90%] h-px bg-gray-300"></div>
-            <FourItemDisplay heading='Top Selling'/>
+            <FourItemDisplay heading='Top Selling' links ='top'/>
             <GalleryDisplay/>
         </div>
         
