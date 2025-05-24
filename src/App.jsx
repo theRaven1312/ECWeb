@@ -26,13 +26,11 @@ const AppContent = () => {
     const dispatch = useDispatch();
     const axiosJWT = axios.create();
     useEffect(() => {
-        const {storageData, decode} = handleDecode();
-        if (decode) {
-            const respone = handleGetDetailUser(decode.id, storageData);
-            dispatch(updateUser({...respone.data, access_token: storageData}));
-            console.log(respone.data);
+        const {decode, storageData} = handleDecode();
+        if (decode.id) {
+            handleGetDetailUser(decode.id, storageData);
         }
-    });
+    }, []);
 
     const handleDecode = () => {
         const storageData = localStorage.getItem("access_token");
@@ -40,21 +38,26 @@ const AppContent = () => {
         if (storageData) {
             decode = jwtDecode(storageData);
         }
+        console.log(storageData);
         return {storageData, decode};
     };
 
     axiosJWT.interceptors.request.use(
-        async function (config) {
+        async (config) => {
             const currentTime = new Date();
-            const {decode} = handleDecode();
+            const {decode, storageData} = handleDecode();
             if (decode.exp < currentTime.getTime() / 1000) {
-                const newData = await axiosJWT.post(
-                    "/api/v1/users//refresh-token",
+                const newData = await axios.post(
+                    "/api/v1/users/refresh-token",
                     {withCredentials: true}
                 );
-                config.headers["token"] = `Bearer ${newData.access_token}`;
-            }
 
+                config.headers[
+                    "Authorization"
+                ] = `Bearer ${newData.data.accessToken}`;
+            } else {
+                config.headers["Authorization"] = `Bearer ${storageData}`;
+            }
             return config;
         },
         function (error) {
@@ -63,12 +66,12 @@ const AppContent = () => {
     );
 
     const handleGetDetailUser = async (id, token) => {
-        const res = await axios.get(`/api/v1/users/${id}`, {
+        const res = await axiosJWT.get(`/api/v1/users/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
-        return res.data;
+        dispatch(updateUser({...res.data.data, access_token: token}));
     };
 
     return (
