@@ -7,11 +7,11 @@ import menu from "../../public/Assets/menu.svg";
 import {Link} from "react-router-dom";
 import {Search} from "lucide-react";
 import SearchBar from "./SearchBar";
-// import {useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 
 const Navbar = () => {
-    // const user = useSelector((state) => state.user);
-    // console.log(user);
+    const user = useSelector((state) => state.user);
+
     return (
         <div className="navbar">
             <img src={menu} alt="menu" className="navbarMenu" />
@@ -44,7 +44,7 @@ const Navbar = () => {
                 <Link to="/login">
                     <img src={profile} />
                 </Link>
-                {/* {user.name ? <span>{user.name}</span> : ""} */}
+                {user.name ? <span>{user.name}</span> : ""}
             </div>
         </div>
     );
