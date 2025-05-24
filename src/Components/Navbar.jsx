@@ -17,17 +17,18 @@ const Navbar = () => {
             <Link to = '/'>T3.SAHUR</Link>
         </div>
         <ul className = 'navbarList'>
-            <li className = 'navbarListSub'>
-                <span>Shop</span>
-                <img src ={arrowDown}/>
-            </li>
-            <li><Link to ='/category'>On Sales</Link></li>
-            <li><Link to ='/category'>New Arrivals</Link></li>
-            <li><Link to ='/category'>Categories</Link></li>
+            <Link to='/category'>
+                <li className = 'navbarListSub'>
+                    <span>Shop</span>
+                    <img src ={arrowDown}/>
+                </li>
+            </Link>
+            <li><Link to ='/category/sales'>On Sales</Link></li>
+            <li><Link to ='/category/new-arrivals'>New Arrivals</Link></li>
+            <li><Link to ='/category/top'>Top Selling</Link></li>
         </ul>
-
-        <SearchBar/>
         
+        <SearchBar/>
         <div className = 'navbarCartProfile'>
             <Link to ='/cart'><img src = {cartIcon} /></Link>
             <Link to = '/login'><img src = {profile} /></Link>

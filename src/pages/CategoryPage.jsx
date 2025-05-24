@@ -4,8 +4,11 @@ import ProductCard from "../Components/ProductCard";
 import DirectLink from "../Components/DirectLink";
 import PriceSlider from "../Components/PriceSlider";
 import ColorPicker from "../Components/ColorPicker";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const CategoryPage = () => {
+
+const CategoryPage = ({heading = 'Shop'} = heading) => {
     const COLORS = [
         "#4CAF50",
         "#F44336",
@@ -19,6 +22,21 @@ const CategoryPage = () => {
         "#000000",
     ];
 
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+    // Gọi API khi component mount
+    axios.get('http://localhost:3000/api/v1/categories')  // ← chỉnh lại URL đúng với backend
+      .then((res) => {
+        setCategories(res.data);   // res.data là mảng categories
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Error fetching categories:', err);
+        setLoading(false);
+      });
+    }, []);
     return (
         <div className="main-container items-baseline">
             <div className="divider"></div>
@@ -129,7 +147,7 @@ const CategoryPage = () => {
 
                 <div className="category-display flex flex-col w-full gap-8">
                     <div className="category-heading flex justify-between w-full">
-                        <div className="heading">Category</div>
+                        <div className="heading">{heading}</div>
                         <div className="category-heading-detail flex gap-4">
                             <div>Showing 1-10 of 100 Products</div>
                             <div>

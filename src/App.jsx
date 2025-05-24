@@ -17,7 +17,6 @@ const AppContent = () => {
     const location = useLocation();
     const hideLayout = location.pathname === "/login";
 
-    // console.log(process.env.REACT_API_URL_BACKEND);
     return (
         <>
             <Navbar />
@@ -26,6 +25,18 @@ const AppContent = () => {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/product" element={<ProductionPage />} />
                 <Route path="/category" element={<CategoryPage />} />
+                <Route
+                    path="/category/sales"
+                    element={<CategoryPage heading={"On Sales"} />}
+                />
+                <Route
+                    path="/category/new-arrivals"
+                    element={<CategoryPage heading={"New arrivals"} />}
+                />
+                <Route
+                    path="/category/top"
+                    element={<CategoryPage heading={"Top Selling"} />}
+                />
                 <Route path="/cart" element={<CartPage />} />
             </Routes>
             {!hideLayout && <Footer />}
