@@ -172,7 +172,6 @@ const changePassword = async (req, res) => {
             confirmPassword,
             userId
         );
-        console.log(respone);
         return res.status(200).json(respone);
     } catch (err) {
         if (err.message) {
