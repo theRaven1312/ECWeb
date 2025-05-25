@@ -17,7 +17,6 @@ import {ProfilePage} from "./pages/ProfilePage";
 import AdminPage from "./pages/AdminPage";
 import {useDispatch} from "react-redux";
 import {jwtDecode} from "jwt-decode";
-import {useDispatch} from "react-redux";
 import {updateUser} from "./redux/UserSlice";
 import axiosJWT from "../backend/utils/aixosJWT.js";
 
