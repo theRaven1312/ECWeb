@@ -1,4 +1,63 @@
-const EditProfile = () => {
+import axios from "axios";
+import {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {jwtDecode} from "jwt-decode";
+import {updateUser} from "../redux/UserSliceRedux";
+
+const EditProfile = ({onClose}) => {
+    const user = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        phone: "",
+        address: "",
+    });
+
+    useEffect(() => {
+        // Gán thông tin user ban đầu vào form
+        if (user) {
+            setFormData({
+                name: user.name || "",
+                email: user.email || "",
+                phone: user.phone || "",
+                address: user.address || "",
+            });
+        }
+    }, [user]);
+
+    const handleChange = (e) => {
+        const {name, value} = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const decode = jwtDecode(user.access_token);
+            const res = await axios.put(
+                `/api/v1/users/update-user/${decode.id}`,
+                formData
+            );
+            console.log("Cập nhật thành công:", res.data.data);
+            dispatch(
+                updateUser({
+                    ...res.data.data,
+                    access_token: user.access_token,
+                })
+            );
+            onClose();
+        } catch (err) {
+            if (err.response?.data?.error) {
+                alert("Lỗi: " + err.response.data.error);
+            } else {
+                alert("Có lỗi xảy ra khi cập nhật");
+            }
+        }
+    };
     return (
         <div
             className="absolute inset-0 bg-black/20 backdrop-blur-md
@@ -8,28 +67,46 @@ const EditProfile = () => {
                 <h2 className="text-xl font-bold mb-4 font-sans">
                     CHANGE INFOMATION
                 </h2>
-                <form className="space-y-5 font-sans font-bold">
+                <form
+                    onSubmit={handleSubmit}
+                    className="space-y-5 font-sans font-bold"
+                >
+                    <input
+                        type="name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        placeholder="Username"
+                        className="w-full p-2 rounded bg-gray-200"
+                    />
                     <input
                         type="email"
                         name="email"
+                        value={formData.email}
+                        onChange={handleChange}
                         placeholder="Email"
                         className="w-full p-2 rounded bg-gray-200"
                     />
                     <input
                         type="text"
                         name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
                         placeholder="Phone number"
                         className="w-full p-2 rounded bg-gray-200"
                     />
                     <input
                         type="text"
                         name="address"
+                        value={formData.address}
+                        onChange={handleChange}
                         placeholder="Address"
                         className="w-full p-2 rounded bg-gray-200"
                     />
                     <div className="flex justify-end gap-3 pt-3">
                         <button
                             type="button"
+                            onClick={onClose}
                             className="px-4 py-2 bg-gray-200 rounded hover:bg-red-500 hover:text-white cursor-pointer"
                         >
                             Hủy

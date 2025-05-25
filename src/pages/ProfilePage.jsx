@@ -1,7 +1,7 @@
 import {useNavigate} from "react-router-dom";
 import {ProfileInfo} from "../Components/ProfileInfo";
 import {useDispatch, useSelector} from "react-redux";
-import {resetUser} from "../redux/UserSlice";
+import {resetUser} from "../redux/UserSliceRedux";
 import EditProfile from "../Components/EditProfile";
 import axios from "axios";
 import {useState} from "react";
@@ -36,7 +36,10 @@ export const ProfilePage = () => {
                 </div>
                 <div className="profile-right">
                     <div className="relative">
-                        <i class="fa-solid fa-pen-to-square absolute right-0 top-0 cursor-pointer"></i>
+                        <i
+                            class="fa-solid fa-pen-to-square absolute right-0 top-0 cursor-pointer"
+                            onClick={() => setIsChanged(true)}
+                        ></i>
                         <h1 className="heading profile-right__heading">
                             Information
                         </h1>
@@ -60,7 +63,7 @@ export const ProfilePage = () => {
                     </div>
                 </div>
             </div>
-            <EditProfile />
+            {isChanged && <EditProfile onClose={() => setIsChanged(false)} />}
         </div>
     );
 };
