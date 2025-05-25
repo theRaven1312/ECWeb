@@ -16,6 +16,7 @@ const ProductUpdate = () => {
         stock: '',
         colors: '',
         brand: '',
+        sizes: '',
         isFeatured: false,
         isSale: false,
         images: []
@@ -57,6 +58,7 @@ const ProductUpdate = () => {
                 stock: '',
                 colors: '',
                 brand: '',
+                sizes: '',
                 isFeatured: false,
                 isSale: false,
                 images: []
@@ -76,6 +78,7 @@ const ProductUpdate = () => {
                 stock: product.stock || '',
                 colors: product.colors ? product.colors.join(', ') : '',
                 brand: product.brand || '',
+                sizes: product.sizes ? product.sizes.join(', ') : '',
                 isFeatured: product.isFeatured || false,
                 isSale: product.isSale || false,
                 // Don't set images - they need to be uploaded again if changing
@@ -127,6 +130,10 @@ const ProductUpdate = () => {
                     // Chuyển colors thành mảng
                     const colorsArray = value.split(',').map(color => color.trim());
                     colorsArray.forEach(color => data.append('colors', color));
+                } else if (key === 'sizes' && value) {
+                    // Chuyển sizes thành mảng
+                    const sizesArray = value.split(',').map(size => size.trim());
+                    sizesArray.forEach(size => data.append('sizes', size));
                 } else if (key === 'isFeatured' || key === 'isSale') {
                     // Chuyển boolean thành string
                     data.append(key, value.toString());
@@ -292,6 +299,18 @@ const ProductUpdate = () => {
                         placeholder='Brand name'
                         className='input-field'
                         value={formData.brand}
+                        onChange={handleChange}
+                    />
+                </label>
+
+                <label className='flex flex-col gap-2'>
+                    <span className='text-lg'>Sizes (comma separated)</span>
+                    <input
+                        type="text"
+                        name="sizes"
+                        placeholder='e.g., S, M, L, XL'
+                        className='input-field'
+                        value={formData.sizes}
                         onChange={handleChange}
                     />
                 </label>

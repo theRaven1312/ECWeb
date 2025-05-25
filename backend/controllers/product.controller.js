@@ -61,6 +61,10 @@ export const create = async (req, res) => {
         const colors = req.body.colors ? req.body.colors.split(',').map(color => color.trim()) : [];
         console.log('Colors:', colors);
         
+        // Parse sizes from string to array
+        const sizes = req.body.sizes ? req.body.sizes.split(',').map(size => size.trim()) : [];
+        console.log('Sizes:', sizes);
+
         // Log category value specifically
         console.log('Category value:', req.body.category);
         
@@ -71,7 +75,8 @@ export const create = async (req, res) => {
             price: req.body.price,
             stock: req.body.stock,
             category: req.body.category,
-            colors: colors,
+            colors: req.body.colors ? req.body.colors.split(',').map(color => color.trim()) : [],
+            sizes: sizes, // Thêm sizes vào productData
             image_url: imageUrl,
             images: imageUrls,
         };
@@ -93,30 +98,15 @@ export const create = async (req, res) => {
 
 export const update = async (req, res) => {
     try {
-        console.log('Update request body:', req.body);
-        console.log('Update request files:', req.files);
-
-        // Handle colors field
-        if (req.body.colors) {
-            if (typeof req.body.colors === 'string') {
-                // If colors is a comma-separated string, split it into an array
-                req.body.colors = req.body.colors.split(',').map(color => color.trim());
-            } else if (Array.isArray(req.body.colors)) {
-                // If colors is already an array, ensure all elements are strings
-                req.body.colors = req.body.colors.map(color => color.trim());
+        // Handle sizes field
+        if (req.body.sizes) {
+            if (typeof req.body.sizes === 'string') {
+                req.body.sizes = req.body.sizes.split(',').map(size => size.trim());
+            } else if (Array.isArray(req.body.sizes)) {
+                req.body.sizes = req.body.sizes.map(size => size.trim());
             } else {
-                // If colors is neither a string nor an array, set it to an empty array
-                req.body.colors = [];
+                req.body.sizes = [];
             }
-        }
-
-        // Handle boolean fields (isFeatured, isSale)
-        req.body.isFeatured = req.body.isFeatured === 'true';
-        req.body.isSale = req.body.isSale === 'true';
-
-        // Handle image uploads
-        if (req.files && req.files.length > 0) {
-            req.body.image_url = `/uploads/${req.files[0].filename}`;
         }
 
         const product = await productService.updateProduct(req.params.id, req.body);

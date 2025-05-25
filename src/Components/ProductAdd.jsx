@@ -14,7 +14,8 @@ const ProductAdd = () => {
         stock: '',
         colors: '',
         brand: '',
-        images: []
+        images: [],
+        sizes: '' // Added sizes field
     });
     
     // Fetch categories on component mount
@@ -38,11 +39,11 @@ const ProductAdd = () => {
                 ...prev,
                 images: files
             }));
-        } else if (name === 'colors') {
-            // Store colors as comma-separated values
+        } else if (name === 'colors' || name === 'sizes') {
+            // Store colors and sizes as comma-separated values
             setFormData(prev => ({
                 ...prev,
-                [name]: value // e.g. "red, blue, green"
+                [name]: value
             }));
         } else {
             setFormData(prev => ({
@@ -80,7 +81,8 @@ const ProductAdd = () => {
                 stock: '',
                 colors: '',
                 brand: '',
-                images: []
+                images: [],
+                sizes: '' // Reset sizes field
             });
         } catch (err) {
             setError(err.response?.data?.message || err.message);
@@ -191,6 +193,17 @@ const ProductAdd = () => {
                         accept="image/*"
                         multiple
                         className='input-field'
+                        onChange={handleChange}
+                    />
+                </label>
+                <label className='flex flex-col gap-2'>
+                    <span className='text-lg'>Sizes (comma separated)</span>
+                    <input
+                        type="text"
+                        name="sizes"
+                        placeholder='e.g., S, M, L, XL'
+                        className='input-field'
+                        value={formData.sizes}
                         onChange={handleChange}
                     />
                 </label>
