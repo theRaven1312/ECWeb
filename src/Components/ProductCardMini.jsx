@@ -64,6 +64,13 @@ const ProductCardMini = ({ product }) => {
             </span>
           </div>
           
+          {/* Display sizes */}
+          {product.sizes && product.sizes.length > 0 && (
+            <div className="text-xs text-gray-500 mt-1">
+              Sizes: {product.sizes.join(', ')}
+            </div>
+          )}
+          
           {/* Color indicators if available */}
           {product.colors && product.colors.length > 0 && (
             <div className="flex mt-2 gap-1">

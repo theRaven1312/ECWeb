@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ProductAdd from './ProductAdd';
 import ProductView from './ProductView';
 import ProductUpdate from './ProductUpdate';
+import ProductDelete from './ProductDelete';
 
 const ProductQuery = () => {
   const [activeTab, setActiveTab] = useState('view');
@@ -12,6 +13,8 @@ const ProductQuery = () => {
         return <ProductAdd />;
       case 'update': 
         return <ProductUpdate/>;
+      case 'delete':
+        return <ProductDelete/>;
       case 'view':
       default:
         return <ProductView />;

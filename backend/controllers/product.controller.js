@@ -1,5 +1,12 @@
 import * as productService from '../services/product.service.js';
 import Product from '../models/product.model.js';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Define __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const getAll = async (req, res) => 
 {
@@ -54,6 +61,10 @@ export const create = async (req, res) => {
         const colors = req.body.colors ? req.body.colors.split(',').map(color => color.trim()) : [];
         console.log('Colors:', colors);
         
+        // Parse sizes from string to array
+        const sizes = req.body.sizes ? req.body.sizes.split(',').map(size => size.trim()) : [];
+        console.log('Sizes:', sizes);
+
         // Log category value specifically
         console.log('Category value:', req.body.category);
         
@@ -64,7 +75,8 @@ export const create = async (req, res) => {
             price: req.body.price,
             stock: req.body.stock,
             category: req.body.category,
-            colors: colors,
+            colors: req.body.colors ? req.body.colors.split(',').map(color => color.trim()) : [],
+            sizes: sizes, // Thêm sizes vào productData
             image_url: imageUrl,
             images: imageUrls,
         };
@@ -86,21 +98,15 @@ export const create = async (req, res) => {
 
 export const update = async (req, res) => {
     try {
-        console.log('Update request body:', req.body);
-        console.log('Update request files:', req.files);
-
-        // Xử lý trường colors (nếu cần)
-        if (req.body.colors) {
-            req.body.colors = req.body.colors.split(',').map(color => color.trim());
-        }
-
-        // Xử lý các checkbox (isFeatured, isSale)
-        req.body.isFeatured = req.body.isFeatured === 'true';
-        req.body.isSale = req.body.isSale === 'true';
-
-        // Xử lý hình ảnh (nếu có)
-        if (req.files && req.files.length > 0) {
-            req.body.image_url = `/uploads/${req.files[0].filename}`;
+        // Handle sizes field
+        if (req.body.sizes) {
+            if (typeof req.body.sizes === 'string') {
+                req.body.sizes = req.body.sizes.split(',').map(size => size.trim());
+            } else if (Array.isArray(req.body.sizes)) {
+                req.body.sizes = req.body.sizes.map(size => size.trim());
+            } else {
+                req.body.sizes = [];
+            }
         }
 
         const product = await productService.updateProduct(req.params.id, req.body);
@@ -115,16 +121,40 @@ export const update = async (req, res) => {
 };
 
 export const remove = async (req, res) => {
-    try {
-        const product = await productService.deleteProduct(req.params.id);
-        if (!product) {
-            return res.status(404).json({ success: false, message: "Product not found!" });
-        }
-        res.status(200).json({ success: true, message: "Product deleted!" });
-    } catch (error) {
-        res.status(500).json({ success: false, error });
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'Product not found!' });
     }
-}
+
+    // Xóa hình ảnh chính
+    if (product.image_url) {
+      const imagePath = path.join(__dirname, '../../public', product.image_url);
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+      }
+    }
+
+    // Xóa các hình ảnh bổ sung
+    if (product.images && product.images.length > 0) {
+      product.images.forEach(image => {
+        const imagePath = path.join(__dirname, '../../public', image);
+        if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
+        }
+      });
+    }
+
+    // Xóa sản phẩm khỏi cơ sở dữ liệu
+    await Product.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({ success: true, message: 'Product deleted successfully!' });
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
 
 export const getFeatured = async (req, res) => {
     try {
