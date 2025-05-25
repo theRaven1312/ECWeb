@@ -1,6 +1,6 @@
 import { User } from 'lucide-react'
 import React from 'react'
-import UserQuery from '../Components/ProductQuery'
+import ProductQuery from '../Components/ProductQuery'
 
 const AdminPage = () => {
   return (
@@ -15,7 +15,7 @@ const AdminPage = () => {
             </ul>
             <div className='flex flex-col gap-4 optionContent w-3/4 p-8 border-1 border-gray-300 rounded-lg'>
                 <h1 className='text-2xl font-bold'>Admin Dashboard</h1>
-                <UserQuery/>
+                <ProductQuery/>
             </div>
         </div>
     </div>
