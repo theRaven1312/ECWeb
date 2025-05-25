@@ -48,7 +48,7 @@ const AppContent = () => {
     return (
         <>
             <Navbar />
-            <Routes>
+            {/* <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/product" element={<ProductionPage />} />
@@ -68,9 +68,9 @@ const AppContent = () => {
                 />
                 <Route path="/cart" element={<CartPage />} />
             </Routes>
-            {!hideLayout && <Footer />}
+            {!hideLayout && <Footer />} */}
 
-            {/* <AdminPage /> */}
+            <AdminPage />
         </>
     );
 };

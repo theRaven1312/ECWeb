@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ProductAdd from './ProductAdd';
 import ProductView from './ProductView';
+import ProductUpdate from './ProductUpdate';
 
 const ProductQuery = () => {
   const [activeTab, setActiveTab] = useState('view');
@@ -9,6 +10,8 @@ const ProductQuery = () => {
     switch (activeTab) {
       case 'add':
         return <ProductAdd />;
+      case 'update': 
+        return <ProductUpdate/>;
       case 'view':
       default:
         return <ProductView />;

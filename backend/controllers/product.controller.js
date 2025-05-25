@@ -86,15 +86,33 @@ export const create = async (req, res) => {
 
 export const update = async (req, res) => {
     try {
+        console.log('Update request body:', req.body);
+        console.log('Update request files:', req.files);
+
+        // Xử lý trường colors (nếu cần)
+        if (req.body.colors) {
+            req.body.colors = req.body.colors.split(',').map(color => color.trim());
+        }
+
+        // Xử lý các checkbox (isFeatured, isSale)
+        req.body.isFeatured = req.body.isFeatured === 'true';
+        req.body.isSale = req.body.isSale === 'true';
+
+        // Xử lý hình ảnh (nếu có)
+        if (req.files && req.files.length > 0) {
+            req.body.image_url = `/uploads/${req.files[0].filename}`;
+        }
+
         const product = await productService.updateProduct(req.params.id, req.body);
         if (!product) {
             return res.status(500).json({ message: "Product cannot be updated!" });
         }
         res.status(200).json(product);
     } catch (error) {
+        console.error('Error updating product:', error);
         res.status(500).json({ message: error.message });
     }
-}
+};
 
 export const remove = async (req, res) => {
     try {

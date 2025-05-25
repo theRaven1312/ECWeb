@@ -11,7 +11,8 @@ router.get('/', ProductController.getAll);
 
 router.post('/', upload.array('images', 10), ProductController.create);
 
-router.put('/:id', ProductController.update);
+router.put('/:id', upload.array('images', 10), ProductController.update);
+
 router.delete('/:id', ProductController.remove);
 router.get('/get/count', ProductController.getCount);
 router.get('/get/featured/:count', ProductController.getFeatured);
@@ -30,6 +31,8 @@ router.get('/search', async (req, res) => {
         res.status(500).json({ message: 'Search failed', error: err.message });
     }
 });
+
+
 
 router.get('/:id', ProductController.getById);
 
