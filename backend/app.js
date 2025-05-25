@@ -17,26 +17,39 @@ import orderRouter from "./routes/order.routes.js";
 
 const app = express();
 const api = process.env.API_URL;
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 // Body parser
 app.use(express.json());
 // // Dev logging middleware
 app.use(morgan("dev"));
 // // Security headers
 app.use(helmet());
-// // Enable CORS
-app.use(cors());
+// // Enable CORS with custom options
+const corsOptions = {
+  origin: "http://localhost:5173",
+  credentials: true
+};
+
+app.use(cors(corsOptions));
+
+// Configure helmet to allow cross-origin resource loading
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: 'cross-origin' }
+}));
+
 //Cookie P
 app.use(cookieParser());
 
-// Serve uploaded files
+// Set up __dirname equivalent for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const port = process.env.PORT || 3000;
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
-app.use('/uploads', express.static(path.join(__dirname, '../../public/uploads')));
+// And also make it available through the API URL for backward compatibility
+app.use(`${api}/uploads`, express.static(path.join(__dirname, '../public/uploads')));
+
+// Add custom middleware for image URLs
 
 app.use(`${api}/users`, userRouter);
 
@@ -50,6 +63,8 @@ app.use(`${api}/orders`, orderRouter);
 app.get(`/`, (req, res) => {
     res.send("API is running...");
 });
+
+const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
     console.log(`Server is runiing on http://localhost:${port}`);
