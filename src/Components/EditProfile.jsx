@@ -51,6 +51,7 @@ const EditProfile = ({onClose}) => {
             );
             onClose();
         } catch (err) {
+            //Check error
             if (err.response?.data?.error) {
                 alert("Lỗi: " + err.response.data.error);
             } else {
