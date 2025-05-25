@@ -1,5 +1,12 @@
 import * as productService from '../services/product.service.js';
 import Product from '../models/product.model.js';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Define __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const getAll = async (req, res) => 
 {
@@ -89,16 +96,25 @@ export const update = async (req, res) => {
         console.log('Update request body:', req.body);
         console.log('Update request files:', req.files);
 
-        // Xử lý trường colors (nếu cần)
+        // Handle colors field
         if (req.body.colors) {
-            req.body.colors = req.body.colors.split(',').map(color => color.trim());
+            if (typeof req.body.colors === 'string') {
+                // If colors is a comma-separated string, split it into an array
+                req.body.colors = req.body.colors.split(',').map(color => color.trim());
+            } else if (Array.isArray(req.body.colors)) {
+                // If colors is already an array, ensure all elements are strings
+                req.body.colors = req.body.colors.map(color => color.trim());
+            } else {
+                // If colors is neither a string nor an array, set it to an empty array
+                req.body.colors = [];
+            }
         }
 
-        // Xử lý các checkbox (isFeatured, isSale)
+        // Handle boolean fields (isFeatured, isSale)
         req.body.isFeatured = req.body.isFeatured === 'true';
         req.body.isSale = req.body.isSale === 'true';
 
-        // Xử lý hình ảnh (nếu có)
+        // Handle image uploads
         if (req.files && req.files.length > 0) {
             req.body.image_url = `/uploads/${req.files[0].filename}`;
         }
@@ -115,16 +131,40 @@ export const update = async (req, res) => {
 };
 
 export const remove = async (req, res) => {
-    try {
-        const product = await productService.deleteProduct(req.params.id);
-        if (!product) {
-            return res.status(404).json({ success: false, message: "Product not found!" });
-        }
-        res.status(200).json({ success: true, message: "Product deleted!" });
-    } catch (error) {
-        res.status(500).json({ success: false, error });
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'Product not found!' });
     }
-}
+
+    // Xóa hình ảnh chính
+    if (product.image_url) {
+      const imagePath = path.join(__dirname, '../../public', product.image_url);
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+      }
+    }
+
+    // Xóa các hình ảnh bổ sung
+    if (product.images && product.images.length > 0) {
+      product.images.forEach(image => {
+        const imagePath = path.join(__dirname, '../../public', image);
+        if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
+        }
+      });
+    }
+
+    // Xóa sản phẩm khỏi cơ sở dữ liệu
+    await Product.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({ success: true, message: 'Product deleted successfully!' });
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
 
 export const getFeatured = async (req, res) => {
     try {
