@@ -40,8 +40,9 @@ const logInUser = async (req, res) => {
         const {refreshToken, ...newRespone} = respone;
         console.log(newRespone);
         res.cookie("refresh_token", refreshToken, {
-            HttpOnly: true,
-            Secure: true,
+            httpOnly: true,
+            secure: false,
+            samesite: "strict",
         });
         return res.status(200).json(newRespone);
     } catch (err) {
