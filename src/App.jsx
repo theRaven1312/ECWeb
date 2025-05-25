@@ -12,7 +12,10 @@ import {
     Route,
     useLocation,
 } from "react-router-dom";
+
 import {ProfilePage} from "./pages/ProfilePage";
+import AdminPage from "./pages/AdminPage";
+import {useDispatch} from "react-redux";
 import {jwtDecode} from "jwt-decode";
 import {useDispatch} from "react-redux";
 import {updateUser} from "./redux/UserSlice";
@@ -46,27 +49,28 @@ const AppContent = () => {
     return (
         <>
             <Navbar />
-            <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/product" element={<ProductionPage />} />
-                <Route path="/category" element={<CategoryPage />} />
-                <Route
-                    path="/category/sales"
-                    element={<CategoryPage heading={"On Sales"} />}
-                />
-                <Route
-                    path="/category/new-arrivals"
-                    element={<CategoryPage heading={"New arrivals"} />}
-                />
-                <Route
-                    path="/category/top"
-                    element={<CategoryPage heading={"Top Selling"} />}
-                />
-                <Route path="/cart" element={<CartPage />} />
-            </Routes>
-            {!hideLayout && <Footer />}
+            {/* <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/product" element={<ProductionPage />} />
+                    <Route path="/category" element={<CategoryPage />} />
+                    <Route
+                        path="/category/sales"
+                        element={<CategoryPage heading={"On Sales"} />}
+                    />
+                    <Route
+                        path="/category/new-arrivals"
+                        element={<CategoryPage heading={"New arrivals"} />}
+                    />
+                    <Route
+                        path="/category/top"
+                        element={<CategoryPage heading={"Top Selling"} />}
+                    />
+                    <Route path="/cart" element={<CartPage />} />
+                </Routes>
+                {!hideLayout && <Footer />} */}
             {/* <ProfilePage></ProfilePage> */}
+            <AdminPage />
         </>
     );
 };

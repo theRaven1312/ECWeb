@@ -76,6 +76,18 @@ body {
 
 @layer components {
 
+  .optionBar__item {
+    @apply p-2 border-b-1 border-gray-400 hover:bg-gray-100 hover:rounded-md cursor-pointer;
+  }
+
+  .adminActions__item {
+    @apply w-full cursor-pointer hover:bg-gray-300 p-2;
+  }
+
+  .input-field {
+    @apply w-full p-2 rounded-md bg-gray-100 border-1 border-gray-300;
+  }
+
   .filter-productTypeList-item {
     @apply flex-center-between;
   }
