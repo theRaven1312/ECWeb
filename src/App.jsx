@@ -69,8 +69,7 @@ const AppContent = () => {
                 <Route path="/cart" element={<CartPage />} />
             </Routes>
             {!hideLayout && <Footer />}
-
-            {/* <AdminPage /> */}
+            {/* {/* <AdminPage /> */}
         </>
     );
 };

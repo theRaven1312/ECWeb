@@ -370,7 +370,7 @@ body {
   }
 
   .img-left {
-    @apply w-full h-full object-cover rounded-2xl cursor-pointer max-sm:row-start-2 max-sm:max-sm:justify-self-center;
+    @apply w-full h-full object-cover rounded-2xl cursor-pointer max-sm:row-start-2 max-sm:max-sm:justify-self-center overflow-y-hidden;
   }
 
   .img-right {

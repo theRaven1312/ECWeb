@@ -2,7 +2,6 @@ import {useState} from "react";
 import ProductImg1 from "../../public/Assets/ProductionAssets/t-shirt1.png";
 import ProductImg2 from "../../public/Assets/ProductionAssets/t-shirt2.png";
 import ProductImg3 from "../../public/Assets/ProductionAssets/t-shirt3.png";
-
 const thumbnails = [ProductImg1, ProductImg2, ProductImg3];
 
 const ProductImg = () => {

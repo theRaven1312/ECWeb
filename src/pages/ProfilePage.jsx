@@ -2,7 +2,9 @@ import {useNavigate} from "react-router-dom";
 import {ProfileInfo} from "../Components/ProfileInfo";
 import {useDispatch, useSelector} from "react-redux";
 import {resetUser} from "../redux/UserSlice";
+import EditProfile from "../Components/EditProfile";
 import axios from "axios";
+import {useState} from "react";
 
 export const ProfilePage = () => {
     //email, phone, pass, address
@@ -16,6 +18,9 @@ export const ProfilePage = () => {
         localStorage.removeItem("access_token");
         navigate("/");
     };
+
+    //Thay đổi thông tin
+    const [isChanged, setIsChanged] = useState(false);
 
     return (
         <div className="profile-page">
@@ -55,6 +60,7 @@ export const ProfilePage = () => {
                     </div>
                 </div>
             </div>
+            <EditProfile />
         </div>
     );
 };
