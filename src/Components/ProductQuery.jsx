@@ -1,5 +1,5 @@
 import React from 'react'
-import UserAdd from './ProductAdd'
+import ProductAdd from './ProductAdd'
 
 const UserQuery = () => {
   return (
@@ -10,7 +10,7 @@ const UserQuery = () => {
             <li className='adminActions__item'>Delete</li>
             <li className='adminActions__item'>View</li>
         </ul>
-        <UserAdd/>
+        <ProductAdd/>
     </div>
   )
 }
