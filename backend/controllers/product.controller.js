@@ -1,7 +1,8 @@
 import * as productService from '../services/product.service.js';
 import Product from '../models/product.model.js';
 
-export const getAll = async (req, res) => {
+export const getAll = async (req, res) => 
+{
     try {
         let filter = {};
         if (req.query.category) {
@@ -31,20 +32,20 @@ export const create = async (req, res) => {
         console.log('Request body:', req.body);
         console.log('Files:', req.files);
         
-        // The main image URL
+        // The main image URL - use relative paths consistently
         let imageUrl = '';
         if (req.files && req.files.length > 0) {
-            imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.files[0].filename}`;
+            imageUrl = `/uploads/${req.files[0].filename}`;
             console.log('Image URL:', imageUrl);
         } else {
             console.log('No files uploaded');
         }
         
-        // Additional images URLs
+        // Additional images URLs - also use relative paths
         const imageUrls = [];
         if (req.files && req.files.length > 1) {
             for (let i = 1; i < req.files.length; i++) {
-                imageUrls.push(`${req.protocol}://${req.get('host')}/uploads/${req.files[i].filename}`);
+                imageUrls.push(`/uploads/${req.files[i].filename}`);
             }
             console.log('Additional images:', imageUrls);
         }
