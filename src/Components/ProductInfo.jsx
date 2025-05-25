@@ -9,6 +9,7 @@ const ProductInfo = () => {
     const discountPrice = 200;
     const discount = 40;
     const COLORS = ["gray", "blue", "red"];
+    
     return (
         <>
             <h1 className="product-content__heading heading">

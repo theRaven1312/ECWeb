@@ -7,6 +7,7 @@ import helmet from "helmet";
 import path from "path";
 import "./config/mongodb.js";
 import cookieParser from "cookie-parser";
+import { fileURLToPath } from 'url';
 
 //Router files
 import userRouter from "./routes/user.routes.js";
@@ -16,6 +17,9 @@ import orderRouter from "./routes/order.routes.js";
 
 const app = express();
 const api = process.env.API_URL;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Body parser
 app.use(express.json());
@@ -28,7 +32,11 @@ app.use(cors());
 //Cookie P
 app.use(cookieParser());
 
+// Serve uploaded files
+
 const port = process.env.PORT || 3000;
+
+app.use('/uploads', express.static(path.join(__dirname, '../../public/uploads')));
 
 app.use(`${api}/users`, userRouter);
 

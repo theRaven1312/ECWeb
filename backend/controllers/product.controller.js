@@ -1,4 +1,5 @@
 import * as productService from '../services/product.service.js';
+import Product from '../models/product.model.js';
 
 export const getAll = async (req, res) => {
     try {
@@ -27,10 +28,58 @@ export const getById = async (req, res) => {
 
 export const create = async (req, res) => {
     try {
-        const product = await productService.createProduct(req.body);
-        res.status(201).json(product);
+        console.log('Request body:', req.body);
+        console.log('Files:', req.files);
+        
+        // The main image URL
+        let imageUrl = '';
+        if (req.files && req.files.length > 0) {
+            imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.files[0].filename}`;
+            console.log('Image URL:', imageUrl);
+        } else {
+            console.log('No files uploaded');
+        }
+        
+        // Additional images URLs
+        const imageUrls = [];
+        if (req.files && req.files.length > 1) {
+            for (let i = 1; i < req.files.length; i++) {
+                imageUrls.push(`${req.protocol}://${req.get('host')}/uploads/${req.files[i].filename}`);
+            }
+            console.log('Additional images:', imageUrls);
+        }
+        
+        // Parse colors from string to array
+        const colors = req.body.colors ? req.body.colors.split(',').map(color => color.trim()) : [];
+        console.log('Colors:', colors);
+        
+        // Log category value specifically
+        console.log('Category value:', req.body.category);
+        
+        const productData = {
+            name: req.body.name,
+            description: req.body.description,
+            brand: req.body.brand,
+            price: req.body.price,
+            stock: req.body.stock,
+            category: req.body.category,
+            colors: colors,
+            image_url: imageUrl,
+            images: imageUrls,
+        };
+        
+        console.log('Product data to save:', productData);
+        
+        const product = new Product(productData);
+        const savedProduct = await product.save();
+        res.status(201).json(savedProduct);
+        
     } catch (error) {
-        res.status(500).json({ success: false, message: "Cannot create product", error });
+        console.error('Error creating product:', error);
+        res.status(500).json({ 
+            message: 'Creating product failed', 
+            error: error.message 
+        });
     }
 }
 

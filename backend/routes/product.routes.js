@@ -5,9 +5,10 @@ import userModel from '../models/user.model.js';
 import mongoose from 'mongoose';
 const router = express.Router();
 import * as ProductController from '../controllers/product.controller.js';
+import upload from '../middlewares/upload.middleware.js';
 
 router.get('/', ProductController.getAll);
-router.post('/', ProductController.create);
+router.post('/', upload.array('images', 10), ProductController.create);
 router.put('/:id', ProductController.update);
 router.delete('/:id', ProductController.remove);
 router.get('/get/count', ProductController.getCount);
