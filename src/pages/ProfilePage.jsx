@@ -1,7 +1,20 @@
+import {useNavigate} from "react-router-dom";
 import {ProfileInfo} from "../Components/ProfileInfo";
+import {useDispatch} from "react-redux";
+import {resetUser} from "../redux/UserSlice";
+import axios from "axios";
 
 export const ProfilePage = () => {
     //email, phone, pass, address
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const handleLogout = async () => {
+        await axios.post(`/api/v1/users/log-out`);
+        dispatch(resetUser());
+        localStorage.removeItem("access_token");
+        navigate("/");
+    };
+
     return (
         <div className="profile-page">
             <div className="profile-container">
@@ -33,8 +46,11 @@ export const ProfilePage = () => {
                         />
                         <ProfileInfo heading="Password" data="somedata" />
                     </div>
-                    <button className="primary-btn btn-signout">
-                        Sign Out
+                    <button
+                        className="primary-btn btn-signout"
+                        onClick={handleLogout}
+                    >
+                        Log Out
                         <i class="fa-solid fa-right-from-bracket ml-2"></i>
                     </button>
                 </div>
