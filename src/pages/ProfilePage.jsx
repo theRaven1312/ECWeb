@@ -1,6 +1,6 @@
 import {useNavigate} from "react-router-dom";
 import {ProfileInfo} from "../Components/ProfileInfo";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {resetUser} from "../redux/UserSlice";
 import axios from "axios";
 
@@ -8,6 +8,8 @@ export const ProfilePage = () => {
     //email, phone, pass, address
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const user = useSelector((state) => state.user);
+    console.log(user);
     const handleLogout = async () => {
         await axios.post(`/api/v1/users/log-out`);
         dispatch(resetUser());
@@ -22,7 +24,7 @@ export const ProfilePage = () => {
                     <i class="fa-solid fa-user p-5 bg-gray-200 text-9xl rounded-2xl"></i>
                     <div className="profile-left__info">
                         <h1 className="heading profile-left__name text-4xl">
-                            Someone
+                            {user.name}
                         </h1>
                         <h1 className="profile-left__rank">Diamon</h1>
                     </div>
@@ -35,24 +37,22 @@ export const ProfilePage = () => {
                         </h1>
                     </div>
                     <div className="flex flex-col gap-3">
-                        <ProfileInfo
-                            heading="Email"
-                            data="tranhoanghai260805@gmail.com"
-                        />
-                        <ProfileInfo heading="Phone" data="somedata" />
-                        <ProfileInfo
-                            heading="Address"
-                            data="gdgadgadgdgadgadgadg"
-                        />
-                        <ProfileInfo heading="Password" data="somedata" />
+                        <ProfileInfo heading="Email" data={user.email} />
+                        <ProfileInfo heading="Phone" data={user.phone} />
+                        <ProfileInfo heading="Address" data={user.address} />
                     </div>
-                    <button
-                        className="primary-btn btn-signout"
-                        onClick={handleLogout}
-                    >
-                        Log Out
-                        <i class="fa-solid fa-right-from-bracket ml-2"></i>
-                    </button>
+                    <div className="flex flex-center-between">
+                        <p className="profile-right__change-password">
+                            Change password ?
+                        </p>
+                        <button
+                            className="right-10 bottom-10 text-lg text-red-600 underline cursor-pointer mr-2 hover:opacity-80 group transition-all duration-300"
+                            onClick={handleLogout}
+                        >
+                            <span>Log Out</span>
+                            <i class="fa-solid fa-right-from-bracket ml-2 transform transition-transform duration-300 group-hover:translate-x-1 "></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

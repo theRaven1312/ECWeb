@@ -304,6 +304,26 @@ body {
     @apply flex-center gap-4;
   }
 
+  .profile-img {
+    @apply w-6 h-6 cursor-pointer
+  }
+
+  .dropdown-menu {
+    @apply absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50
+  }
+
+  .dropdown-menu__name {
+    @apply px-4 py-2 font-semibold border-b border-gray-100
+  }
+
+  .dropdown-menu__info {
+    @apply block px-4 py-2 hover:bg-gray-100 font-satoshi
+  }
+
+  .dropdown-menu__logout {
+    @apply w-full text-left px-4 py-2 text-red-600 hover:bg-red-100 font-satoshi cursor-pointer
+  }
+
   @layer components {
     .main-container {
       @apply flex flex-col flex-center w-screen px-16 py-4 gap-10 max-sm:px-5;
@@ -762,13 +782,13 @@ body {
 }
 
 .profile-right {
-  @apply flex flex-col gap-5 w-[60%] pt-10 pb-20 pr-10 relative
+  @apply flex flex-col gap-5 w-[60%] py-10 pr-15 relative
 }
 
 .profile-right__heading {
   @apply pb-3 border-b-2 border-black text-4xl
 }
 
-.btn-signout {
-  @apply w-[30%] rounded-md bg-white border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white hover:border-white absolute bottom-0 right-10
+.profile-right__change-password {
+  @apply bottom-10 text-lg underline cursor-pointer hover:opacity-70
 }
