@@ -81,6 +81,18 @@ const updateUser = async (req, res) => {
     }
 };
 
+const logOutUser = async (req, res) => {
+    try {
+        res.clearCookie("refresh_token");
+        return res.status(200).json({
+            status: "OK",
+            message: "Logout sucessfully",
+        });
+    } catch (err) {
+        res.status(500).json({success: false, error: "Lỗi server"});
+    }
+};
+
 //Xóa user
 const deleteUser = async (req, res) => {
     try {
@@ -150,4 +162,5 @@ export default {
     getAllUsers,
     getUserById,
     refreshToken,
+    logOutUser,
 };
