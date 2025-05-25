@@ -6,17 +6,19 @@ import userToken from "./jwt.service.js";
 const createUser = (newUser) => {
     return new Promise(async (resolve, reject) => {
         const {name, email, password} = newUser;
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
         try {
             //Khởi tạo user
             const createUser = await User.create({
                 name,
                 email,
-                password,
+                password: hashedPassword,
             });
             if (createUser) {
                 resolve({
                     status: "OK",
-                    message: "Đăng kí thành công",
+                    message: "Sign Up successfully",
                     data: createUser,
                 });
             }
@@ -36,7 +38,7 @@ const logInUser = (userLogIn) => {
             if (checkUser == null) {
                 resolve({
                     status: "ERROR",
-                    message: "Tài khoản không tồn tại",
+                    message: "Account is not existed",
                 });
             }
 
@@ -48,7 +50,7 @@ const logInUser = (userLogIn) => {
             if (!comparePassword) {
                 resolve({
                     status: "ERROR",
-                    message: "Mật khẩu sai",
+                    message: "Wrong Password",
                 });
             }
             //Cung cấp access_token khi đăng nhập thành công
@@ -65,7 +67,7 @@ const logInUser = (userLogIn) => {
 
             resolve({
                 status: "OK",
-                message: "Đăng nhập thành công",
+                message: "Log In successfully ",
                 accessToken,
                 refreshToken,
             });
@@ -84,7 +86,7 @@ const updateUser = (userId, dataUpdate) => {
             if (checkUser == null) {
                 resolve({
                     status: "ERROR",
-                    message: "Tài khoản không tồn tại",
+                    message: "Account is not existed",
                 });
             }
 
@@ -96,7 +98,7 @@ const updateUser = (userId, dataUpdate) => {
             );
             resolve({
                 status: "OK",
-                message: "Chỉnh sửa thành công",
+                message: "Update successfully",
                 data: hasUpdateUser,
             });
         } catch (e) {
@@ -114,7 +116,7 @@ const deleteUser = (userId) => {
             if (checkUser == null) {
                 resolve({
                     status: "ERROR",
-                    message: "Tài khoản không tồn tại",
+                    message: "Account is not existed",
                 });
             }
 
@@ -122,7 +124,7 @@ const deleteUser = (userId) => {
             await User.findByIdAndDelete(userId);
             resolve({
                 status: "OK",
-                message: "Xóa thành công",
+                message: "Delete successfully",
             });
         } catch (e) {
             reject(e);
@@ -137,7 +139,7 @@ const getAllUsers = () => {
             const users = await User.find();
             resolve({
                 status: "OK",
-                message: "Hiện thông tin users thành công",
+                message: "Get all users successfully",
                 data: users,
             });
         } catch (e) {
@@ -154,13 +156,59 @@ const getUserById = (userId) => {
             if (!user) {
                 resolve({
                     status: "ERROR",
-                    message: "Tài khoản không tồn tại",
+                    message: "Account is not existed",
                 });
             }
             resolve({
                 status: "OK",
-                message: "Hiện thông tin user thành công",
+                message: "Get user successfully",
                 data: user,
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
+const changePassword = (
+    currentPassword,
+    newPassword,
+    confirmPassword,
+    userId
+) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //Tìm user có id trong route và kiểm tra user đó có tồn tại hay không
+            const checkUser = await User.findById(userId).select("+password");
+            if (checkUser == null) {
+                throw new Error("Account does not exist");
+            }
+
+            console.log(checkUser.password, currentPassword);
+            // So sánh mật khẩu hiện tại
+            const isMatch = await bcrypt.compare(
+                currentPassword,
+                checkUser.password
+            );
+            if (!isMatch) {
+                throw new Error("Current password is not correct");
+            }
+
+            if (newPassword !== confirmPassword) {
+                throw new Error("New password and confirmation do not match");
+            }
+            // Hash mật khẩu mới
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+            // Cập nhật mật khẩu
+            checkUser.password = hashedPassword;
+            await checkUser.save();
+
+            resolve({
+                status: "OK",
+                message: "Change password successfully",
+                data: checkUser,
             });
         } catch (e) {
             reject(e);
@@ -175,4 +223,5 @@ export default {
     deleteUser,
     getAllUsers,
     getUserById,
+    changePassword,
 };

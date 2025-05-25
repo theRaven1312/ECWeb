@@ -73,7 +73,7 @@ const LoginPage = () => {
     const handleRegisterSumbit = (e) => {
         e.preventDefault();
         axios
-            .post(`/api/v1/users/sign-in`, {
+            .post(`/api/v1/users/sign-up`, {
                 name: registerName,
                 email: registerEmail,
                 password: registerPassword,

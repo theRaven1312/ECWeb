@@ -7,6 +7,7 @@ import {updateUser} from "../redux/UserSliceRedux";
 const EditProfile = ({onClose}) => {
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
+    const [error, setError] = useState("");
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -51,17 +52,14 @@ const EditProfile = ({onClose}) => {
             );
             onClose();
         } catch (err) {
-            //Check error
-            if (err.response?.data?.error) {
-                alert("Lỗi: " + err.response.data.error);
-            } else {
-                alert("Có lỗi xảy ra khi cập nhật");
-            }
+            const data = err.response.data;
+            console.log(data.messages[0]);
+            setError(data.messages[0]);
         }
     };
     return (
         <div
-            className="absolute inset-0 bg-black/20 backdrop-blur-md
+            className="fixed inset-0 bg-black/20 backdrop-blur-md
  flex items-center justify-center z-50 overflow-hidden"
         >
             <div className="bg-white p-6 rounded-xl w-full max-w-md shadow-lg">
@@ -104,6 +102,11 @@ const EditProfile = ({onClose}) => {
                         placeholder="Address"
                         className="w-full p-2 rounded bg-gray-200"
                     />
+                    {error && (
+                        <p className="text-red-500 shake border-none">
+                            {error}
+                        </p>
+                    )}
                     <div className="flex justify-end gap-3 pt-3">
                         <button
                             type="button"

@@ -24,10 +24,10 @@ const createUser = async (req, res) => {
         if (err.code === 11000) {
             return res
                 .status(400)
-                .json({status: "ERROR", message: "Email đã tồn tại"});
+                .json({status: "ERROR", message: "Email has existed"});
         }
 
-        return res.status(500).json({status: "ERROR", message: "Lỗi server"});
+        return res.status(500).json({status: "ERROR", message: "SERVER ERROR"});
     }
 };
 
@@ -54,7 +54,7 @@ const logInUser = async (req, res) => {
         }
 
         // Lỗi khác
-        res.status(500).json({success: false, error: "Lỗi server"});
+        res.status(500).json({success: false, error: "SERVER ERROR"});
     }
 };
 
@@ -70,14 +70,22 @@ const updateUser = async (req, res) => {
         console.error("ERROR:", err);
 
         if (err.name === "ValidationError") {
-            const messages = Object.values(err.errors).map(
+            const messagesError = Object.values(err.errors).map(
                 (val) => val.message
             );
-            return res.status(400).json({success: false, errors: messages});
+            return res
+                .status(400)
+                .json({status: "ERROR", messages: messagesError});
+        }
+
+        if (err.code === 11000) {
+            return res
+                .status(400)
+                .json({status: "ERROR", message: "Email has existed"});
         }
 
         // Lỗi khác
-        res.status(500).json({success: false, error: "Lỗi server"});
+        res.status(500).json({success: false, error: "SERVER ERROR"});
     }
 };
 
@@ -89,7 +97,7 @@ const logOutUser = async (req, res) => {
             message: "Logout sucessfully",
         });
     } catch (err) {
-        res.status(500).json({success: false, error: "Lỗi server"});
+        res.status(500).json({success: false, error: "SERVER ERROR"});
     }
 };
 
@@ -111,7 +119,7 @@ const deleteUser = async (req, res) => {
         }
 
         // Lỗi khác
-        res.status(500).json({success: false, error: "Lỗi server"});
+        res.status(500).json({success: false, error: "SERVER ERROR"});
     }
 };
 
@@ -121,7 +129,7 @@ const getAllUsers = async (req, res) => {
         const respone = await userService.getAllUsers();
         return res.status(200).json(respone);
     } catch (err) {
-        res.status(500).json({success: false, error: "Lỗi server"});
+        res.status(500).json({success: false, error: "SERVER ERROR"});
     }
 };
 
@@ -132,7 +140,7 @@ const getUserById = async (req, res) => {
         const respone = await userService.getUserById(userId);
         return res.status(200).json(respone);
     } catch (err) {
-        res.status(500).json({success: false, error: "Lỗi server"});
+        res.status(500).json({success: false, error: "SERVER ERROR"});
     }
 };
 
@@ -150,7 +158,39 @@ const refreshToken = async (req, res) => {
         return res.status(200).json(respone);
     } catch (err) {
         console.log(err);
-        res.status(500).json({success: false, error: "Lỗi server"});
+        res.status(500).json({success: false, error: "SERVER ERROR"});
+    }
+};
+
+const changePassword = async (req, res) => {
+    try {
+        const {currentPassword, newPassword, confirmPassword} = req.body;
+        const userId = req.params.id;
+        const respone = await userService.changePassword(
+            currentPassword,
+            newPassword,
+            confirmPassword,
+            userId
+        );
+        console.log(respone);
+        return res.status(200).json(respone);
+    } catch (err) {
+        if (err.message) {
+            return res.status(400).json({
+                status: "ERROR",
+                message: err.message,
+            });
+        }
+
+        if (err.name === "ValidationError") {
+            const messagesError = Object.values(err.errors).map(
+                (val) => val.message
+            );
+            return res
+                .status(400)
+                .json({status: "ERROR", messages: messagesError});
+        }
+        return res.status(500).json({status: "ERROR", message: "SERVER ERROR"});
     }
 };
 
@@ -163,4 +203,5 @@ export default {
     getUserById,
     refreshToken,
     logOutUser,
+    changePassword,
 };

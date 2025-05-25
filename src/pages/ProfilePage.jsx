@@ -2,9 +2,10 @@ import {useNavigate} from "react-router-dom";
 import {ProfileInfo} from "../Components/ProfileInfo";
 import {useDispatch, useSelector} from "react-redux";
 import {resetUser} from "../redux/UserSliceRedux";
-import EditProfile from "../Components/EditProfile";
 import axios from "axios";
 import {useState} from "react";
+import EditProfile from "../Components/EditProfile";
+import EditPassword from "../Components/EditPassword";
 
 export const ProfilePage = () => {
     //email, phone, pass, address
@@ -21,6 +22,9 @@ export const ProfilePage = () => {
 
     //Thay đổi thông tin
     const [isChanged, setIsChanged] = useState(false);
+
+    //Thay đổi mật khẩu
+    const [isChangePass, setIsChangePass] = useState(false);
 
     return (
         <div className="profile-page">
@@ -50,7 +54,10 @@ export const ProfilePage = () => {
                         <ProfileInfo heading="Address" data={user.address} />
                     </div>
                     <div className="flex flex-center-between">
-                        <p className="profile-right__change-password">
+                        <p
+                            className="profile-right__change-password"
+                            onClick={() => setIsChangePass(true)}
+                        >
                             Change password ?
                         </p>
                         <button
@@ -64,6 +71,9 @@ export const ProfilePage = () => {
                 </div>
             </div>
             {isChanged && <EditProfile onClose={() => setIsChanged(false)} />}
+            {isChangePass && (
+                <EditPassword onClose={() => setIsChangePass(false)} />
+            )}
         </div>
     );
 };

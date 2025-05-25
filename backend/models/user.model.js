@@ -6,29 +6,42 @@ const UserSchema = new mongoose.Schema(
     {
         name: {
             type: String,
-            required: [true, "Vui lòng nhập tên"],
+            required: [true, "Name is required"],
             trim: true, //Xóa khoảng trắng thừa
-            maxlength: [50, "Tên không quá 50 ký tự"],
+            maxlength: [50, "Name no more than 50 characters"],
         },
         email: {
             type: String,
-            required: [true, "Vui lòng nhập email"],
+            required: [true, "Email is required"],
             unique: true,
             match: [
                 /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-                "Vui lòng nhập email hợp lệ",
+                "Invalid Email",
             ],
         },
         password: {
             type: String,
-            required: [true, "Vui lòng nhập mật khẩu"],
-            minlength: [6, "Mật khẩu tối thiểu 6 ký tự"],
+            required: [true, "Password is required"],
+            minlength: [6, "Password minimum 6 characters"],
             select: false, // Không trả về password khi query
         },
         phone: {
             type: String,
             trim: true,
             default: "",
+            validate: {
+                validator: function (v) {
+                    return /^\S+$/.test(v);
+                },
+                message: "Phone numbers cannot contain spaces",
+            },
+            validate: {
+                validator: function (v) {
+                    return /^[0-9]*$/.test(v); // chỉ cho phép số
+                },
+                message:
+                    "Phone number cannot contain letters or special characters",
+            },
         },
         role: {
             type: String,
@@ -47,22 +60,5 @@ const UserSchema = new mongoose.Schema(
         timestamps: true,
     }
 );
-// Mã hóa mật khẩu trước khi lưu
-UserSchema.pre("save", async function (next) {
-    if (!this.isModified("password")) {
-        next();
-    }
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-});
-// Tạo JWT token
-UserSchema.methods.getSignedJwtToken = function () {
-    return jwt.sign({id: this._id}, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRES_IN,
-    });
-};
-// So sánh mật khẩu đã nhập với mật khẩu đã hash
-UserSchema.methods.matchPassword = async function (enteredPassword) {
-    return await bcrypt.compare(enteredPassword, this.password);
-};
+
 export default mongoose.model("users", UserSchema);
