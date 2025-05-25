@@ -9,7 +9,7 @@ import {ImageOff, Search} from "lucide-react";
 import SearchBar from "./SearchBar";
 import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
-import {resetUser} from "../redux/UserSlice";
+import {resetUser} from "../redux/UserSliceRedux";
 import {useNavigate} from "react-router-dom";
 
 const Navbar = () => {

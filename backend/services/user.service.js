@@ -92,7 +92,7 @@ const updateUser = (userId, dataUpdate) => {
             const hasUpdateUser = await User.findByIdAndUpdate(
                 userId,
                 dataUpdate,
-                {new: true}
+                {new: true, runValidators: true}
             );
             resolve({
                 status: "OK",

@@ -3,7 +3,7 @@ import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import {jwtDecode} from "jwt-decode";
 import {useDispatch} from "react-redux";
-import {updateUser} from "../redux/UserSlice.js";
+import {updateUser} from "../redux/UserSliceRedux.js";
 
 const LoginPage = () => {
     const navigate = useNavigate();

@@ -17,7 +17,7 @@ import {ProfilePage} from "./pages/ProfilePage";
 import AdminPage from "./pages/AdminPage";
 import {useDispatch} from "react-redux";
 import {jwtDecode} from "jwt-decode";
-import {updateUser} from "./redux/UserSlice";
+import {updateUser} from "./redux/UserSliceRedux.js";
 import axiosJWT from "../backend/utils/aixosJWT.js";
 
 const AppContent = () => {
@@ -69,7 +69,6 @@ const AppContent = () => {
                 <Route path="/cart" element={<CartPage />} />
             </Routes>
             {!hideLayout && <Footer />}
-
             <AdminPage />
         </>
     );
