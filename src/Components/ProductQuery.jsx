@@ -18,7 +18,6 @@ const ProductQuery = () => {
       case 'view':
       default:
         return <ProductView />;
-      // Add other cases for update and delete when implemented
     }
   };
 
@@ -31,18 +30,21 @@ const ProductQuery = () => {
         >
           Add
         </li>
+
         <li 
           className={`px-4 py-2 cursor-pointer ${activeTab === 'update' ? 'bg-gray-200 font-medium' : 'hover:bg-gray-100'}`} 
           onClick={() => setActiveTab('update')}
         >
           Update
         </li>
+
         <li 
           className={`px-4 py-2 cursor-pointer ${activeTab === 'delete' ? 'bg-gray-200 font-medium' : 'hover:bg-gray-100'}`} 
           onClick={() => setActiveTab('delete')}
         >
           Delete
         </li>
+        
         <li 
           className={`px-4 py-2 cursor-pointer ${activeTab === 'view' ? 'bg-gray-200 font-medium' : 'hover:bg-gray-100'}`} 
           onClick={() => setActiveTab('view')}
