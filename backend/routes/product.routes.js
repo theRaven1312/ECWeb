@@ -32,12 +32,9 @@ router.get('/search', async (req, res) => {
     }
 });
 
-
-
 router.get('/:id', ProductController.getById);
 
 export default router;
-
 
 // // Create a new product
 // router.post(`/`, async (req, res) => {
