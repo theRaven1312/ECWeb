@@ -9,51 +9,69 @@ const ProductQuery = () => {
 
   const renderContent = () => {
     switch (activeTab) {
+      case 'view':
+        return <ProductView />;
       case 'add':
         return <ProductAdd />;
       case 'update': 
-        return <ProductUpdate/>;
+        return <ProductUpdate />;
       case 'delete':
-        return <ProductDelete/>;
-      case 'view':
+        return <ProductDelete />;
       default:
         return <ProductView />;
     }
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <ul className="w-full flex border-b mb-4">
-        <li 
-          className={`px-4 py-2 cursor-pointer ${activeTab === 'add' ? 'bg-gray-200 font-medium' : 'hover:bg-gray-100'}`} 
-          onClick={() => setActiveTab('add')}
-        >
-          Add
-        </li>
-
-        <li 
-          className={`px-4 py-2 cursor-pointer ${activeTab === 'update' ? 'bg-gray-200 font-medium' : 'hover:bg-gray-100'}`} 
-          onClick={() => setActiveTab('update')}
-        >
-          Update
-        </li>
-
-        <li 
-          className={`px-4 py-2 cursor-pointer ${activeTab === 'delete' ? 'bg-gray-200 font-medium' : 'hover:bg-gray-100'}`} 
-          onClick={() => setActiveTab('delete')}
-        >
-          Delete
-        </li>
-        
-        <li 
-          className={`px-4 py-2 cursor-pointer ${activeTab === 'view' ? 'bg-gray-200 font-medium' : 'hover:bg-gray-100'}`} 
+    <div className="w-full">
+      {/* Navigation Tabs */}
+      <div className="flex border-b border-gray-200 mb-6">
+        <button
+          className={`px-4 py-2 font-medium text-sm ${
+            activeTab === 'view'
+              ? 'border-b-2 border-blue-500 text-blue-600'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
           onClick={() => setActiveTab('view')}
         >
-          View
-        </li>
-      </ul>
+          View Products
+        </button>
+        <button
+          className={`px-4 py-2 font-medium text-sm ${
+            activeTab === 'add'
+              ? 'border-b-2 border-blue-500 text-blue-600'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+          onClick={() => setActiveTab('add')}
+        >
+          Add Product
+        </button>
+        <button
+          className={`px-4 py-2 font-medium text-sm ${
+            activeTab === 'update'
+              ? 'border-b-2 border-blue-500 text-blue-600'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+          onClick={() => setActiveTab('update')}
+        >
+          Update Product
+        </button>
+        <button
+          className={`px-4 py-2 font-medium text-sm ${
+            activeTab === 'delete'
+              ? 'border-b-2 border-blue-500 text-blue-600'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+          onClick={() => setActiveTab('delete')}
+        >
+          Delete Product
+        </button>
+      </div>
 
-      {renderContent()}
+      {/* Content */}
+      <div className="bg-white rounded-lg shadow-sm">
+        {renderContent()}
+      </div>
     </div>
   );
 };

@@ -1,5 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
+import heroImg from '../../public/Assets/hero.jpg'
+
 
 export const Hero = () => {
   return (
@@ -31,7 +33,9 @@ export const Hero = () => {
                 </div>
             </div>
         </div>
-        <div className='bg-gray-500 w-1/2 max-sm:w-full h-full'></div>
+        <div className=' w-1/2 max-sm:w-full h-full overflow-hidden'>
+            <img src={heroImg}/>
+        </div>
     </div>
   )
 }

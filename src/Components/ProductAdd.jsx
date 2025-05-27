@@ -8,17 +8,16 @@ const ProductAdd = () => {
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
-        category: '', // This will store the category ID
+        category: '',
         description: '',
         price: '',
         stock: '',
         colors: '',
         brand: '',
         images: [],
-        sizes: '' // Added sizes field
+        sizes: ''
     });
     
-    // Fetch categories on component mount
     useEffect(() => {
         const fetchCategories = async () => {
             try {
@@ -39,12 +38,6 @@ const ProductAdd = () => {
                 ...prev,
                 images: files
             }));
-        } else if (name === 'colors' || name === 'sizes') {
-            // Store colors and sizes as comma-separated values
-            setFormData(prev => ({
-                ...prev,
-                [name]: value
-            }));
         } else {
             setFormData(prev => ({
                 ...prev,
@@ -55,9 +48,16 @@ const ProductAdd = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        if (!formData.name.trim()) {
+            setError('Product name is required');
+            return;
+        }
+
         setLoading(true);
         setError('');
         setSuccess('');
+        
         try {
             const data = new FormData();
             Object.entries(formData).forEach(([key, value]) => {
@@ -67,11 +67,13 @@ const ProductAdd = () => {
                     data.append(key, value);
                 }
             });
+            
             const res = await axios.post('/api/v1/products', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
+            
             setSuccess('Product added successfully!');
             setFormData({
                 name: '',
@@ -82,42 +84,46 @@ const ProductAdd = () => {
                 colors: '',
                 brand: '',
                 images: [],
-                sizes: '' // Reset sizes field
+                sizes: ''
             });
         } catch (err) {
-            setError(err.response?.data?.message || err.message);
+            setError('Failed to create product: ' + (err.response?.data?.message || err.message));
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className='flex gap-2 flex-col bg-gray-100 p-4 rounded-b-xl'>
-            <h1 className='text-2xl font-bold'>Add Product</h1>
-            <form className='flex flex-col gap-4 bg-gray-200 p-2 rounded-lg' onSubmit={handleSubmit}>
-                <label className='flex flex-col gap-2'>
-                    <span className='text-lg'>Name</span>
-                    <input
-                        type="text"
-                        name="name"
-                        placeholder='...'
-                        className='input-field'
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                    />
-                </label>
+        <div className="p-6">
+            <h2 className="text-xl font-bold mb-4">Add New Product</h2>
+            
+            <form onSubmit={handleSubmit} className="max-w-2xl space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Product Name *
+                        </label>
+                        <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            placeholder="Enter product name"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                        />
+                    </div>
 
-                <div className="form-group">
-                    <label htmlFor="category" className='flex flex-col gap-2'>
-                        <span className='text-lg'>Category</span>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Category *
+                        </label>
                         <select
                             name="category"
-                            id="category"
                             value={formData.category}
                             onChange={handleChange}
                             required
-                            className="form-control input-field"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             <option value="">Select a category</option>
                             {categories.map(category => (
@@ -126,92 +132,133 @@ const ProductAdd = () => {
                                 </option>
                             ))}
                         </select>
-                    </label>
+                    </div>
                 </div>
 
-                <label className='flex flex-col gap-2'>
-                    <span className='text-lg'>Description</span>
-                    <input
-                        type="text"
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Description
+                    </label>
+                    <textarea
                         name="description"
-                        placeholder='...'
-                        className='input-field'
                         value={formData.description}
                         onChange={handleChange}
+                        placeholder="Enter product description"
+                        rows="3"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                </label>
-                <label className='flex flex-col gap-2'>
-                    <span className='text-lg'>Price</span>
-                    <input
-                        type="number"
-                        name="price"
-                        placeholder='...'
-                        className='input-field'
-                        value={formData.price}
-                        onChange={handleChange}
-                        required
-                    />
-                </label>
-                <label className='flex flex-col gap-2'>
-                    <span className='text-lg'>Stock</span>
-                    <input
-                        type="number"
-                        name="stock"
-                        placeholder='...'
-                        className='input-field'
-                        value={formData.stock}
-                        onChange={handleChange}
-                    />
-                </label>
-                <label className='flex flex-col gap-2'>
-                    <span className='text-lg'>Colors</span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Price *
+                        </label>
+                        <input
+                            type="number"
+                            name="price"
+                            value={formData.price}
+                            onChange={handleChange}
+                            placeholder="0.00"
+                            step="0.01"
+                            min="0"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Stock
+                        </label>
+                        <input
+                            type="number"
+                            name="stock"
+                            value={formData.stock}
+                            onChange={handleChange}
+                            placeholder="0"
+                            min="0"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Colors (comma separated)
+                        </label>
+                        <input
+                            type="text"
+                            name="colors"
+                            value={formData.colors}
+                            onChange={handleChange}
+                            placeholder="red, blue, green"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Brand
+                        </label>
+                        <input
+                            type="text"
+                            name="brand"
+                            value={formData.brand}
+                            onChange={handleChange}
+                            placeholder="Brand name"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Sizes (comma separated)
+                    </label>
                     <input
                         type="text"
-                        name="colors"
-                        placeholder='...'
-                        className='input-field'
-                        value={formData.colors}
+                        name="sizes"
+                        value={formData.sizes}
                         onChange={handleChange}
+                        placeholder="S, M, L, XL"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                </label>
-                <label className='flex flex-col gap-2'>
-                    <span className='text-lg'>Brand</span>
-                    <input
-                        type="text"
-                        name="brand"
-                        placeholder='...'
-                        className='input-field'
-                        value={formData.brand}
-                        onChange={handleChange}
-                    />
-                </label>
-                <label className='flex flex-col gap-2'>
-                    <span className='text-lg'>Images</span>
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Images
+                    </label>
                     <input
                         type="file"
                         name="images"
                         accept="image/*"
                         multiple
-                        className='input-field'
                         onChange={handleChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                </label>
-                <label className='flex flex-col gap-2'>
-                    <span className='text-lg'>Sizes (comma separated)</span>
-                    <input
-                        type="text"
-                        name="sizes"
-                        placeholder='e.g., S, M, L, XL'
-                        className='input-field'
-                        value={formData.sizes}
-                        onChange={handleChange}
-                    />
-                </label>
+                </div>
 
-                {error && <div className="text-red-500">{error}</div>}
-                {success && <div className="text-green-500">{success}</div>}
-                <button type="submit" className='primary-btn' disabled={loading}>
-                    {loading ? 'Adding...' : 'Add Product'}
+                {error && (
+                    <div className="text-red-500 text-sm bg-red-50 p-3 rounded-md">
+                        {error}
+                    </div>
+                )}
+
+                {success && (
+                    <div className="text-green-600 text-sm bg-green-50 p-3 rounded-md">
+                        {success}
+                    </div>
+                )}
+
+                <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md disabled:bg-gray-400 disabled:cursor-not-allowed"
+                >
+                    {loading ? 'Creating...' : 'Create Product'}
                 </button>
             </form>
         </div>
