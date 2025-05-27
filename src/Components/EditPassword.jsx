@@ -13,6 +13,7 @@ const EditPassword = ({onClose}) => {
     });
 
     const handleChange = (e) => {
+        setError("");
         const {name, value} = e.target;
         setFormData((prev) => ({
             ...prev,
@@ -33,14 +34,12 @@ const EditPassword = ({onClose}) => {
                     },
                 }
             );
-            console.log("Cập nhật mật khẩu thành công:", res.data.data);
             onClose();
         } catch (err) {
             const data = err.response.data;
             const errorMsg =
-                data?.message || data?.messages?.[0] || "Lỗi không xác định";
+                data.message || data.messages?.[0] || "Lỗi không xác định";
             setError(errorMsg);
-            console.error("Lỗi đổi mật khẩu:", errorMsg);
         }
     };
     return (

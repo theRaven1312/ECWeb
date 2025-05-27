@@ -28,6 +28,7 @@ const EditProfile = ({onClose}) => {
     }, [user]);
 
     const handleChange = (e) => {
+        setError("");
         const {name, value} = e.target;
         setFormData((prev) => ({
             ...prev,
@@ -43,7 +44,6 @@ const EditProfile = ({onClose}) => {
                 `/api/v1/users/update-user/${decode.id}`,
                 formData
             );
-            console.log("Cập nhật thành công:", res.data.data);
             dispatch(
                 updateUser({
                     ...res.data.data,
@@ -53,7 +53,6 @@ const EditProfile = ({onClose}) => {
             onClose();
         } catch (err) {
             const data = err.response.data;
-            console.log(data.messages[0]);
             setError(data.messages[0]);
         }
     };

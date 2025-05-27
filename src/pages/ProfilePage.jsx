@@ -12,7 +12,6 @@ export const ProfilePage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user);
-    console.log(user);
     const handleLogout = async () => {
         await axios.post(`/api/v1/users/log-out`);
         dispatch(resetUser());
