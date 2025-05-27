@@ -1,11 +1,24 @@
 import React from "react";
+import axios from "axios";
 
 const statusColors = {
     online: "bg-green-500",
     offline: "bg-gray-400",
 };
 
-const UserCardMini = ({username, email, lastOnline, state, onDelete}) => {
+const UserCardMini = ({
+    id,
+    username,
+    email,
+    role,
+    lastOnline,
+    state,
+    onDelete,
+}) => {
+    const handleDelete = () => {
+        if (onDelete) onDelete(id);
+    };
+
     return (
         <div className="w-full flex items-center p-4 bg-white rounded-lg shadow-md">
             <div
@@ -30,13 +43,17 @@ const UserCardMini = ({username, email, lastOnline, state, onDelete}) => {
             >
                 {state.charAt(0).toUpperCase() + state.slice(1)}
             </span>
-            <button
-                className="ml-4 p-2 rounded cursor-pointer hover:bg-red-100"
-                onClick={onDelete}
-                title="Delete user"
-            >
-                <i class="fa-solid fa-trash-can cursor-pointer text-red-500"></i>
-            </button>
+            {role === "user" ? (
+                <button
+                    className="ml-4 p-2 rounded cursor-pointer hover:bg-red-100"
+                    onClick={handleDelete}
+                    title="Delete user"
+                >
+                    <i className="fa-solid fa-trash-can cursor-pointer text-red-500"></i>
+                </button>
+            ) : (
+                ""
+            )}
         </div>
     );
 };

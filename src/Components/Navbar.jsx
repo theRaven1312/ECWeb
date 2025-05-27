@@ -5,7 +5,6 @@ import cartIcon from "../../public/Assets/cart.svg";
 import profile from "../../public/Assets/profile.svg";
 import menu from "../../public/Assets/menu.svg";
 import {Link, Navigate} from "react-router-dom";
-import {ImageOff, Search} from "lucide-react";
 import SearchBar from "./SearchBar";
 import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
@@ -73,13 +72,22 @@ const Navbar = () => {
                                     onClick={() => setDropdownOpen(false)}
                                     className="dropdown-menu__info"
                                 >
-                                    Thông tin người dùng
+                                    User Info
                                 </Link>
+                                {user.role === "admin" && (
+                                    <Link
+                                        to="/admin"
+                                        onClick={() => setDropdownOpen(false)}
+                                        className="dropdown-menu__info"
+                                    >
+                                        Store Management
+                                    </Link>
+                                )}
                                 <button
                                     onClick={handleLogout}
                                     className="dropdown-menu__logout"
                                 >
-                                    Đăng xuất
+                                    Log Out
                                 </button>
                             </div>
                         )}
