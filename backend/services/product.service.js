@@ -15,7 +15,20 @@ export const createProduct = async (data) => {
 };
 
 export const updateProduct = async (id, data) => {
-    return await Product.findByIdAndUpdate(id, data, { new: true, runValidators: true });
+    try {
+        const updatedProduct = await Product.findByIdAndUpdate(
+            id, 
+            data, 
+            { 
+                new: true, 
+                runValidators: true 
+            }
+        ).populate('category', 'name description icon');
+        
+        return updatedProduct;
+    } catch (error) {
+        throw new Error('Error updating product: ' + error.message);
+    }
 };
 
 export const deleteProduct= async (id) => {

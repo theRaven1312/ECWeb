@@ -98,6 +98,20 @@ export const create = async (req, res) => {
 
 export const update = async (req, res) => {
     try {
+        console.log('Update request body:', req.body);
+        console.log('Update request files:', req.files);
+
+        // Handle colors field
+        if (req.body.colors) {
+            if (typeof req.body.colors === 'string') {
+                req.body.colors = req.body.colors.split(',').map(color => color.trim());
+            } else if (Array.isArray(req.body.colors)) {
+                req.body.colors = req.body.colors.map(color => color.trim());
+            } else {
+                req.body.colors = [];
+            }
+        }
+
         // Handle sizes field
         if (req.body.sizes) {
             if (typeof req.body.sizes === 'string') {
@@ -109,10 +123,37 @@ export const update = async (req, res) => {
             }
         }
 
+        // Handle boolean fields
+        if (req.body.isFeatured !== undefined) {
+            req.body.isFeatured = req.body.isFeatured === 'true';
+        }
+        if (req.body.isSale !== undefined) {
+            req.body.isSale = req.body.isSale === 'true';
+        }
+
+        // Handle image uploads
+        if (req.files && req.files.length > 0) {
+            console.log('Processing uploaded files:', req.files.length);
+            
+            // Update main image
+            req.body.image_url = `/uploads/${req.files[0].filename}`;
+            
+            // Update additional images if more than one file
+            if (req.files.length > 1) {
+                req.body.images = [];
+                for (let i = 1; i < req.files.length; i++) {
+                    req.body.images.push(`/uploads/${req.files[i].filename}`);
+                }
+            }
+        }
+
+        console.log('Processed update data:', req.body);
+
         const product = await productService.updateProduct(req.params.id, req.body);
         if (!product) {
-            return res.status(500).json({ message: "Product cannot be updated!" });
+            return res.status(404).json({ message: "Product not found or cannot be updated!" });
         }
+        
         res.status(200).json(product);
     } catch (error) {
         console.error('Error updating product:', error);

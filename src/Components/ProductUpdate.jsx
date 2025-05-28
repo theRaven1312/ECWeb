@@ -122,25 +122,44 @@ const ProductUpdate = () => {
         try {
             const data = new FormData();
 
+            // Append regular form fields
             Object.entries(formData).forEach(([key, value]) => {
-                if (key === 'images') return;
+                if (key === 'images') return; // Handle images separately
+                
                 if (key === 'colors' && value) {
-                    const colorsArray = value.split(',').map(color => color.trim());
-                    colorsArray.forEach(color => data.append('colors', color));
+                    // Handle colors array
+                    const colorsArray = value.split(',').map(color => color.trim()).filter(color => color !== '');
+                    colorsArray.forEach(color => {
+                        data.append('colors', color);
+                    });
                 } else if (key === 'sizes' && value) {
-                    const sizesArray = value.split(',').map(size => size.trim());
-                    sizesArray.forEach(size => data.append('sizes', size));
+                    // Handle sizes array
+                    const sizesArray = value.split(',').map(size => size.trim()).filter(size => size !== '');
+                    sizesArray.forEach(size => {
+                        data.append('sizes', size);
+                    });
                 } else if (key === 'isFeatured' || key === 'isSale') {
+                    // Handle boolean values
                     data.append(key, value.toString());
                 } else if (value !== '') {
+                    // Handle other fields
                     data.append(key, value);
                 }
             });
 
-            if (formData.images.length > 0) {
-                Array.from(formData.images).forEach(file => {
-                    data.append('images', file);
-                });
+            // Handle images - THIS IS THE KEY FIX
+            if (formData.images && formData.images.length > 0) {
+                console.log('Adding images to FormData:', formData.images.length);
+                for (let i = 0; i < formData.images.length; i++) {
+                    data.append('images', formData.images[i]);
+                    console.log(`Added image ${i}:`, formData.images[i].name);
+                }
+            }
+
+            // Log FormData contents for debugging
+            console.log('FormData contents:');
+            for (let pair of data.entries()) {
+                console.log(pair[0], pair[1]);
             }
 
             const response = await axios.put(`/api/v1/products/${selectedProduct}`, data, {
@@ -149,13 +168,25 @@ const ProductUpdate = () => {
                 }
             });
 
+            console.log('Update response:', response.data);
             setSuccess('Product updated successfully!');
             
+            // Refresh products list
             const refreshedProducts = await axios.get('/api/v1/products');
             setProducts(refreshedProducts.data);
 
+            // Update current product in the form
+            const updatedProduct = refreshedProducts.data.find(p => p._id === selectedProduct);
+            if (updatedProduct) {
+                setFormData(prev => ({
+                    ...prev,
+                    images: [] // Clear the file input
+                }));
+            }
+
         } catch (err) {
-            setError('Update failed: ' + (err.response?.data?.error || err.message));
+            console.error('Update error:', err.response || err);
+            setError('Update failed: ' + (err.response?.data?.message || err.message));
         } finally {
             setLoading(false);
         }
