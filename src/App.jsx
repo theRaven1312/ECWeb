@@ -54,6 +54,7 @@ const AppContent = () => {
                 <Route path="/product" element={<ProductionPage />} />
                 <Route path="/category" element={<CategoryPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/admin" element={<AdminPage />} />
                 <Route
                     path="/category/sales"
                     element={<CategoryPage heading={"On Sales"} />}
@@ -69,7 +70,6 @@ const AppContent = () => {
                 <Route path="/cart" element={<CartPage />} />
             </Routes>
             {!hideLayout && <Footer />}
-            <AdminPage />
         </>
     );
 };

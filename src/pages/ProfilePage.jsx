@@ -6,13 +6,13 @@ import axios from "axios";
 import {useState} from "react";
 import EditProfile from "../Components/EditProfile";
 import EditPassword from "../Components/EditPassword";
+import {useEffect} from "react";
 
 export const ProfilePage = () => {
     //email, phone, pass, address
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user);
-    console.log(user);
     const handleLogout = async () => {
         await axios.post(`/api/v1/users/log-out`);
         dispatch(resetUser());
@@ -26,6 +26,17 @@ export const ProfilePage = () => {
     //Thay đổi mật khẩu
     const [isChangePass, setIsChangePass] = useState(false);
 
+    useEffect(() => {
+        if (isChanged || isChangePass) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [isChanged, isChangePass]);
+
     return (
         <div className="profile-page">
             <div className="profile-container">
@@ -35,7 +46,7 @@ export const ProfilePage = () => {
                         <h1 className="heading profile-left__name text-4xl">
                             {user.name}
                         </h1>
-                        <h1 className="profile-left__rank">Diamon</h1>
+                        <h1 className="profile-left__rank">Diamond</h1>
                     </div>
                 </div>
                 <div className="profile-right">

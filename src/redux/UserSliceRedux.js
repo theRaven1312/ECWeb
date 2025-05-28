@@ -3,8 +3,9 @@ import {createSlice} from "@reduxjs/toolkit";
 const initialState = {
     name: "",
     email: "",
-    phone: " ",
+    phone: "",
     address: "",
+    role: "",
     access_token: "",
 };
 
@@ -13,11 +14,13 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         updateUser: (state, actions) => {
-            const {name, email, phone, address, access_token} = actions.payload;
+            const {name, email, phone, address, role, access_token} =
+                actions.payload;
             state.name = name;
             state.email = email;
             state.phone = phone;
             state.address = address;
+            state.role = role;
             state.access_token = access_token;
         },
 
@@ -26,6 +29,7 @@ export const userSlice = createSlice({
             state.email = "";
             state.phone = "";
             state.address = "";
+            state.role = "";
             state.access_token = "";
         },
     },

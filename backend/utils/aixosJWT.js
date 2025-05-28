@@ -8,7 +8,6 @@ const handleDecode = () => {
     if (storageData) {
         decode = jwtDecode(storageData);
     }
-    console.log(storageData);
     return {storageData, decode};
 };
 
