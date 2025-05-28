@@ -7,6 +7,7 @@ import CartPage from "./pages/CartPage";
 import CategoryPage from "./pages/CategoryPage";
 import LoginPage from "./pages/LoginPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage.jsx";
+import ScrollToTop from "./Components/ScrollToTop";
 import {
     BrowserRouter as Router,
     Routes,
@@ -49,6 +50,7 @@ const AppContent = () => {
     return (
         <>
             <Navbar />
+            <ScrollToTop />
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />
