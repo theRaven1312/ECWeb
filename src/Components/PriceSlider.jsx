@@ -1,46 +1,67 @@
 import React, { useState } from "react";
-import { Range } from "react-range";
 
-const PriceSlider = () => {
-  const STEP = 1;
-  const MIN = 0;
-  const MAX = 300;
+const PriceSlider = ({ value, onChange, min = 0, max = 1000 }) => {
+  const handleChange = (e, index) => {
+    const newValue = [...value];
+    newValue[index] = parseInt(e.target.value);
 
-  const [values, setValues] = useState([50, 200]);
+    // Ensure min is always less than max
+    if (index === 0 && newValue[0] >= newValue[1]) {
+      newValue[0] = newValue[1] - 1;
+    }
+    if (index === 1 && newValue[1] <= newValue[0]) {
+      newValue[1] = newValue[0] + 1;
+    }
+
+    onChange(newValue);
+  };
 
   return (
-    <div className="w-full max-w-md mx-auto p-4">
-      <Range
-        step={STEP}
-        min={MIN}
-        max={MAX}
-        values={values}
-        onChange={(values) => setValues(values)}
-        renderTrack={({ props, children }) => (
-          <div
-            {...props}
-            className="h-2 bg-gray-200 rounded-full"
-            style={{ ...props.style }}>
-            <div
-              className="h-2 bg-black rounded-full"
-              style={{
-                position: "absolute",
-                left: `${((values[0] - MIN) / (MAX - MIN)) * 100}%`,
-                width: `${((values[1] - values[0]) / (MAX - MIN)) * 100}%`,
-              }}/>
-            {children}
+    <div className="price-slider">
+      <div className="flex flex-col gap-4">
+        <div className="flex gap-4">
+          <div className="flex flex-col">
+            <label className="text-sm text-gray-600">Min</label>
+            <input
+              type="range"
+              min={min}
+              max={max}
+              value={value[0]}
+              onChange={(e) => handleChange(e, 0)}
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+            />
           </div>
-        )}
-        renderThumb={({ props }) => (
-          <div
-            {...props}
-            className="w-4 h-4 bg-black rounded-full shadow"
+          <div className="flex flex-col">
+            <label className="text-sm text-gray-600">Max</label>
+            <input
+              type="range"
+              min={min}
+              max={max}
+              value={value[1]}
+              onChange={(e) => handleChange(e, 1)}
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+            />
+          </div>
+        </div>
+
+        <div className="flex gap-4">
+          <input
+            type="number"
+            min={min}
+            max={max}
+            value={value[0]}
+            onChange={(e) => handleChange(e, 0)}
+            className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
           />
-        )}
-      />
-      <div className="flex justify-between mt-4">
-        <span>${values[0]}</span>
-        <span>${values[1]}</span>
+          <input
+            type="number"
+            min={min}
+            max={max}
+            value={value[1]}
+            onChange={(e) => handleChange(e, 1)}
+            className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+          />
+        </div>
       </div>
     </div>
   );

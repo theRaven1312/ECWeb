@@ -6,9 +6,10 @@ const ProductCard = ({ product }) => {
 
   if (!product) {
     return (
-      <div className="bg-gray-100 h-80 rounded-lg flex items-center justify-center">
-        <span className="text-gray-400">No product data</span>
-      </div>
+        <></>
+    //   <div className="bg-gray-100 h-80 rounded-lg flex items-center justify-center">
+    //     <span className="text-gray-400">No product data</span>
+    //   </div>
     );
   }
 
@@ -27,7 +28,7 @@ const ProductCard = ({ product }) => {
           <img
             src={
               imageError
-                ? "/placeholder-image.jpg"
+                ? ""
                 : getImageUrl(product.image_url)
             }
             alt={product.name}
@@ -53,11 +54,6 @@ const ProductCard = ({ product }) => {
               ${product.price}
             </span>
 
-            {product.isFeatured && (
-              <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
-                Featured
-              </span>
-            )}
           </div>
 
           {product.brand && (
