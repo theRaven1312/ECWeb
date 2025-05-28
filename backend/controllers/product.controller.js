@@ -8,17 +8,62 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export const getAll = async (req, res) => 
-{
+export const getAll = async (req, res) => {
     try {
         let filter = {};
+        let sort = { dateCreated: -1 }; // Newest first
+        
+        // Filter by category
         if (req.query.category) {
-            filter = { category: req.query.category.split(',') };
+            filter.category = req.query.category;
         }
-        const products = await productService.getAllProduct(filter);
+        
+        // Filter by featured
+        if (req.query.featured === 'true') {
+            filter.isFeatured = true;
+        }
+        
+        // Filter by sale
+        if (req.query.sale === 'true') {
+            filter.isSale = true;
+        }
+        
+        // Handle sorting
+        if (req.query.sort) {
+            switch (req.query.sort) {
+                case 'newest':
+                    sort = { dateCreated: -1 };
+                    break;
+                case 'oldest':
+                    sort = { dateCreated: 1 };
+                    break;
+                case 'price_low':
+                    sort = { price: 1 };
+                    break;
+                case 'price_high':
+                    sort = { price: -1 };
+                    break;
+                default:
+                    sort = { dateCreated: -1 };
+            }
+        }
+        
+        console.log('Filter:', filter); // Debug log
+        console.log('Sort:', sort); // Debug log
+        
+        const products = await Product.find(filter)
+            .populate('category', 'name description icon')
+            .sort(sort);
+        
+        console.log('Found products:', products.length); // Debug log
+        
         res.status(200).json(products);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('Error fetching products:', error);
+        res.status(500).json({ 
+            message: 'Failed to fetch products', 
+            error: error.message 
+        });
     }
 }
 
