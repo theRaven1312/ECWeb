@@ -233,7 +233,7 @@ const forgotPassword = (email) => {
             user.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
             await user.save();
 
-            const html = `SYBAU TS PMO FR FR NGL <a href="http://localhost:3000/api/v1/users/reset-password/${resetToken}">Click here</a>`;
+            const html = `SYBAU TS PMO FR FR NGL <a href="http://localhost:5173/reset-password/${resetToken}">Click here</a>`;
             const data = {email, html};
             const res = await sendEmail(data);
             resolve({

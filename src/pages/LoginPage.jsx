@@ -16,6 +16,12 @@ const LoginPage = () => {
     const [visible, setVisible] = useState(false);
     const handleVisible = () => setVisible((prev) => !prev);
 
+    // Forgot password state
+    const [showForgot, setShowForgot] = useState(false);
+    const [forgotEmail, setForgotEmail] = useState("");
+    const [forgotStatus, setForgotStatus] = useState("");
+    const [forgotMessage, setForgotMessage] = useState("");
+
     //Kết nối API đăng nhập với backend
     const [logInEmail, setLogInEmail] = useState("");
     const [logInPassword, setLogInPassword] = useState("");
@@ -100,76 +106,185 @@ const LoginPage = () => {
             });
     };
 
+    // Forgot password submit
+    const handleForgotSubmit = (e) => {
+        e.preventDefault();
+        axios
+            .post(`/api/v1/users/forgot-password`, {
+                email: forgotEmail,
+            })
+            .then((res) => {
+                if (res.data.status === "OK") {
+                    navigate("/login");
+                    setForgotStatus("OK");
+                    setForgotEmail("");
+                }
+            })
+            .catch((err) => {
+                if (err.response.data.status === "ERROR") {
+                    setForgotStatus("ERROR");
+                    setForgotMessage(
+                        err.response.data.messages
+                            ? err.response.data.messages
+                            : [err.response.data.message]
+                    );
+                }
+            });
+    };
+
     return (
         <div className="login-page">
             <div className={`login-container ${isActive ? "active" : ""}`}>
                 {/* Đăng nhập */}
-                <div className="login-form form-box">
-                    <form onSubmit={handleLogInSumbit}>
-                        <h1 className="login-form__heading heading">Login</h1>
+                {!showForgot && (
+                    <div className="login-form form-box">
+                        <form onSubmit={handleLogInSumbit}>
+                            <h1 className="login-form__heading heading">
+                                Login
+                            </h1>
 
-                        <div className="login-form__input">
-                            <input
-                                className={`${
-                                    logInStatus === "ERROR" ? "shake" : ""
-                                }`}
-                                type="text"
-                                placeholder="Email"
-                                name="email"
-                                value={logInEmail}
-                                required
-                                onChange={(e) => {
-                                    setLogInEmail(e.target.value);
-                                    setLogInStatus("");
-                                }}
-                            />
-                            <i
-                                class={`fa-solid fa-envelope ${
-                                    logInStatus === "ERROR" ? "shake" : ""
-                                }`}
-                            ></i>
-                        </div>
+                            <div className="login-form__input">
+                                <input
+                                    className={`${
+                                        logInStatus === "ERROR" ? "shake" : ""
+                                    }`}
+                                    type="text"
+                                    placeholder="Email"
+                                    name="email"
+                                    value={logInEmail}
+                                    required
+                                    onChange={(e) => {
+                                        setLogInEmail(e.target.value);
+                                        setLogInStatus("");
+                                    }}
+                                />
+                                <i
+                                    className={`fa-solid fa-envelope ${
+                                        logInStatus === "ERROR" ? "shake" : ""
+                                    }`}
+                                ></i>
+                            </div>
 
-                        <div className="login-form__input">
-                            <input
-                                className={`${
-                                    logInStatus === "ERROR" ? "shake" : ""
-                                }`}
-                                type={visible ? "text" : "password"}
-                                placeholder="Password"
-                                name="password"
-                                value={logInPassword}
-                                required
-                                onChange={(e) => {
-                                    setLogInPassword(e.target.value);
-                                    setLogInStatus("");
-                                }}
-                            />
-                            <i
-                                className={`fa-solid ${
-                                    visible ? "fa-eye-slash" : "fa-eye"
-                                } cursor-pointer ${
-                                    logInStatus === "ERROR" ? "shake" : ""
-                                }`}
-                                onClick={handleVisible}
-                            ></i>
-                        </div>
+                            <div className="login-form__input">
+                                <input
+                                    className={`${
+                                        logInStatus === "ERROR" ? "shake" : ""
+                                    }`}
+                                    type={visible ? "text" : "password"}
+                                    placeholder="Password"
+                                    name="password"
+                                    value={logInPassword}
+                                    required
+                                    onChange={(e) => {
+                                        setLogInPassword(e.target.value);
+                                        setLogInStatus("");
+                                    }}
+                                />
+                                <i
+                                    className={`fa-solid ${
+                                        visible ? "fa-eye-slash" : "fa-eye"
+                                    } cursor-pointer ${
+                                        logInStatus === "ERROR" ? "shake" : ""
+                                    }`}
+                                    onClick={handleVisible}
+                                ></i>
+                            </div>
 
-                        {logInStatus === "ERROR" && (
-                            <span className="text-base text-red-600 font-sans font-bold">
-                                {logInMessage}
-                            </span>
+                            {logInStatus === "ERROR" && (
+                                <span className="text-base text-red-600 font-sans font-bold">
+                                    {logInMessage}
+                                </span>
+                            )}
+
+                            <div className="login-form__forgot-link">
+                                <a
+                                    href="#"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setShowForgot(true);
+                                        setForgotMessage("");
+                                    }}
+                                >
+                                    Forgot password?
+                                </a>
+                            </div>
+
+                            <button type="submit" className="login-form__btn">
+                                Login
+                            </button>
+                        </form>
+                    </div>
+                )}
+
+                {/* Forgot password form */}
+                {showForgot && (
+                    <div className="forgot-form form-box">
+                        {forgotStatus === "OK" ? (
+                            <form>
+                                <h1 className="login-form__heading heading">
+                                    Forgot Password
+                                </h1>
+                                <span className="text-base text-green-600 font-sans">
+                                    Request has sent. Please check the email to
+                                    reset password
+                                </span>
+                            </form>
+                        ) : (
+                            <form onSubmit={handleForgotSubmit}>
+                                <h1 className="login-form__heading heading">
+                                    Forgot Password
+                                </h1>
+                                <span className="text-base text-gray-700 font-sans">
+                                    Please enter the email to reset password
+                                </span>
+                                <div className="login-form__input">
+                                    <input
+                                        className={`${
+                                            forgotStatus === "ERROR"
+                                                ? "shake"
+                                                : ""
+                                        }`}
+                                        type="text"
+                                        placeholder="Email"
+                                        value={forgotEmail}
+                                        required
+                                        onChange={(e) => {
+                                            setForgotEmail(e.target.value);
+                                            setForgotStatus("");
+                                            setForgotMessage("");
+                                        }}
+                                    />
+                                    <i className="fa-solid fa-envelope"></i>
+                                </div>
+                                {forgotStatus === "ERROR" && (
+                                    <span className="text-base text-red-600 font-sans font-bold">
+                                        {forgotMessage}
+                                    </span>
+                                )}
+                                <div className="flex gap-2">
+                                    <button
+                                        type="submit"
+                                        className="login-form__btn"
+                                    >
+                                        Submit
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="login-form__btn"
+                                        onClick={() => {
+                                            setShowForgot(false);
+                                            setForgotStatus("");
+                                            setForgotMessage("");
+                                            setForgotEmail("");
+                                        }}
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
                         )}
-
-                        <div className="login-form__forgot-link">
-                            <a href="#">Forgot password?</a>
-                        </div>
-
-                        <button type="submit" className="login-form__btn">
-                            Login
-                        </button>
-                    </form>
-                </div>
+                    </div>
+                )}
 
                 {/* Đăng kí */}
                 <div className="register-form form-box">
@@ -195,7 +310,7 @@ const LoginPage = () => {
                                 }}
                             />
                             <i
-                                class={`fa-solid fa-user ${
+                                className={`fa-solid fa-user ${
                                     registerStatus === "ERROR" ? "shake" : ""
                                 }`}
                             ></i>
@@ -218,7 +333,7 @@ const LoginPage = () => {
                                 }}
                             />
                             <i
-                                class={`fa-solid fa-envelope ${
+                                className={`fa-solid fa-envelope ${
                                     registerStatus === "ERROR" ? "shake" : ""
                                 }`}
                             ></i>
@@ -274,7 +389,10 @@ const LoginPage = () => {
                         <p className="text-white">Don't have an account?</p>
                         <button
                             className="login-form__btn toggle-btn"
-                            onClick={handleAddClass}
+                            onClick={() => {
+                                handleAddClass();
+                                setTimeout(() => setShowForgot(false), 1000);
+                            }}
                         >
                             Register
                         </button>
@@ -287,7 +405,9 @@ const LoginPage = () => {
                         <p className="text-white">Already have an account?</p>
                         <button
                             className="login-form__btn toggle-btn"
-                            onClick={handleRemoveClass}
+                            onClick={() => {
+                                handleRemoveClass();
+                            }}
                         >
                             Login
                         </button>

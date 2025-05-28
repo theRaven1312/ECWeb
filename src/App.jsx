@@ -6,6 +6,7 @@ import Footer from "./Components/Footer";
 import CartPage from "./pages/CartPage";
 import CategoryPage from "./pages/CategoryPage";
 import LoginPage from "./pages/LoginPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage.jsx";
 import {
     BrowserRouter as Router,
     Routes,
@@ -55,6 +56,10 @@ const AppContent = () => {
                 <Route path="/category" element={<CategoryPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/admin" element={<AdminPage />} />
+                <Route
+                    path="/reset-password/:token"
+                    element={<ResetPasswordPage />}
+                />
                 <Route
                     path="/category/sales"
                     element={<CategoryPage heading={"On Sales"} />}
