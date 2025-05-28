@@ -16,6 +16,8 @@ router.put("/update-user/:id", userController.updateUser); //từ admin, tên sa
 router.delete("/delete-user/:id", userController.deleteUser);
 router.post("/refresh-token", userController.refreshToken);
 router.post("/change-password/:id", userController.changePassword);
+router.post("/forgot-password", userController.forgotPassword);
+router.post("/reset-password/:token", userController.resetPassword);
 
 //+ 1 hàm người dùng tự update
 

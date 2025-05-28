@@ -193,6 +193,59 @@ const changePassword = async (req, res) => {
     }
 };
 
+const forgotPassword = async (req, res) => {
+    try {
+        console.log(req.body);
+        const {email} = req.body;
+        const respone = await userService.forgotPassword(email);
+        return res.status(200).json(respone);
+    } catch (err) {
+        if (err.message) {
+            return res.status(400).json({
+                status: "ERROR",
+                message: err.message,
+            });
+        }
+
+        if (err.name === "ValidationError") {
+            const messagesError = Object.values(err.errors).map(
+                (val) => val.message
+            );
+            return res
+                .status(400)
+                .json({status: "ERROR", messages: messagesError});
+        }
+        return res.status(500).json({status: "ERROR", message: "SERVER ERROR"});
+    }
+};
+
+const resetPassword = async (req, res) => {
+    try {
+        const token = req.params.token;
+        const newPassword = req.body.password;
+        console.log(newPassword);
+        const respone = await userService.resetPassword(token, newPassword);
+        return res.status(200).json(respone);
+    } catch (err) {
+        if (err.message) {
+            return res.status(400).json({
+                status: "ERROR",
+                message: err.message,
+            });
+        }
+
+        if (err.name === "ValidationError") {
+            const messagesError = Object.values(err.errors).map(
+                (val) => val.message
+            );
+            return res
+                .status(400)
+                .json({status: "ERROR", messages: messagesError});
+        }
+        return res.status(500).json({status: "ERROR", message: "SERVER ERROR"});
+    }
+};
+
 export default {
     createUser,
     logInUser,
@@ -203,4 +256,6 @@ export default {
     refreshToken,
     logOutUser,
     changePassword,
+    forgotPassword,
+    resetPassword,
 };

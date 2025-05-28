@@ -1,6 +1,8 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import userToken from "./jwt.service.js";
+import sendEmail from "../utils/sendEmail.js";
+import crypto from "crypto";
 
 //Đăng kí tài khoản
 const createUser = (newUser) => {
@@ -216,6 +218,68 @@ const changePassword = (
     });
 };
 
+const forgotPassword = (email) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!email) throw new Error("Missing Email");
+            const user = await User.findOne({email});
+            if (!user) throw new Error("User not found");
+            const resetToken = crypto.randomBytes(32).toString("hex");
+            const hashedToken = crypto
+                .createHash("sha256")
+                .update(resetToken)
+                .digest("hex");
+            user.resetPasswordToken = hashedToken;
+            user.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+            await user.save();
+
+            const html = `SYBAU TS PMO FR FR NGL <a href="http://localhost:3000/api/v1/users/reset-password/${resetToken}">Click here</a>`;
+            const data = {email, html};
+            const res = await sendEmail(data);
+            resolve({
+                status: "OK",
+                message: "Send email successfully",
+                res,
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
+const resetPassword = (token, newPassword) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const passwordResetToken = crypto
+                .createHash("sha256")
+                .update(token)
+                .digest("hex");
+            const user = await User.findOne({
+                resetPasswordToken: passwordResetToken,
+                resetPasswordExpire: {$gt: Date.now()},
+            });
+            if (!user) {
+                return resolve({
+                    status: "ERROR",
+                    message: "Invalid or Expired Token",
+                });
+            }
+
+            const salt = await bcrypt.genSalt(10);
+            user.password = await bcrypt.hash(newPassword, salt);
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpire = undefined;
+            await user.save();
+            resolve({
+                status: "OK",
+                message: "Reset Password successfully",
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
 export default {
     createUser,
     logInUser,
@@ -224,4 +288,6 @@ export default {
     getAllUsers,
     getUserById,
     changePassword,
+    forgotPassword,
+    resetPassword,
 };
