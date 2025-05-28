@@ -37,9 +37,8 @@ const ProductCard = ({ product }) => {
           />
         </div>
 
-        {/* Content area with flex-grow to fill remaining space */}
         <div className="p-4 flex flex-col flex-grow">
-          <h3 className="font-medium text-gray-900 line-clamp-2 min-h-[2.5rem]">
+          <h3 className="font-bold text-gray-900 line-clamp-2 min-h-[2.5rem]">
             {product.name}
           </h3>
 
