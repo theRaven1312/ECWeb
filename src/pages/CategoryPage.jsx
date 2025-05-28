@@ -258,7 +258,7 @@ const CategoryPage = ({ heading = 'Shop' }) => {
     if (loading) {
         return (
             <div className="main-container">
-                <div className="flex justify-center items-center h-64">
+                <div className="flex-center-around h-screen">
                     <div className="text-lg">Loading products...</div>
                 </div>
             </div>
