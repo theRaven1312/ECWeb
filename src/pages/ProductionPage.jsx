@@ -92,11 +92,12 @@ export default function ProductionPage() {
                     <CommentCard />
                     <CommentCard />
                 </div>
+
                 <button className="primary-btn learnMoreBtn">
                     Learn More Reviews
                 </button>
 
-                <FourItemDisplay heading="Top Selling" links="top" />
+                <FourItemDisplay heading="You might also like" links="top" />
             </MainContainer>
         </>
     );
