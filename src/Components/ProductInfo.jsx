@@ -1,20 +1,30 @@
+import React, {useState} from "react";
 import ChooseSizeBtn from "./ChooseSizeBtn";
 import ColorPicker from "./ColorPicker";
 import QuantitySelector from "./QuanityBtn";
 import RatingStar from "./RatingStar";
 
-const ProductInfo = () => {
-    const score = 4.5;
-    const price = 300;
-    const discountPrice = 200;
-    const discount = 40;
-    const COLORS = ["gray", "blue", "red"];
-    
+const ProductInfo = ({heading, price, desc, colors, sizes}) => {
+    const [selectedColor, setSelectedColor] = useState(""); // State to track selected color (single selection)
+
+    const COLORS = colors;
+
+    // Handler to convert single color selection to array format for ColorPicker
+    const handleColorSelect = (colorsArray) => {
+        if (colorsArray.length > 0) {
+            const newColor = colorsArray[colorsArray.length - 1]; // Get the last selected color
+            setSelectedColor(newColor);
+        } else {
+            setSelectedColor(""); // No color selected
+        }
+    };
+    const discount = 50; // Example discount percentage
+    const discountPrice = price - (price * discount) / 100;
+    const score = 4.5; // Example rating score
+
     return (
         <>
-            <h1 className="product-content__heading heading">
-                ONE LIFE GRAPHIC T SHIRT
-            </h1>
+            <h1 className="product-content__heading heading">{heading}</h1>
             <div className="product-content__feedback">
                 <RatingStar />
                 <p className="product-content__feedback-score desc">
@@ -30,23 +40,24 @@ const ProductInfo = () => {
                     -{discount}%
                 </div>
             </div>
-            <div className="product-content__desc desc">
-                This graphic t-shirt which is perfect for any occasion. Crafted
-                from a soft and breathable fabric, it offers superior comfort
-                and style.
-            </div>
-            <div className="product-content__choose desc">Select Color</div>
-            <ColorPicker colors={COLORS} />
+            <div className="product-content__desc desc">{desc}</div>
+            <div className="product-content__choose desc">
+                Select Color
+            </div>{" "}
+            <ColorPicker
+                colors={COLORS}
+                selectedColors={selectedColor ? [selectedColor] : []} // Convert single color to array format
+                onColorSelect={handleColorSelect} // Use custom handler
+            />
             <div className="product-content__choose desc">Choose Size</div>
             <div className="product-content__choose-size">
-                <ChooseSizeBtn size="Small" />
-                <ChooseSizeBtn size="Medium" />
-                <ChooseSizeBtn size="Large" />
-                <ChooseSizeBtn size="XLarge" />
+                {sizes.map((size) => (
+                    <ChooseSizeBtn key={size} size={size} />
+                ))}
             </div>
-            <div className="product-content__choose-quanity flex gap-5 mt-5">
+            <div className="product-content__choose-quanity flex-center-between gap-5 mt-5">
                 <QuantitySelector />
-                <button className="product-content__cartbtn primary-btn">
+                <button className="product-content__cartbtn primary-btn w-full">
                     Add to Cart
                 </button>
             </div>

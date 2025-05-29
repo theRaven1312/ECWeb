@@ -1,38 +1,38 @@
-import express from 'express';
-import Product from '../models/product.model.js';
-import Category from '../models/category.model.js';
-import userModel from '../models/user.model.js';
-import mongoose from 'mongoose';
+import express from "express";
+import Product from "../models/product.model.js";
+import Category from "../models/category.model.js";
+import userModel from "../models/user.model.js";
+import mongoose from "mongoose";
 const router = express.Router();
-import * as ProductController from '../controllers/product.controller.js';
-import upload from '../middlewares/upload.middleware.js';
+import * as ProductController from "../controllers/product.controller.js";
+import upload from "../middlewares/upload.middleware.js";
 
-router.get('/', ProductController.getAll);
+router.get("/", ProductController.getAll);
 
-router.post('/', upload.array('images', 10), ProductController.create);
+router.post("/", upload.array("images", 10), ProductController.create);
 
-router.put('/:id', upload.array('images', 10), ProductController.update);
+router.put("/:id", upload.array("images", 10), ProductController.update);
 
-router.delete('/:id', ProductController.remove);
-router.get('/get/count', ProductController.getCount);
-router.get('/get/featured/:count', ProductController.getFeatured);
+router.delete("/:id", ProductController.remove);
+router.get("/get/count", ProductController.getCount);
+router.get("/get/featured/:count", ProductController.getFeatured);
 
-router.get('/search', async (req, res) => {
+router.get("/search", async (req, res) => {
     const query = req.query.q;
-    
+
     try {
         const products = await Product.find({
-            name: { $regex: query, $options: 'i' } // tìm không phân biệt hoa thường
-        })
-        
+            name: {$regex: query, $options: "i"}, // tìm không phân biệt hoa thường
+        });
+
         res.json(products);
     } catch (err) {
         console.log(err);
-        res.status(500).json({ message: 'Search failed', error: err.message });
+        res.status(500).json({message: "Search failed", error: err.message});
     }
 });
 
-router.get('/:id', ProductController.getById);
+router.get("/:id", ProductController.getById);
 
 export default router;
 
@@ -156,6 +156,5 @@ export default router;
 
 //     res.send(products );
 // });
-
 
 // export default router;

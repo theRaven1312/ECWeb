@@ -1,31 +1,43 @@
-import {useState} from "react";
-import ProductImg1 from "../../public/Assets/ProductionAssets/t-shirt1.png";
-import ProductImg2 from "../../public/Assets/ProductionAssets/t-shirt2.png";
-import ProductImg3 from "../../public/Assets/ProductionAssets/t-shirt3.png";
-const thumbnails = [ProductImg1, ProductImg2, ProductImg3];
+import {useState, useEffect} from "react";
 
-const ProductImg = () => {
+const ProductImg = ({images, mainImage}) => {
+    const thumbnails = [mainImage, ...(images || [])];
     const [selectedImage, setSelectedImage] = useState(thumbnails[0]);
 
+    useEffect(() => {
+        setSelectedImage(mainImage);
+    }, [mainImage]);
+
     return (
-        <div className="productImg-container">
-            {thumbnails.map((img, i) => (
-                <img
-                    key={i}
-                    src={img}
-                    onClick={() => setSelectedImage(img)}
-                    className={`img-left  ${
-                        img === selectedImage
-                            ? "border-black border-2 "
-                            : "border-transparent opacity-50"
-                    }`}
-                    alt="thumb"
-                />
-            ))}
-            <div className="img-right ">
+        <div className="w-full h-full grid grid-cols-4 gap-4 max-sm:flex max-sm:flex-col max-sm:items-center">
+            {/* Thumbnails */}
+            <div
+                className="flex flex-col gap-2 overflow-y-auto max-h-[500px] flex-center-between
+                       max-sm:flex-row max-sm:overflow-x-auto
+                       max-sm:w-full max-sm:px-1 max-sm:order-2 max-sm:flex-center-between"
+            >
+                {thumbnails.map((img, i) => (
+                    <img
+                        key={i}
+                        src={img}
+                        onClick={() => setSelectedImage(img)}
+                        className={`cursor-pointer rounded-md aspect-[3/4] object-cover max-w-20
+                            max-sm:h-24 max-sm:w-auto max-sm:min-w-[60px] max-sm:flex-shrink-0
+                            transition-all duration-200
+                            ${
+                                img === selectedImage
+                                    ? "border-2 border-black"
+                                    : "opacity-50 border border-transparent"
+                            }`}
+                        alt="thumb"
+                    />
+                ))}
+            </div>
+            {/* Ảnh chính */}
+            <div className="col-span-3 order-2 max-sm:order-1 flex justify-center items-center">
                 <img
                     src={selectedImage}
-                    className="rounded-2xl w-full h-full"
+                    className="rounded-2xl w-auto max-h-[500px] object-cover"
                     alt="main"
                 />
             </div>
