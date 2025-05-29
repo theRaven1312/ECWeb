@@ -28,7 +28,7 @@ const PriceSlider = ({ value, onChange, min = 0, max = 1000 }) => {
               max={max}
               value={value[0]}
               onChange={(e) => handleChange(e, 0)}
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+              className="price-range-input"
             />
           </div>
           <div className="flex flex-col">
@@ -39,7 +39,7 @@ const PriceSlider = ({ value, onChange, min = 0, max = 1000 }) => {
               max={max}
               value={value[1]}
               onChange={(e) => handleChange(e, 1)}
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+              className="price-range-input"
             />
           </div>
         </div>

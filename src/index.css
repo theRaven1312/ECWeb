@@ -152,6 +152,10 @@ body {
     @apply flex flex-col gap-4 w-92 max-sm:w-full;
   }
 
+  .price-range-input {
+    @apply w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer;
+  }
+
   .inputEmail {
     @apply bg-gray-100 flex gap-2 p-2 rounded-full;
   }
