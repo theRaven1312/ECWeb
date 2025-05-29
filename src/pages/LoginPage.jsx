@@ -1,6 +1,6 @@
-import {useState} from "react";
+import {use, useState} from "react";
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useLocation} from "react-router-dom";
 import {jwtDecode} from "jwt-decode";
 import {useDispatch} from "react-redux";
 import {updateUser} from "../redux/UserSliceRedux.js";
@@ -8,6 +8,7 @@ import {updateUser} from "../redux/UserSliceRedux.js";
 const LoginPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const location = useLocation();
     let [isActive, setIsActive] = useState(null);
 
     const handleAddClass = () => setIsActive(true);
@@ -37,10 +38,13 @@ const LoginPage = () => {
             })
             .then((res) => {
                 if (res.data.status === "OK") {
-                    navigate("/");
+                    if (location.state) {
+                        navigate(location.state);
+                    } else {
+                        navigate("/");
+                    }
                     const token = res.data.accessToken;
                     localStorage.setItem("access_token", token);
-
                     if (token) {
                         const decode = jwtDecode(token);
                         if (decode.id) {

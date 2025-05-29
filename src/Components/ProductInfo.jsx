@@ -3,10 +3,14 @@ import ChooseSizeBtn from "./ChooseSizeBtn";
 import ColorPicker from "./ColorPicker";
 import QuantitySelector from "./QuanityBtn";
 import RatingStar from "./RatingStar";
+import {useSelector} from "react-redux";
+import {useLocation, useNavigate} from "react-router-dom";
 
 const ProductInfo = ({heading, price, desc, colors, sizes}) => {
-    const [selectedColor, setSelectedColor] = useState(""); // State to track selected color (single selection)
-
+    const [selectedColor, setSelectedColor] = useState("");
+    const location = useLocation(); // State to track selected color (single selection)
+    const user = useSelector((state) => state.user.user); // Get user from Redux store
+    const navigate = useNavigate(); // Import useNavigate from react-router-dom
     const COLORS = colors;
 
     // Handler to convert single color selection to array format for ColorPicker
@@ -21,6 +25,12 @@ const ProductInfo = ({heading, price, desc, colors, sizes}) => {
     const discount = 50; // Example discount percentage
     const discountPrice = price - (price * discount) / 100;
     const score = 4.5; // Example rating score
+
+    const handleAddToCart = () => {
+        if (!user) {
+            navigate("/login", {state: location.pathname}); // Redirect to login if user is not logged in
+        }
+    };
 
     return (
         <>
@@ -57,7 +67,10 @@ const ProductInfo = ({heading, price, desc, colors, sizes}) => {
             </div>
             <div className="product-content__choose-quanity flex-center-between gap-5 mt-5">
                 <QuantitySelector />
-                <button className="product-content__cartbtn primary-btn w-full">
+                <button
+                    className="product-content__cartbtn primary-btn w-full"
+                    onClick={handleAddToCart}
+                >
                     Add to Cart
                 </button>
             </div>
