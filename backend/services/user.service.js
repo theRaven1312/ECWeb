@@ -233,7 +233,29 @@ const forgotPassword = (email) => {
             user.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
             await user.save();
 
-            const html = `SYBAU TS PMO FR FR NGL <a href="http://localhost:5173/reset-password/${resetToken}">Click here</a>`;
+            const html = `
+                <div style="font-family: Arial, sans-serif; max-width: 500px; margin: auto; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 32px; background: #fff;">
+                    <h2 style="color: #2d3748; text-align: center;">Password Reset Request</h2>
+                    <p style="color: #4a5568; font-size: 16px;">
+                        Hello,<br><br>
+                        We received a request to reset your password. Click the button below to set a new password. This link will expire in 10 minutes.
+                    </p>
+                    <div style="text-align: center; margin: 32px 0;">
+                        <a href="http://localhost:5173/reset-password/${resetToken}" 
+                           style="background: black; color: #fff; padding: 12px 24px; border-radius: 4px; text-decoration: none; font-size: 16px; display: inline-block;">
+                            Reset Password
+                        </a>
+                    </div>
+                    <p style="color: #718096; font-size: 14px;">
+                        If you did not request a password reset, please ignore this email.<br>
+                        For security reasons, do not share this link with anyone.
+                    </p>
+                    <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 24px 0;">
+                    <p style="color: #a0aec0; font-size: 12px; text-align: center;">
+                        &copy; ${new Date().getFullYear()} ECWeb Team. All rights reserved.
+                    </p>
+                </div>
+            `;
             const data = {email, html};
             const res = await sendEmail(data);
             resolve({

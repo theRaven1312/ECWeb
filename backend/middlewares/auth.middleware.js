@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
 import "dotenv/config";
+import User from "../models/user.model.js";
+//Middleware để xác thực người dùng có quyền truy cập vào các route cần thiết
 
 export const authMiddleware = async (req, res, next) => {
     //Lấy phần header auth
@@ -85,4 +87,18 @@ export const authChangePassMiddleware = async (req, res, next) => {
             });
         }
     });
+};
+
+export const authReviewMiddleware = async (req, res, next) => {
+    let token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) return res.status(401).json({message: "Not authorized"});
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = await User.findById(decoded.id).select("-password");
+        next();
+    } catch (err) {
+        res.status(401).json({message: "Token failed"});
+    }
 };

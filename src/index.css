@@ -188,6 +188,10 @@ body {
     @apply overflow-auto text-gray-500;
   }
 
+  .comment-date {
+    @apply text-sm text-gray-400 mt-2;
+  }
+
   .galleryDisplay {
     @apply flex-center flex-col lg:w-[80%] w-full bg-gray-300 p-12 max-sm:p-4 rounded-4xl gap-8 shadow-xl;
   }
@@ -409,19 +413,19 @@ body {
   }
 
   .product-container {
-    @apply flex-center-between gap-5 max-sm:flex-col max-sm:w-full;
+    @apply flex-center-between gap-7 max-sm:flex-col max-sm:w-full;
   }
 
   .product-img {
-    @apply w-[40%] h-full max-sm:w-[100%] max-sm:m-0;
+    @apply w-[50%] h-full max-sm:w-[100%] max-sm:m-0;
   }
 
   .productImg-container {
-    @apply grid grid-cols-4 gap-4 w-full h-full
+    @apply grid grid-cols-4 gap-5 w-full h-full
   }
 
   .product-content {
-    @apply w-[60%] max-sm:w-full max-sm:mt-5;
+    @apply w-[50%] max-sm:w-full max-sm:mt-5;
 
   }
 
@@ -888,4 +892,83 @@ body {
   to {
     opacity: 0;
   }
+}
+
+/* Review Modal Styles (Tailwind CSS) */
+.review-modal-overlay {
+  @apply fixed inset-0 bg-black/20 flex items-center justify-center z-50;
+}
+
+.review-modal {
+  @apply bg-white rounded-lg p-7 w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl;
+}
+
+.review-modal__header {
+  @apply flex justify-between items-center mb-4;
+}
+
+.review-modal__title {
+  @apply text-lg font-bold text-gray-900;
+}
+
+.review-modal__close {
+  @apply text-gray-400 text-2xl font-bold p-1 cursor-pointer border-none bg-transparent transition-colors duration-200 hover:text-gray-700;
+}
+
+.review-modal__form {
+  @apply flex flex-col gap-4;
+}
+
+.review-modal__label {
+  @apply block text-sm font-medium text-gray-700 font-sans;
+}
+
+.review-modal__rating {
+  @apply flex flex-col gap-2;
+}
+
+.review-modal__stars {
+  @apply flex gap-1;
+}
+
+.review-modal__star {
+  @apply text-2xl text-gray-300 cursor-pointer border-none bg-transparent p-0 transition-all duration-300 ease-in-out;
+  transform: scale(1);
+}
+
+.review-modal__star:hover {
+  @apply text-yellow-400;
+  transform: scale(1.1);
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
+}
+
+.review-modal__star.active {
+  @apply text-yellow-400;
+  transform: scale(1.05);
+  text-shadow: 0 0 6px rgba(251, 191, 36, 0.4);
+}
+
+
+.review-modal__rating-text {
+  @apply text-sm text-gray-600;
+}
+
+.review-modal__comment {
+  @apply flex flex-col gap-2;
+}
+
+.review-modal__textarea {
+  @apply w-full p-3 border border-gray-300 rounded-md resize-none font-satoshi text-sm leading-6 outline-none transition-colors duration-200 focus:border-black focus:shadow-sm
+}
+
+.review-modal__actions {
+  @apply flex gap-3 justify-end pt-4;
+}
+
+.review-modal__cancel {
+  @apply px-4 py-2 text-gray-600 border border-gray-300 rounded-md bg-white cursor-pointer text-sm transition-colors duration-200 hover:bg-gray-50;
+}
+
+.review-modal__submit {
+  @apply px-4 py-2 bg-black text-white border-none rounded-md cursor-pointer text-sm transition-colors duration-200 hover:bg-black hover:backdrop-opacity-80 disabled:opacity-50 disabled:cursor-not-allowed;
 }

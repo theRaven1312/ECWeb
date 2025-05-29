@@ -229,8 +229,7 @@ const LoginPage = () => {
                                     Forgot Password
                                 </h1>
                                 <span className="text-base text-green-600 font-sans">
-                                    Request has sent. Please check the email to
-                                    reset password
+                                    Please check your email to reset password
                                 </span>
                             </form>
                         ) : (

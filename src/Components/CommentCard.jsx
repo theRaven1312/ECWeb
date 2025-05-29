@@ -1,21 +1,26 @@
-import React from 'react'
-import start from '../../public/Assets/star.svg'
-import verf from '../../public/Assets/verified.svg'
-import RatingStar from './RatingStar'
+import React from "react";
+import start from "../../public/Assets/star.svg";
+import verf from "../../public/Assets/verified.svg";
+import RatingStar from "./RatingStar";
 
-const CommentCard = () => {
-  return (
-    <div className='commentCard'>
-        <div className='ratingStar'>
-          <RatingStar/>
-        </div>
-        <div className='customer'>
-            <div className='name'>Some dude</div>
-            <img src={verf}/>
-        </div>
-        <p className='comment'>Filler text is text that shares some characteristics of a real written text, but is random or otherwise generated. It may be used to display a sample of fonts, generate text for testing, or to spoof an e-mail spam filter.</p>
-    </div>
-  )
-}
+const CommentCard = ({review}) => {
+    if (!review) return null;
 
-export default CommentCard
+    return (
+        <div className="commentCard">
+            <div className="ratingStar">
+                <RatingStar rating={review.rating} />
+            </div>
+            <div className="customer">
+                <div className="name">{review.users?.name || "Anonymous"}</div>
+                <img src={verf} alt="verified" />
+            </div>
+            <p className="comment">{review.comment}</p>
+            <div className="comment-date">
+                {new Date(review.createdAt).toLocaleDateString("vi-VN")}
+            </div>
+        </div>
+    );
+};
+
+export default CommentCard;

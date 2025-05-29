@@ -7,7 +7,7 @@ import helmet from "helmet";
 import path from "path";
 import "./config/mongodb.js";
 import cookieParser from "cookie-parser";
-import { fileURLToPath } from 'url';
+import {fileURLToPath} from "url";
 
 //Router files
 import userRouter from "./routes/user.routes.js";
@@ -25,16 +25,18 @@ app.use(morgan("dev"));
 app.use(helmet());
 // // Enable CORS with custom options
 const corsOptions = {
-  origin: "http://localhost:5173",
-  credentials: true
+    origin: "http://localhost:5173",
+    credentials: true,
 };
 
 app.use(cors(corsOptions));
 
 // Configure helmet to allow cross-origin resource loading
-app.use(helmet({
-  crossOriginResourcePolicy: { policy: 'cross-origin' }
-}));
+app.use(
+    helmet({
+        crossOriginResourcePolicy: {policy: "cross-origin"},
+    })
+);
 
 //Cookie P
 app.use(cookieParser());
@@ -44,10 +46,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Serve static files from the uploads directory
-app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
+app.use("/uploads", express.static(path.join(__dirname, "../public/uploads")));
 
 // And also make it available through the API URL for backward compatibility
-app.use(`${api}/uploads`, express.static(path.join(__dirname, '../public/uploads')));
+app.use(
+    `${api}/uploads`,
+    express.static(path.join(__dirname, "../public/uploads"))
+);
 
 // Add custom middleware for image URLs
 

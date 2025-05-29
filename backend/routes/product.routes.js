@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 const router = express.Router();
 import * as ProductController from "../controllers/product.controller.js";
 import upload from "../middlewares/upload.middleware.js";
+import {authReviewMiddleware} from "../middlewares/auth.middleware.js";
 
 router.get("/", ProductController.getAll);
 
@@ -33,6 +34,14 @@ router.get("/search", async (req, res) => {
 });
 
 router.get("/:id", ProductController.getById);
+
+router.post(
+    "/:id/reviews",
+    authReviewMiddleware,
+    ProductController.createReview
+);
+
+router.get("/:id/reviews", ProductController.getAllReviews);
 
 export default router;
 

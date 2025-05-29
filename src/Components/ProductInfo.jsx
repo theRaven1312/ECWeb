@@ -6,7 +6,15 @@ import RatingStar from "./RatingStar";
 import {useSelector} from "react-redux";
 import {useLocation, useNavigate} from "react-router-dom";
 
-const ProductInfo = ({heading, price, desc, colors, sizes}) => {
+const ProductInfo = ({
+    heading,
+    price,
+    desc,
+    colors,
+    sizes,
+    rating,
+    numReviews,
+}) => {
     const [selectedColor, setSelectedColor] = useState("");
     const location = useLocation(); // State to track selected color (single selection)
     const user = useSelector((state) => state.user.user); // Get user from Redux store
@@ -24,7 +32,6 @@ const ProductInfo = ({heading, price, desc, colors, sizes}) => {
     };
     const discount = 50; // Example discount percentage
     const discountPrice = price - (price * discount) / 100;
-    const score = 4.5; // Example rating score
 
     const handleAddToCart = () => {
         if (!user) {
@@ -34,11 +41,12 @@ const ProductInfo = ({heading, price, desc, colors, sizes}) => {
 
     return (
         <>
+            {" "}
             <h1 className="product-content__heading heading">{heading}</h1>
             <div className="product-content__feedback">
-                <RatingStar />
+                <RatingStar rating={rating} />
                 <p className="product-content__feedback-score desc">
-                    {score}/5
+                    {rating}/5
                 </p>
             </div>
             <div className="product-content__price">
