@@ -15,13 +15,10 @@ const FourItemDisplay = ({ heading, links }) => {
         let response;
         
         if (heading.toLowerCase().includes('top') || heading.toLowerCase().includes('featured')) {
-          // Lấy sản phẩm featured
           response = await axios.get('/api/v1/products?featured=true&limit=4');
         } else if (heading.toLowerCase().includes('new') || heading.toLowerCase().includes('arrivals')) {
-          // Lấy sản phẩm mới nhất (4 sản phẩm được tạo gần đây nhất)
           response = await axios.get('/api/v1/products?sort=newest&limit=4');
         } else {
-          // Mặc định lấy 4 sản phẩm đầu tiên
           response = await axios.get('/api/v1/products?limit=4');
         }
         

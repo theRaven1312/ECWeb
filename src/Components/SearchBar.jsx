@@ -2,6 +2,7 @@ import React from 'react'
 import searchIcon from '../../public/Assets/searchIcon.svg'
 import {useState, useEffect} from 'react'
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const SearchBar = () => {
 
@@ -39,9 +40,11 @@ const SearchBar = () => {
             {results.length > 0 && (
                 <ul className="bg-white shadow-lg rounded-lg absolute top-18 w-1/4 max-sm:w-full max-sm:top-35 max-sm:left-0 flex flex-col gap-4 border border-gray-200">
                     {results.map((product) => (
-                        <li key={product._id} className="hover:bg-gray-100 hover:cursor-pointer md:ounded-lg p-4 max-sm:border-b-1 max-sm:border-gray-200">
-                            {product.name} - <span className='text-green-700'>{product.price}$</span>
-                        </li>
+                        <Link to={`/product/${product._id}`} key={product._id}>
+                            <li key={product._id} className="hover:bg-gray-100 hover:cursor-pointer md:ounded-lg p-4 max-sm:border-b-1 max-sm:border-gray-200">
+                                {product.name} - <span className='text-green-700'>{product.price}$</span>
+                            </li>
+                        </Link>
                     ))}
                 </ul>
             )}
