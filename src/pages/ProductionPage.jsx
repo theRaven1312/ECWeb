@@ -9,21 +9,51 @@ import CommentDisplay from "../Components/CommentDisplay.jsx";
 import FourItemDisplay from "../Components/FourItemDisplay.jsx";
 import Footer from "../Components/Footer.jsx";
 import CommentCard from "../Components/CommentCard.jsx";
+import {useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
+import axios from "axios";
 
 export default function ProductionPage() {
+    const [product, setProduct] = useState(null);
+    const {id} = useParams();
+
+    useEffect(() => {
+        async function fetchProduct() {
+            try {
+                const res = await axios.get(`/api/v1/products/${id}`);
+                setProduct(res.data);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        fetchProduct();
+    }, [id]);
+
     return (
         <>
             <div class="flex flex-col flex-center">
                 <div className="w-[80%] h-px bg-gray-300"></div>
             </div>
             <MainContainer>
-
                 <div className="product-container">
                     <div className="product-img">
-                        <ProductImg />
+                        {product && (
+                            <ProductImg
+                                images={product.images}
+                                mainImage={product.image_url}
+                            />
+                        )}
                     </div>
                     <div className="product-content ">
-                        <ProductInfo />
+                        {product && (
+                            <ProductInfo
+                                heading={product.name}
+                                price={product.price}
+                                desc={product.description}
+                                colors={product.colors}
+                                sizes={product.sizes}
+                            />
+                        )}
                     </div>
                 </div>
 
@@ -66,7 +96,7 @@ export default function ProductionPage() {
                     Learn More Reviews
                 </button>
 
-                <FourItemDisplay />
+                <FourItemDisplay heading="Top Selling" links="top" />
             </MainContainer>
         </>
     );

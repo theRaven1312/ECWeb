@@ -15,65 +15,83 @@ import {Check} from "lucide-react"; // dùng icon tick
 // ];
 
 const ColorPicker = ({
-  colors = [],
-  selectedColors = [],
-  onColorSelect,
-  classColorPicker = ""
+    colors = [],
+    selectedColors = [],
+    onColorSelect,
+    classColorPicker = "",
 }) => {
-  const handleColorSelect = (color) => {
-    const colorLower = color.toLowerCase();
-    const isSelected = selectedColors.includes(colorLower);
+    const handleColorSelect = (color) => {
+        const colorLower = color.toLowerCase();
+        const isSelected = selectedColors.includes(colorLower);
 
-    if (isSelected) {
-      onColorSelect(selectedColors.filter(c => c !== colorLower));
-    } else {
-      onColorSelect([...selectedColors, colorLower]);
-    }
-  };
-
-  // Convert color names to hex values for display
-  const getColorValue = (color) => {
-    const colorMap = {
-      'red': '#EF4444',
-      'blue': '#3B82F6',
-      'green': '#10B981',
-      'black': '#000000',
-      'white': '#FFFFFF',
-      'yellow': '#F59E0B',
-      'purple': '#8B5CF6',
-      'pink': '#EC4899',
-      'gray': '#6B7280',
-      'orange': '#F97316'
+        if (isSelected) {
+            onColorSelect(selectedColors.filter((c) => c !== colorLower));
+        } else {
+            onColorSelect([...selectedColors, colorLower]);
+        }
     };
 
-    return colorMap[color.toLowerCase()] || color;
-  };
+    // Convert color names to hex values for display
+    const getColorValue = (color) => {
+        const colorMap = {
+            red: "#EF4444",
+            blue: "#3B82F6",
+            green: "#10B981",
+            black: "#000000",
+            white: "#FFFFFF",
+            yellow: "#F59E0B",
+            purple: "#8B5CF6",
+            pink: "#EC4899",
+            gray: "#6B7280",
+            orange: "#F97316",
+        };
 
-  return (
-    <div className={`color-picker ${classColorPicker}`}>
-      <div className="flex flex-wrap gap-2">
-        {colors.map((color, index) => {
-          const colorValue = getColorValue(color);
-          const isSelected = selectedColors.includes(color.toLowerCase());
+        return colorMap[color.toLowerCase()] || color;
+    };
 
-          return (
-            <button
-              key={`color-${index}`} // Fixed: Pass key directly, not in spread
-              className={`w-8 h-8 rounded-full border-2 transition-all duration-200 ${
-                isSelected
-                  ? 'border-gray-800 scale-110'
-                  : 'border-gray-300 hover:border-gray-500'
-              } ${color.toLowerCase() === 'white' ? 'border-gray-400' : ''}`}
-              style={{backgroundColor: colorValue}}
-              onClick={() => handleColorSelect(color)}
-              title={color}
-              aria-label={`Select ${color} color`}
-            />
-          );
-        })}
-      </div>
-    </div>
-  );
+    return (
+        <div className={`color-picker ${classColorPicker}`}>
+            <div className="flex flex-wrap gap-2">
+                {colors.map((color, index) => {
+                    const colorValue = getColorValue(color);
+                    const isSelected = selectedColors.includes(
+                        color.toLowerCase()
+                    );
+
+                    return (
+                        <button
+                            key={`color-${index}`}
+                            className={`w-8 h-8 rounded-full border-2 transition-all duration-200 relative ${
+                                isSelected
+                                    ? "border-gray-800 scale-110"
+                                    : "border-gray-300 hover:border-gray-500"
+                            } ${
+                                color.toLowerCase() === "white"
+                                    ? "border-gray-400"
+                                    : ""
+                            }`}
+                            style={{backgroundColor: colorValue}}
+                            onClick={() => handleColorSelect(color)}
+                            title={color}
+                            aria-label={`Select ${color} color`}
+                        >
+                            {isSelected && (
+                                <Check
+                                    className="absolute inset-0 m-auto w-4 h-4"
+                                    style={{
+                                        color:
+                                            color.toLowerCase() === "white"
+                                                ? "#000"
+                                                : "#fff",
+                                    }}
+                                />
+                            )}
+                        </button>
+                    );
+                })}
+            </div>
+        </div>
+    );
 };
 
 export default ColorPicker;
