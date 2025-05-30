@@ -1,3 +1,14 @@
-export default function ChooseSizeBtn({size}) {
-    return <button className="primary-btn w-20 max-sm:w-full">{size}</button>;
-}
+import React from 'react';
+
+const ChooseSizeBtn = ({ size, isSelected, onSelect }) => {
+    return (
+        <button
+            className={`size-btn ${isSelected ? 'size-btn--selected' : ''}`}
+            onClick={onSelect}
+        >
+            {size}
+        </button>
+    );
+};
+
+export default ChooseSizeBtn;

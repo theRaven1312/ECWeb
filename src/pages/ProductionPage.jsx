@@ -107,6 +107,7 @@ export default function ProductionPage() {
                                 sizes={product.sizes}
                                 rating={product.rating}
                                 numReviews={product.numReviews}
+                                productId={product._id || id} // ✅ Pass productId
                             />
                         )}
                     </div>
