@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosJWT from "../utils/axiosJWT";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {jwtDecode} from "jwt-decode";
@@ -20,19 +20,13 @@ const EditPassword = ({onClose}) => {
             [name]: value,
         }));
     };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const decode = jwtDecode(user.access_token);
-            const res = await axios.post(
+            const res = await axiosJWT.post(
                 `/api/v1/users/change-password/${decode.id}`,
-                formData,
-                {
-                    headers: {
-                        Authorization: `Bearer ${user.access_token}`,
-                    },
-                }
+                formData
             );
             onClose();
         } catch (err) {

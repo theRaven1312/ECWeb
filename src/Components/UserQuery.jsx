@@ -1,6 +1,6 @@
 import {useEffect, useState, useCallback} from "react";
 import UserCardMini from "./UserCardMini";
-import axios from "axios";
+import axiosJWT from "../utils/axiosJWT";
 
 const USERS_PER_PAGE = 4;
 
@@ -15,7 +15,7 @@ const UserQuery = () => {
         setLoading(true);
         setError("");
         try {
-            const response = await axios.get("/api/v1/users");
+            const response = await axiosJWT.get("/api/v1/users");
             setUsers(response.data.data);
         } catch (err) {
             setError("Failed to load users.");
@@ -40,9 +40,8 @@ const UserQuery = () => {
         setLoading(true);
         setError("");
         setSuccess("");
-
         try {
-            await axios.delete(`/api/v1/users/delete-user/${userId}`);
+            await axiosJWT.delete(`/api/v1/users/delete-user/${userId}`);
             setUsers((prev) => prev.filter((u) => u._id !== userId));
             setSuccess(`${userName} deleted successfully!`);
         } catch (err) {

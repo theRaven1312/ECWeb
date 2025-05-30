@@ -20,6 +20,8 @@ axiosJWT.interceptors.request.use(
                 withCredentials: true,
             });
 
+            localStorage.setItem("access_token", newData.data.accessToken);
+
             config.headers[
                 "Authorization"
             ] = `Bearer ${newData.data.accessToken}`;

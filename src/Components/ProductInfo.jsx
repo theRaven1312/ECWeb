@@ -5,7 +5,7 @@ import QuantitySelector from "./QuanityBtn";
 import RatingStar from "./RatingStar";
 import {useSelector} from "react-redux";
 import {useLocation, useNavigate} from "react-router-dom";
-import axios from "axios";
+import axiosJWT from "../utils/axiosJWT";
 
 const ProductInfo = ({
     heading,
@@ -77,44 +77,36 @@ const ProductInfo = ({
             setTimeout(() => setAddToCartMessage(""), 3000);
             return;
         }
-
         try {
             setIsAddingToCart(true);
             setAddToCartMessage("");
 
-            const token = localStorage.getItem('access_token');
-            
-            const response = await axios.post('/api/v1/cart/add', {
+            const response = await axiosJWT.post("/api/v1/cart/add", {
                 productId: productId,
                 quantity: quantity,
                 size: selectedSize,
-                color: selectedColor
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
+                color: selectedColor,
             });
 
-            if (response.data.status === 'SUCCESS') {
+            if (response.data.status === "SUCCESS") {
                 setAddToCartMessage("✅ Product added to cart successfully!");
                 setTimeout(() => setAddToCartMessage(""), 3000);
-                
+
                 // Optional: Reset selections after successful add
                 // setSelectedColor("");
                 // setSelectedSize("");
                 // setQuantity(1);
             }
-
         } catch (error) {
-            console.error('Error adding to cart:', error);
-            
+            console.error("Error adding to cart:", error);
+
             if (error.response?.status === 401) {
                 setAddToCartMessage("Please login again");
                 navigate("/login", {state: {from: location.pathname}});
             } else {
                 setAddToCartMessage(
-                    error.response?.data?.message || "Failed to add product to cart"
+                    error.response?.data?.message ||
+                        "Failed to add product to cart"
                 );
             }
             setTimeout(() => setAddToCartMessage(""), 5000);
@@ -142,7 +134,7 @@ const ProductInfo = ({
                 </div>
             </div>
             <div className="product-content__desc desc">{desc}</div>
-            
+
             {/* Color Selection */}
             {colors && colors.length > 0 && (
                 <>
@@ -175,8 +167,8 @@ const ProductInfo = ({
                     </div>
                     <div className="product-content__choose-size">
                         {sizes.map((size) => (
-                            <ChooseSizeBtn 
-                                key={size} 
+                            <ChooseSizeBtn
+                                key={size}
                                 size={size}
                                 isSelected={selectedSize === size}
                                 onSelect={() => handleSizeSelect(size)}
@@ -188,24 +180,26 @@ const ProductInfo = ({
 
             {/* Add to Cart Message */}
             {addToCartMessage && (
-                <div className={`mt-4 p-3 rounded-lg text-sm ${
-                    addToCartMessage.includes('✅') 
-                        ? 'bg-green-50 text-green-700 border border-green-200'
-                        : 'bg-red-50 text-red-700 border border-red-200'
-                }`}>
+                <div
+                    className={`mt-4 p-3 rounded-lg text-sm ${
+                        addToCartMessage.includes("✅")
+                            ? "bg-green-50 text-green-700 border border-green-200"
+                            : "bg-red-50 text-red-700 border border-red-200"
+                    }`}
+                >
                     {addToCartMessage}
                 </div>
             )}
 
             {/* Quantity and Add to Cart */}
             <div className="product-content__choose-quanity flex-center-between gap-5 mt-5">
-                <QuantitySelector 
+                <QuantitySelector
                     quantity={quantity}
                     onQuantityChange={handleQuantityChange}
                 />
                 <button
                     className={`product-content__cartbtn primary-btn w-full ${
-                        isAddingToCart ? 'opacity-50 cursor-not-allowed' : ''
+                        isAddingToCart ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                     onClick={handleAddToCart}
                     disabled={isAddingToCart}
@@ -216,7 +210,7 @@ const ProductInfo = ({
                             Adding...
                         </>
                     ) : (
-                        'Add to Cart'
+                        "Add to Cart"
                     )}
                 </button>
             </div>

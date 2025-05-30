@@ -1,93 +1,97 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import {useState, useEffect} from "react";
+import axiosJWT from "../utils/axiosJWT";
 
 const ProductAdd = () => {
     const [categories, setCategories] = useState([]);
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
-        name: '',
-        category: '',
-        description: '',
-        price: '',
-        stock: '',
-        colors: '',
-        brand: '',
+        name: "",
+        category: "",
+        description: "",
+        price: "",
+        stock: "",
+        colors: "",
+        brand: "",
         images: [],
-        sizes: ''
+        sizes: "",
     });
-    
+
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get('/api/v1/categories');
+                const response = await axiosJWT.get("/api/v1/categories");
                 setCategories(response.data);
             } catch (err) {
                 console.error("Failed to fetch categories:", err);
             }
         };
-        
+
         fetchCategories();
     }, []);
 
     const handleChange = (e) => {
-        const { name, value, type, files } = e.target;
-        if (type === 'file') {
-            setFormData(prev => ({
+        const {name, value, type, files} = e.target;
+        if (type === "file") {
+            setFormData((prev) => ({
                 ...prev,
-                images: files
+                images: files,
             }));
         } else {
-            setFormData(prev => ({
+            setFormData((prev) => ({
                 ...prev,
-                [name]: value
+                [name]: value,
             }));
         }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (!formData.name.trim()) {
-            setError('Product name is required');
+            setError("Product name is required");
             return;
         }
 
         setLoading(true);
-        setError('');
-        setSuccess('');
-        
+        setError("");
+        setSuccess("");
+
         try {
             const data = new FormData();
             Object.entries(formData).forEach(([key, value]) => {
-                if (key === 'images') {
-                    Array.from(value).forEach(file => data.append('images', file));
+                if (key === "images") {
+                    Array.from(value).forEach((file) =>
+                        data.append("images", file)
+                    );
                 } else {
                     data.append(key, value);
                 }
             });
-            
-            const res = await axios.post('/api/v1/products', data, {
+            const res = await axiosJWT.post("/api/v1/products", data, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
+                    "Content-Type": "multipart/form-data",
+                },
             });
-            
-            setSuccess('Product added successfully!');
+
+            setSuccess("Product added successfully!");
             setFormData({
-                name: '',
-                category: '',
-                description: '',
-                price: '',
-                stock: '',
-                colors: '',
-                brand: '',
+                name: "",
+                category: "",
+                description: "",
+                price: "",
+                stock: "",
+                colors: "",
+                brand: "",
                 images: [],
-                sizes: ''
+                sizes: "",
             });
         } catch (err) {
-            setError('Failed to create product: ' + (err.response?.data?.message || err.message));
+            setError(
+                "Failed to create product: " +
+                    (err.response?.data?.message || err.message)
+            );
         } finally {
             setLoading(false);
         }
@@ -96,7 +100,7 @@ const ProductAdd = () => {
     return (
         <div className="p-6">
             <h2 className="text-xl font-bold mb-4">Add New Product</h2>
-            
+
             <form onSubmit={handleSubmit} className="max-w-2xl space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -126,7 +130,7 @@ const ProductAdd = () => {
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             <option value="">Select a category</option>
-                            {categories.map(category => (
+                            {categories.map((category) => (
                                 <option key={category._id} value={category._id}>
                                     {category.name}
                                 </option>
@@ -258,7 +262,7 @@ const ProductAdd = () => {
                     disabled={loading}
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md disabled:bg-gray-400 disabled:cursor-not-allowed"
                 >
-                    {loading ? 'Creating...' : 'Create Product'}
+                    {loading ? "Creating..." : "Create Product"}
                 </button>
             </form>
         </div>

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosJWT from "../utils/axiosJWT";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {jwtDecode} from "jwt-decode";
@@ -35,12 +35,11 @@ const EditProfile = ({onClose}) => {
             [name]: value,
         }));
     };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const decode = jwtDecode(user.access_token);
-            const res = await axios.put(
+            const res = await axiosJWT.put(
                 `/api/v1/users/update-user/${decode.id}`,
                 formData
             );

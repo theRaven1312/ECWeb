@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import axios from "axios";
+import axiosJWT from "../utils/axiosJWT";
 import {useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
 
@@ -17,7 +17,6 @@ const ReviewModal = ({isOpen, onClose, onReviewSubmitted}) => {
     const handleStarHover = (starIndex) => {
         setHoverRating(starIndex + 1);
     };
-
     const handleStarLeave = () => {
         setHoverRating(0);
     };
@@ -27,18 +26,10 @@ const ReviewModal = ({isOpen, onClose, onReviewSubmitted}) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post(
-                `/api/v1/products/${id}/reviews`,
-                {
-                    rating,
-                    comment,
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${user.access_token}`,
-                    },
-                }
-            );
+            await axiosJWT.post(`/api/v1/products/${id}/reviews`, {
+                rating,
+                comment,
+            });
 
             // Reset form
             setRating(0);

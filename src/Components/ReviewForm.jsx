@@ -1,65 +1,70 @@
-import React, { useState, useEffect } from 'react';
-import RatingStar from './RatingStar';
-import { useSelector } from 'react-redux';
-import axios from 'axios';
+import React, {useState, useEffect} from "react";
+import RatingStar from "./RatingStar";
+import {useSelector} from "react-redux";
+import axiosJWT from "../utils/axiosJWT";
 
 // ✅ Helper function to decode JWT and extract user ID
 const getUserIdFromToken = (token) => {
     try {
         if (!token) return null;
-        
-        const payload = JSON.parse(atob(token.split('.')[1]));
+
+        const payload = JSON.parse(atob(token.split(".")[1]));
         return payload.id || payload._id || payload.userId;
     } catch (error) {
-        console.error('Error decoding token:', error);
+        console.error("Error decoding token:", error);
         return null;
     }
 };
 
-const ReviewForm = ({ productId, onReviewSubmitted }) => {
+const ReviewForm = ({productId, onReviewSubmitted}) => {
     const user = useSelector((state) => state.user);
     const [canReview, setCanReview] = useState(false);
     const [reviewEligibility, setReviewEligibility] = useState(null);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
-    
+
     // Form state
     const [rating, setRating] = useState(0);
-    const [content, setContent] = useState('');
+    const [content, setContent] = useState("");
 
     // ✅ Get user ID from multiple sources
     const getUserId = () => {
         // Try to get from user state first
         let userId = user?._id || user?.id || user?.userId;
-        
+
         // If not found, try to extract from token
         if (!userId) {
-            const token = localStorage.getItem('access_token');
+            const token = localStorage.getItem("access_token");
             userId = getUserIdFromToken(token);
         }
-        
+
         return userId;
     };
 
     // ✅ Debug user state
     useEffect(() => {
-        console.log('Current user state:', user);
-        console.log('User ID from state:', user?._id || user?.id);
-        console.log('Access token:', localStorage.getItem('access_token'));
-        
-        const tokenUserId = getUserIdFromToken(localStorage.getItem('access_token'));
-        console.log('User ID from token:', tokenUserId);
-        console.log('Final User ID:', getUserId());
+        console.log("Current user state:", user);
+        console.log("User ID from state:", user?._id || user?.id);
+        console.log("Access token:", localStorage.getItem("access_token"));
+
+        const tokenUserId = getUserIdFromToken(
+            localStorage.getItem("access_token")
+        );
+        console.log("User ID from token:", tokenUserId);
+        console.log("Final User ID:", getUserId());
     }, [user]);
 
     useEffect(() => {
         const userId = getUserId();
-        
+
         if (userId && productId) {
-            console.log('Checking review eligibility for:', { userId, productId });
+            console.log("Checking review eligibility for:", {
+                userId,
+                productId,
+            });
             checkReviewEligibility();
         } else {
-            console.log('Missing data:', { userId, productId });
+            console.log("Missing data:", {userId, productId});
             setLoading(false);
         }
     }, [user, productId]);
@@ -67,47 +72,43 @@ const ReviewForm = ({ productId, onReviewSubmitted }) => {
     const checkReviewEligibility = async () => {
         try {
             setLoading(true);
-            
-            const token = localStorage.getItem('access_token');
+
+            const token = localStorage.getItem("access_token");
             if (!token) {
-                console.log('No access token found');
+                console.log("No access token found");
                 setCanReview(false);
                 setReviewEligibility({
                     canReview: false,
-                    reason: 'no_token',
-                    message: 'Please log in again'
+                    reason: "no_token",
+                    message: "Please log in again",
                 });
                 setLoading(false);
                 return;
             }
-
-            console.log('Calling API to check review eligibility...');
-            const response = await axios.get(
-                `/api/v1/comments/can-review/${productId}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
+            console.log("Calling API to check review eligibility...");
+            const response = await axiosJWT.get(
+                `/api/v1/comments/can-review/${productId}`
             );
-            
-            console.log('Review eligibility response:', response.data);
+
+            console.log("Review eligibility response:", response.data);
             setCanReview(response.data.canReview);
             setReviewEligibility(response.data);
         } catch (error) {
-            console.error('Error checking review eligibility:', error);
-            
+            console.error("Error checking review eligibility:", error);
+
             if (error.response?.status === 401) {
                 setReviewEligibility({
                     canReview: false,
-                    reason: 'unauthorized',
-                    message: 'Please log in again'
+                    reason: "unauthorized",
+                    message: "Please log in again",
                 });
             } else {
                 setReviewEligibility({
                     canReview: false,
-                    reason: 'error',
-                    message: error.response?.data?.message || 'Unable to check review eligibility'
+                    reason: "error",
+                    message:
+                        error.response?.data?.message ||
+                        "Unable to check review eligibility",
                 });
             }
             setCanReview(false);
@@ -118,54 +119,48 @@ const ReviewForm = ({ productId, onReviewSubmitted }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (!rating || !content.trim()) {
-            alert('Please provide both rating and review content');
+            alert("Please provide both rating and review content");
             return;
         }
 
         try {
             setSubmitting(true);
-            
-            const token = localStorage.getItem('access_token');
+
+            const token = localStorage.getItem("access_token");
             if (!token) {
-                alert('Please log in to submit a review');
+                alert("Please log in to submit a review");
                 return;
             }
-
-            const response = await axios.post(
-                '/api/v1/comments',
-                {
-                    productId,
-                    rating,
-                    content: content.trim()
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            );
+            const response = await axiosJWT.post("/api/v1/comments", {
+                productId,
+                rating,
+                content: content.trim(),
+            });
 
             // Reset form
             setRating(0);
-            setContent('');
-            
-            alert('Review submitted successfully!');
-            
+            setContent("");
+
+            alert("Review submitted successfully!");
+
             if (onReviewSubmitted) {
                 onReviewSubmitted(response.data.comment);
             }
-
         } catch (error) {
-            console.error('Error submitting review:', error);
-            
+            console.error("Error submitting review:", error);
+
             if (error.response?.status === 401) {
-                alert('Your session has expired. Please log in again.');
-            } else if (error.response?.data?.code === 'SHIPPED_ORDER_REQUIRED') {
-                alert('You can only review products from your shipped orders.');
+                alert("Your session has expired. Please log in again.");
+            } else if (
+                error.response?.data?.code === "SHIPPED_ORDER_REQUIRED"
+            ) {
+                alert("You can only review products from your shipped orders.");
             } else {
-                alert(error.response?.data?.message || 'Failed to submit review');
+                alert(
+                    error.response?.data?.message || "Failed to submit review"
+                );
             }
         } finally {
             setSubmitting(false);
@@ -185,11 +180,11 @@ const ReviewForm = ({ productId, onReviewSubmitted }) => {
 
     // ✅ Updated login check
     const userId = getUserId();
-    const token = localStorage.getItem('access_token');
+    const token = localStorage.getItem("access_token");
     const isLoggedIn = userId && token;
-    
-    console.log('Login check:', { userId, token: !!token, isLoggedIn });
-    
+
+    console.log("Login check:", {userId, token: !!token, isLoggedIn});
+
     if (!isLoggedIn) {
         return (
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
@@ -221,34 +216,38 @@ const ReviewForm = ({ productId, onReviewSubmitted }) => {
     if (!canReview) {
         const getMessageForReason = (reason) => {
             switch (reason) {
-                case 'no_shipped_order':
+                case "no_shipped_order":
                     return {
-                        title: 'Shipped Order Required',
-                        message: 'You can only review products from your shipped orders.',
-                        icon: 'fa-shipping-fast',
-                        color: 'orange'
+                        title: "Shipped Order Required",
+                        message:
+                            "You can only review products from your shipped orders.",
+                        icon: "fa-shipping-fast",
+                        color: "orange",
                     };
-                case 'already_reviewed':
+                case "already_reviewed":
                     return {
-                        title: 'Already Reviewed',
-                        message: 'You have already reviewed this product.',
-                        icon: 'fa-check-circle',
-                        color: 'green'
+                        title: "Already Reviewed",
+                        message: "You have already reviewed this product.",
+                        icon: "fa-check-circle",
+                        color: "green",
                     };
-                case 'unauthorized':
-                case 'no_token':
+                case "unauthorized":
+                case "no_token":
                     return {
-                        title: 'Authentication Required',
-                        message: 'Your session has expired. Please log in again.',
-                        icon: 'fa-lock',
-                        color: 'red'
+                        title: "Authentication Required",
+                        message:
+                            "Your session has expired. Please log in again.",
+                        icon: "fa-lock",
+                        color: "red",
                     };
                 default:
                     return {
-                        title: 'Cannot Review',
-                        message: reviewEligibility?.message || 'Unable to review this product.',
-                        icon: 'fa-exclamation-circle',
-                        color: 'red'
+                        title: "Cannot Review",
+                        message:
+                            reviewEligibility?.message ||
+                            "Unable to review this product.",
+                        icon: "fa-exclamation-circle",
+                        color: "red",
                     };
             }
         };
@@ -258,16 +257,17 @@ const ReviewForm = ({ productId, onReviewSubmitted }) => {
         return (
             <div className="bg-orange-50 border border-orange-200 rounded-lg p-6">
                 <div className="flex items-center gap-3 mb-3">
-                    <i className={`fa-solid ${messageInfo.icon} text-orange-600`}></i>
+                    <i
+                        className={`fa-solid ${messageInfo.icon} text-orange-600`}
+                    ></i>
                     <h3 className="font-semibold text-orange-900">
                         {messageInfo.title}
                     </h3>
                 </div>
-                <p className="text-orange-700 mb-4">
-                    {messageInfo.message}
-                </p>
-                
-                {(reviewEligibility?.reason === 'unauthorized' || reviewEligibility?.reason === 'no_token') && (
+                <p className="text-orange-700 mb-4">{messageInfo.message}</p>
+
+                {(reviewEligibility?.reason === "unauthorized" ||
+                    reviewEligibility?.reason === "no_token") && (
                     <div className="flex gap-3">
                         <a
                             href="/login"
@@ -291,7 +291,7 @@ const ReviewForm = ({ productId, onReviewSubmitted }) => {
     return (
         <div className="bg-white border border-gray-200 rounded-lg p-6">
             <h3 className="text-xl font-semibold mb-6">Write a Review</h3>
-            
+
             <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Rating */}
                 <div>
@@ -337,7 +337,7 @@ const ReviewForm = ({ productId, onReviewSubmitted }) => {
                             Submitting...
                         </span>
                     ) : (
-                        'Submit Review'
+                        "Submit Review"
                     )}
                 </button>
             </form>

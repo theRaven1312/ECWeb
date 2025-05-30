@@ -1,11 +1,11 @@
-import express from 'express';
-import Cart from '../models/cart.model.js';
-import Product from '../models/product.model.js';
-import Coupon from '../models/coupon.model.js';
+import express from "express";
+import Cart from "../models/cart.model.js";
+import Product from "../models/product.model.js";
+import Coupon from "../models/coupon.model.js";
 
 function calculateTotalPrice(products) {
     let totalPrice = 0;
-    products.forEach(item => {
+    products.forEach((item) => {
         totalPrice += item.product.price * item.quantity;
     });
     return totalPrice;
@@ -16,38 +16,38 @@ export const initializeCart = async (req, res) => {
     try {
         // ✅ Get user ID from JWT token
         const userId = req.user.id || req.user._id;
-        
+
         if (!userId) {
             return res.status(400).json({
-                message: 'User ID not found in token',
-                status: 'ERROR'
+                message: "User ID not found in token",
+                status: "ERROR",
             });
         }
 
-        const existingCart = await Cart.findOne({ user: userId });
+        const existingCart = await Cart.findOne({user: userId});
 
         if (existingCart) {
             return res.status(200).json({
-                message: 'Cart already exists',
+                message: "Cart already exists",
                 cart: existingCart,
-                status: 'SUCCESS'
+                status: "SUCCESS",
             });
         }
 
-        const newCart = new Cart({ user: userId });
+        const newCart = new Cart({user: userId});
         await newCart.save();
 
         res.status(201).json({
-            message: 'Cart initialized successfully',
+            message: "Cart initialized successfully",
             cart: newCart,
-            status: 'SUCCESS'
+            status: "SUCCESS",
         });
     } catch (error) {
-        console.error('Initialize cart error:', error);
+        console.error("Initialize cart error:", error);
         res.status(500).json({
-            message: 'Error initializing cart',
+            message: "Error initializing cart",
             error: error.message,
-            status: 'ERROR'
+            status: "ERROR",
         });
     }
 };
@@ -57,22 +57,28 @@ export const addToCart = async (req, res) => {
     try {
         // ✅ Get user ID from JWT token
         const userId = req.user.id || req.user._id;
-        const { productId, quantity = 1, size = '', color = '' } = req.body;
+        const {productId, quantity = 1, size = "", color = ""} = req.body;
 
-        console.log('Adding to cart:', { userId, productId, quantity, size, color });
+        console.log("Adding to cart:", {
+            userId,
+            productId,
+            quantity,
+            size,
+            color,
+        });
 
         if (!userId) {
             return res.status(400).json({
-                message: 'User ID not found in token',
-                status: 'ERROR'
+                message: "User ID not found in token",
+                status: "ERROR",
             });
         }
 
         // ✅ Validate input
         if (!productId) {
             return res.status(400).json({
-                message: 'Product ID is required',
-                status: 'ERROR'
+                message: "Product ID is required",
+                status: "ERROR",
             });
         }
 
@@ -80,22 +86,23 @@ export const addToCart = async (req, res) => {
         const product = await Product.findById(productId);
         if (!product) {
             return res.status(404).json({
-                message: 'Product not found',
-                status: 'ERROR'
+                message: "Product not found",
+                status: "ERROR",
             });
         }
 
-        let cart = await Cart.findOne({ user: userId });
+        let cart = await Cart.findOne({user: userId});
 
         // ✅ Create cart if doesn't exist
         if (!cart) {
-            cart = new Cart({ user: userId });
+            cart = new Cart({user: userId});
         }
 
         const existingProductIndex = cart.products.findIndex(
-            p => p.product.toString() === productId && 
-                 p.size === size && 
-                 p.color === color
+            (p) =>
+                p.product.toString() === productId &&
+                p.size === size &&
+                p.color === color
         );
 
         if (existingProductIndex > -1) {
@@ -103,31 +110,31 @@ export const addToCart = async (req, res) => {
             cart.products[existingProductIndex].quantity += parseInt(quantity);
         } else {
             // Add new product variant to cart
-            cart.products.push({ 
-                product: productId, 
-                quantity: parseInt(quantity), 
-                size, 
-                color 
+            cart.products.push({
+                product: productId,
+                quantity: parseInt(quantity),
+                size,
+                color,
             });
         }
 
         // Populate products to calculate total
-        await cart.populate('products.product');
+        await cart.populate("products.product");
         cart.totalPrice = calculateTotalPrice(cart.products);
-        
+
         await cart.save();
 
         res.status(200).json({
-            message: 'Product added to cart successfully',
+            message: "Product added to cart successfully",
             cart,
-            status: 'SUCCESS'
+            status: "SUCCESS",
         });
     } catch (error) {
-        console.error('Add to cart error:', error);
+        console.error("Add to cart error:", error);
         res.status(500).json({
-            message: 'Error adding product to cart',
+            message: "Error adding product to cart",
             error: error.message,
-            status: 'ERROR'
+            status: "ERROR",
         });
     }
 };
@@ -135,37 +142,37 @@ export const addToCart = async (req, res) => {
 // ✅ Get the user's cart
 export const getUserCart = async (req, res) => {
     try {
-        // ✅ Get user ID from JWT token
+        console.log(req.user._id);
         const userId = req.user.id || req.user._id;
-        
-        console.log('Getting cart for user:', userId);
 
         if (!userId) {
             return res.status(400).json({
-                message: 'User ID not found in token',
-                status: 'ERROR'
+                message: "User ID not found in token",
+                status: "ERROR",
             });
         }
 
-        let cart = await Cart.findOne({ user: userId }).populate('products.product');
+        let cart = await Cart.findOne({user: userId}).populate(
+            "products.product"
+        );
 
         if (!cart) {
             // Create new cart if doesn't exist
-            cart = new Cart({ user: userId });
+            cart = new Cart({user: userId});
             await cart.save();
         }
 
         res.status(200).json({
-            message: 'Cart retrieved successfully',
+            message: "Cart retrieved successfully",
             cart,
-            status: 'SUCCESS'
+            status: "SUCCESS",
         });
     } catch (error) {
-        console.error('Get cart error:', error);
+        console.error("Get cart error:", error);
         res.status(500).json({
-            message: 'Error retrieving cart',
+            message: "Error retrieving cart",
             error: error.message,
-            status: 'ERROR'
+            status: "ERROR",
         });
     }
 };
@@ -175,37 +182,44 @@ export const updateProductQuantity = async (req, res) => {
     try {
         // ✅ Get user ID from JWT token
         const userId = req.user.id || req.user._id;
-        const { productId } = req.params;
-        const { quantity, size = '', color = '' } = req.body;
+        const {productId} = req.params;
+        const {quantity, size = "", color = ""} = req.body;
 
-        console.log('Updating quantity:', { userId, productId, quantity, size, color });
+        console.log("Updating quantity:", {
+            userId,
+            productId,
+            quantity,
+            size,
+            color,
+        });
 
         if (!userId) {
             return res.status(400).json({
-                message: 'User ID not found in token',
-                status: 'ERROR'
+                message: "User ID not found in token",
+                status: "ERROR",
             });
         }
 
-        const cart = await Cart.findOne({ user: userId });
+        const cart = await Cart.findOne({user: userId});
 
         if (!cart) {
             return res.status(404).json({
-                message: 'Cart not found',
-                status: 'ERROR'
+                message: "Cart not found",
+                status: "ERROR",
             });
         }
 
         const productIndex = cart.products.findIndex(
-            p => p.product.toString() === productId && 
-                 p.size === size && 
-                 p.color === color
+            (p) =>
+                p.product.toString() === productId &&
+                p.size === size &&
+                p.color === color
         );
 
         if (productIndex === -1) {
             return res.status(404).json({
-                message: 'Product not found in cart',
-                status: 'ERROR'
+                message: "Product not found in cart",
+                status: "ERROR",
             });
         }
 
@@ -218,22 +232,22 @@ export const updateProductQuantity = async (req, res) => {
         }
 
         // Populate and recalculate total
-        await cart.populate('products.product');
+        await cart.populate("products.product");
         cart.totalPrice = calculateTotalPrice(cart.products);
-        
+
         await cart.save();
 
         res.status(200).json({
-            message: 'Cart updated successfully',
+            message: "Cart updated successfully",
             cart,
-            status: 'SUCCESS'
+            status: "SUCCESS",
         });
     } catch (error) {
-        console.error('Update quantity error:', error);
+        console.error("Update quantity error:", error);
         res.status(500).json({
-            message: 'Error updating cart',
+            message: "Error updating cart",
             error: error.message,
-            status: 'ERROR'
+            status: "ERROR",
         });
     }
 };
@@ -243,60 +257,61 @@ export const removeFromCart = async (req, res) => {
     try {
         // ✅ Get user ID from JWT token
         const userId = req.user.id || req.user._id;
-        const { productId } = req.params;
-        const { size = '', color = '' } = req.body;
+        const {productId} = req.params;
+        const {size = "", color = ""} = req.body;
 
-        console.log('Removing from cart:', { userId, productId, size, color });
+        console.log("Removing from cart:", {userId, productId, size, color});
 
         if (!userId) {
             return res.status(400).json({
-                message: 'User ID not found in token',
-                status: 'ERROR'
+                message: "User ID not found in token",
+                status: "ERROR",
             });
         }
 
-        const cart = await Cart.findOne({ user: userId });
-        
+        const cart = await Cart.findOne({user: userId});
+
         if (!cart) {
             return res.status(404).json({
-                message: 'Cart not found',
-                status: 'ERROR'
+                message: "Cart not found",
+                status: "ERROR",
             });
         }
-        
+
         const productIndex = cart.products.findIndex(
-            p => p.product.toString() === productId && 
-                 p.size === size && 
-                 p.color === color
+            (p) =>
+                p.product.toString() === productId &&
+                p.size === size &&
+                p.color === color
         );
 
         if (productIndex === -1) {
             return res.status(404).json({
-                message: 'Product not found in cart',
-                status: 'ERROR'
+                message: "Product not found in cart",
+                status: "ERROR",
             });
         }
-        
+
         // Remove the product from the cart
         cart.products.splice(productIndex, 1);
 
         // Populate and recalculate total
-        await cart.populate('products.product');
+        await cart.populate("products.product");
         cart.totalPrice = calculateTotalPrice(cart.products);
-        
+
         await cart.save();
-        
+
         res.status(200).json({
-            message: 'Product removed from cart successfully',
+            message: "Product removed from cart successfully",
             cart,
-            status: 'SUCCESS'
+            status: "SUCCESS",
         });
     } catch (error) {
-        console.error('Remove from cart error:', error);
+        console.error("Remove from cart error:", error);
         res.status(500).json({
-            message: 'Error removing product from cart',
+            message: "Error removing product from cart",
             error: error.message,
-            status: 'ERROR'
+            status: "ERROR",
         });
     }
 };
@@ -307,41 +322,41 @@ export const clearCart = async (req, res) => {
         // ✅ Get user ID from JWT token
         const userId = req.user.id || req.user._id;
 
-        console.log('Clearing cart for user:', userId);
+        console.log("Clearing cart for user:", userId);
 
         if (!userId) {
             return res.status(400).json({
-                message: 'User ID not found in token',
-                status: 'ERROR'
+                message: "User ID not found in token",
+                status: "ERROR",
             });
         }
 
-        const cart = await Cart.findOne({ user: userId });
-        
+        const cart = await Cart.findOne({user: userId});
+
         if (!cart) {
             return res.status(404).json({
-                message: 'Cart not found',
-                status: 'ERROR'
+                message: "Cart not found",
+                status: "ERROR",
             });
         }
 
         cart.products = [];
         cart.totalPrice = 0;
         cart.coupon = null;
-        
+
         await cart.save();
 
         res.status(200).json({
-            message: 'Cart cleared successfully',
+            message: "Cart cleared successfully",
             cart,
-            status: 'SUCCESS'
+            status: "SUCCESS",
         });
     } catch (error) {
-        console.error('Clear cart error:', error);
+        console.error("Clear cart error:", error);
         res.status(500).json({
-            message: 'Error clearing cart',
+            message: "Error clearing cart",
             error: error.message,
-            status: 'ERROR'
+            status: "ERROR",
         });
     }
 };

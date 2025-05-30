@@ -1,14 +1,14 @@
-import { useState } from "react";
+import {useState} from "react";
 import arrowDown from "../../public/Assets/arrowdown.svg";
 import cartIcon from "../../public/Assets/cart.svg";
 import profile from "../../public/Assets/profile.svg";
 import menu from "../../public/Assets/menu.svg";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import SearchBar from "./SearchBar";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import { resetUser } from "../redux/UserSliceRedux";
-import { useNavigate } from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import axiosJWT from "../utils/axiosJWT";
+import {resetUser} from "../redux/UserSliceRedux";
+import {useNavigate} from "react-router-dom";
 
 const Navbar = () => {
     const user = useSelector((state) => state.user);
@@ -16,9 +16,8 @@ const Navbar = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
     const handleLogout = async () => {
-        await axios.post(`/api/v1/users/log-out`);
+        await axiosJWT.post(`/api/v1/users/log-out`);
         dispatch(resetUser());
         localStorage.removeItem("access_token");
         navigate("/");
@@ -32,13 +31,13 @@ const Navbar = () => {
         <>
             <div className="navbar">
                 {/* Mobile Menu Button */}
-                <button 
+                <button
                     className="md:hidden z-50"
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 >
                     <img src={menu} alt="menu" className="w-6 h-6" />
                 </button>
-                
+
                 <div className="navbarLogo">
                     <Link to="/" onClick={() => window.scrollTo(0, 0)}>
                         T3.SAHUR
@@ -68,7 +67,7 @@ const Navbar = () => {
                 <div className="hidden md:block">
                     <SearchBar />
                 </div>
-                
+
                 <div className="navbarCartProfile">
                     <Link to="/cart">
                         <img src={cartIcon} alt="cart" />
@@ -97,7 +96,9 @@ const Navbar = () => {
                                     {user.role === "admin" && (
                                         <Link
                                             to="/admin"
-                                            onClick={() => setDropdownOpen(false)}
+                                            onClick={() =>
+                                                setDropdownOpen(false)
+                                            }
                                             className="dropdown-menu__info"
                                         >
                                             Store Management
@@ -126,21 +127,25 @@ const Navbar = () => {
 
             {/* Mobile Menu Overlay */}
             {mobileMenuOpen && (
-                <div 
+                <div
                     className="fixed inset-0 bg-black/50 z-40 md:hidden"
                     onClick={closeMobileMenu}
                 />
             )}
 
             {/* Mobile Menu Dropdown */}
-            <div className={`fixed top-0 left-0 h-full w-80 bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-50 md:hidden ${
-                mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-            }`}>
+            <div
+                className={`fixed top-0 left-0 h-full w-80 bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-50 md:hidden ${
+                    mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+                }`}
+            >
                 <div className="flex flex-col h-full">
                     {/* Header */}
                     <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                        <div className="text-2xl font-bold font-integral">T3.SAHUR</div>
-                        <button 
+                        <div className="text-2xl font-bold font-integral">
+                            T3.SAHUR
+                        </div>
+                        <button
                             onClick={closeMobileMenu}
                             className="p-2 hover:bg-gray-100 rounded-full"
                         >
@@ -157,18 +162,22 @@ const Navbar = () => {
                     <nav className="flex-1 py-6">
                         <ul className="space-y-2">
                             <li>
-                                <Link 
-                                    to="/category" 
+                                <Link
+                                    to="/category"
                                     className="flex items-center justify-between px-6 py-4 text-lg font-medium hover:bg-gray-100 transition-colors"
                                     onClick={closeMobileMenu}
                                 >
                                     <span>Shop</span>
-                                    <img src={arrowDown} alt="arrow" className="w-4 h-4" />
+                                    <img
+                                        src={arrowDown}
+                                        alt="arrow"
+                                        className="w-4 h-4"
+                                    />
                                 </Link>
                             </li>
                             <li>
-                                <Link 
-                                    to="/category/sales" 
+                                <Link
+                                    to="/category/sales"
                                     className="block px-6 py-4 text-lg hover:bg-gray-100 transition-colors"
                                     onClick={closeMobileMenu}
                                 >
@@ -176,8 +185,8 @@ const Navbar = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link 
-                                    to="/category/new-arrivals" 
+                                <Link
+                                    to="/category/new-arrivals"
                                     className="block px-6 py-4 text-lg hover:bg-gray-100 transition-colors"
                                     onClick={closeMobileMenu}
                                 >
@@ -185,8 +194,8 @@ const Navbar = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link 
-                                    to="/category/top" 
+                                <Link
+                                    to="/category/top"
                                     className="block px-6 py-4 text-lg hover:bg-gray-100 transition-colors"
                                     onClick={closeMobileMenu}
                                 >
@@ -201,13 +210,21 @@ const Navbar = () => {
                         {user.name ? (
                             <div className="space-y-4">
                                 <div className="flex items-center gap-3 pb-4 border-b border-gray-200">
-                                    <img src={profile} alt="Profile" className="w-10 h-10" />
+                                    <img
+                                        src={profile}
+                                        alt="Profile"
+                                        className="w-10 h-10"
+                                    />
                                     <div>
-                                        <div className="font-medium">{user.name}</div>
-                                        <div className="text-sm text-gray-500">Welcome back!</div>
+                                        <div className="font-medium">
+                                            {user.name}
+                                        </div>
+                                        <div className="text-sm text-gray-500">
+                                            Welcome back!
+                                        </div>
                                     </div>
                                 </div>
-                                
+
                                 <Link
                                     to="/profile"
                                     className="flex items-center gap-3 py-2 text-gray-700 hover:text-black"
@@ -216,7 +233,7 @@ const Navbar = () => {
                                     <i className="fa-solid fa-user w-5"></i>
                                     <span>User Info</span>
                                 </Link>
-                                
+
                                 <Link
                                     to="/cart"
                                     className="flex items-center gap-3 py-2 text-gray-700 hover:text-black"
@@ -225,7 +242,7 @@ const Navbar = () => {
                                     <i className="fa-solid fa-shopping-cart w-5"></i>
                                     <span>Cart</span>
                                 </Link>
-                                
+
                                 {user.role === "admin" && (
                                     <Link
                                         to="/admin"
@@ -236,7 +253,7 @@ const Navbar = () => {
                                         <span>Store Management</span>
                                     </Link>
                                 )}
-                                
+
                                 <button
                                     onClick={() => {
                                         handleLogout();

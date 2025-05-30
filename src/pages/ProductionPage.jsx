@@ -13,6 +13,7 @@ import ReviewModal from "../Components/ReviewModal.jsx";
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import axios from "axios";
+import axiosJWT from "../utils/axiosJWT.js";
 
 export default function ProductionPage() {
     const [product, setProduct] = useState(null);
@@ -38,7 +39,7 @@ export default function ProductionPage() {
                 setProduct(productRes.data);
 
                 // Fetch reviews data
-                const reviewsRes = await axios.get(
+                const reviewsRes = await axiosJWT.get(
                     `/api/v1/products/${id}/reviews`
                 );
                 setReviews(reviewsRes.data);
@@ -73,7 +74,7 @@ export default function ProductionPage() {
 
     const refreshReviews = async () => {
         try {
-            const reviewsRes = await axios.get(
+            const reviewsRes = await axiosJWT.get(
                 `/api/v1/products/${id}/reviews`
             );
             setReviews(reviewsRes.data);

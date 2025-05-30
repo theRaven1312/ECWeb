@@ -1,9 +1,8 @@
-import React from 'react';
+import React from "react";
 import CartCard from "./CartCard";
-import QuantitySelector from './QuanityBtn';
+import QuantitySelector from "./QuanityBtn";
 
-const CartList = ({ items = [], onUpdateQuantity, onRemoveItem }) => {
-    
+const CartList = ({items = [], onUpdateQuantity, onRemoveItem}) => {
     const handleQuantityChange = (item, newQuantity) => {
         onUpdateQuantity(item.product._id, newQuantity, item.size, item.color);
     };
@@ -15,7 +14,9 @@ const CartList = ({ items = [], onUpdateQuantity, onRemoveItem }) => {
     if (items.length === 0) {
         return (
             <div className="cart-list">
-                <p className="text-gray-500 text-center py-8">No items in cart</p>
+                <p className="text-gray-500 text-center py-8">
+                    No items in cart
+                </p>
             </div>
         );
     }
@@ -23,34 +24,52 @@ const CartList = ({ items = [], onUpdateQuantity, onRemoveItem }) => {
     return (
         <div className="cart-list w-full space-y-4">
             {items.map((item, index) => (
-                <div key={`${item.product._id}-${item.size}-${item.color}-${index}`} 
-                     className="cart-card">
-                    
+                <div
+                    key={`${item.product._id}-${item.size}-${item.color}-${index}`}
+                    className="cart-card"
+                >
                     {/* Product Image */}
-                    <div className="w-20 h-20 flex-shrink-0">
-                        <img 
-                            src={item.product.image_url || item.product.images?.[0] || '/placeholder-image.jpg'} 
+                    <div className="w-30 h-30 flex-shrink-0">
+                        <img
+                            src={
+                                item.product.image_url ||
+                                item.product.images?.[0] ||
+                                "/placeholder-image.jpg"
+                            }
                             alt={item.product.name}
                             className="w-full h-full object-cover rounded"
                         />
                     </div>
-                    
+
                     {/* Product Details */}
                     <div className="flex-1">
-                        <h3 className="font-semibold text-lg">{item.product.name}</h3>
+                        <h3 className="font-semibold text-lg">
+                            {item.product.name}
+                        </h3>
                         {item.size && (
-                            <p className="text-sm text-gray-600">Size: {item.size}</p>
+                            <p className="text-sm text-gray-600">
+                                Size: {item.size}
+                            </p>
                         )}
                         {item.color && (
-                            <p className="text-sm text-gray-600">Color: {item.color}</p>
+                            <p className="text-sm text-gray-600">
+                                Color: {item.color}
+                            </p>
                         )}
-                        <p className="text-lg font-bold">${item.product.price}</p>
+                        <p className="text-lg font-bold">
+                            ${item.product.price}
+                        </p>
                     </div>
 
-                    <div className="flex flex-col-reverse items-end gap-4">    
+                    <div className="flex flex-col-reverse items-end gap-4">
                         <div className="quantity-selector flex-center bg-gray-300 p-2 rounded-full w-30%">
-                            <button 
-                                onClick={() => handleQuantityChange(item, item.quantity - 1)}
+                            <button
+                                onClick={() =>
+                                    handleQuantityChange(
+                                        item,
+                                        item.quantity - 1
+                                    )
+                                }
                                 className="w-8 h-8 border border-gray-300 rounded flex items-center justify-center hover:bg-gray-100"
                             >
                                 -
@@ -60,8 +79,13 @@ const CartList = ({ items = [], onUpdateQuantity, onRemoveItem }) => {
                                 {item.quantity}
                             </span>
 
-                            <button 
-                                onClick={() => handleQuantityChange(item, item.quantity + 1)}
+                            <button
+                                onClick={() =>
+                                    handleQuantityChange(
+                                        item,
+                                        item.quantity + 1
+                                    )
+                                }
                                 className="w-8 h-8 border border-gray-300 rounded flex items-center justify-center hover:bg-gray-100"
                             >
                                 +
@@ -69,13 +93,12 @@ const CartList = ({ items = [], onUpdateQuantity, onRemoveItem }) => {
                         </div>
 
                         {/* Remove Button */}
-                        <button 
+                        <button
                             onClick={() => handleRemove(item)}
                             className="text-red-500 hover:text-red-700 p-2"
                         >
                             <i className="fa-solid fa-trash"></i>
                         </button>
-
                     </div>
                 </div>
             ))}

@@ -2,7 +2,7 @@ import {useNavigate} from "react-router-dom";
 import {ProfileInfo} from "../Components/ProfileInfo";
 import {useDispatch, useSelector} from "react-redux";
 import {resetUser} from "../redux/UserSliceRedux";
-import axios from "axios";
+import axiosJWT from "../utils/axiosJWT";
 import {useState} from "react";
 import EditProfile from "../Components/EditProfile";
 import EditPassword from "../Components/EditPassword";
@@ -14,7 +14,7 @@ export const ProfilePage = () => {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user);
     const handleLogout = async () => {
-        await axios.post(`/api/v1/users/log-out`);
+        await axiosJWT.post(`/api/v1/users/log-out`);
         dispatch(resetUser());
         localStorage.removeItem("access_token");
         navigate("/");

@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, {useState, useEffect} from "react";
+import axiosJWT from "../utils/axiosJWT";
 
 const ProductUpdate = () => {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
-    const [selectedProduct, setSelectedProduct] = useState('');
+    const [selectedProduct, setSelectedProduct] = useState("");
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
     const [formData, setFormData] = useState({
-        name: '',
-        category: '',
-        description: '',
-        price: '',
-        stock: '',
-        colors: '',
-        brand: '',
-        sizes: '',
+        name: "",
+        category: "",
+        description: "",
+        price: "",
+        stock: "",
+        colors: "",
+        brand: "",
+        sizes: "",
         isFeatured: false,
         isSale: false,
-        images: []
+        images: [],
     });
 
     useEffect(() => {
@@ -27,13 +27,16 @@ const ProductUpdate = () => {
             try {
                 setLoading(true);
                 const [productsRes, categoriesRes] = await Promise.all([
-                    axios.get('/api/v1/products'),
-                    axios.get('/api/v1/categories')
+                    axiosJWT.get("/api/v1/products"),
+                    axiosJWT.get("/api/v1/categories"),
                 ]);
                 setProducts(productsRes.data);
                 setCategories(categoriesRes.data);
             } catch (err) {
-                setError('Failed to load data: ' + (err.response?.data?.message || err.message));
+                setError(
+                    "Failed to load data: " +
+                        (err.response?.data?.message || err.message)
+                );
             } finally {
                 setLoading(false);
             }
@@ -45,59 +48,59 @@ const ProductUpdate = () => {
     const handleProductSelect = (e) => {
         const productId = e.target.value;
         setSelectedProduct(productId);
-        
+
         if (!productId) {
             setFormData({
-                name: '',
-                category: '',
-                description: '',
-                price: '',
-                stock: '',
-                colors: '',
-                brand: '',
-                sizes: '',
+                name: "",
+                category: "",
+                description: "",
+                price: "",
+                stock: "",
+                colors: "",
+                brand: "",
+                sizes: "",
                 isFeatured: false,
                 isSale: false,
-                images: []
+                images: [],
             });
             return;
         }
 
-        const product = products.find(p => p._id === productId);
+        const product = products.find((p) => p._id === productId);
         if (product) {
             setFormData({
-                name: product.name || '',
-                category: product.category?._id || product.category || '',
-                description: product.description || '',
-                price: product.price || '',
-                stock: product.stock || '',
-                colors: product.colors ? product.colors.join(', ') : '',
-                brand: product.brand || '',
-                sizes: product.sizes ? product.sizes.join(', ') : '',
+                name: product.name || "",
+                category: product.category?._id || product.category || "",
+                description: product.description || "",
+                price: product.price || "",
+                stock: product.stock || "",
+                colors: product.colors ? product.colors.join(", ") : "",
+                brand: product.brand || "",
+                sizes: product.sizes ? product.sizes.join(", ") : "",
                 isFeatured: product.isFeatured || false,
                 isSale: product.isSale || false,
-                images: []
+                images: [],
             });
         }
     };
 
     const handleChange = (e) => {
-        const { name, value, type, checked, files } = e.target;
-        
-        if (type === 'file') {
-            setFormData(prev => ({
+        const {name, value, type, checked, files} = e.target;
+
+        if (type === "file") {
+            setFormData((prev) => ({
                 ...prev,
-                images: files
+                images: files,
             }));
-        } else if (type === 'checkbox') {
-            setFormData(prev => ({
+        } else if (type === "checkbox") {
+            setFormData((prev) => ({
                 ...prev,
-                [name]: checked
+                [name]: checked,
             }));
         } else {
-            setFormData(prev => ({
+            setFormData((prev) => ({
                 ...prev,
-                [name]: value
+                [name]: value,
             }));
         }
     };
@@ -106,42 +109,48 @@ const ProductUpdate = () => {
         e.preventDefault();
 
         if (!selectedProduct) {
-            setError('Please select a product to update');
+            setError("Please select a product to update");
             return;
         }
 
         if (!formData.name.trim()) {
-            setError('Product name is required');
+            setError("Product name is required");
             return;
         }
 
         setLoading(true);
-        setError('');
-        setSuccess('');
+        setError("");
+        setSuccess("");
 
         try {
             const data = new FormData();
 
             // Append regular form fields
             Object.entries(formData).forEach(([key, value]) => {
-                if (key === 'images') return; // Handle images separately
-                
-                if (key === 'colors' && value) {
+                if (key === "images") return; // Handle images separately
+
+                if (key === "colors" && value) {
                     // Handle colors array
-                    const colorsArray = value.split(',').map(color => color.trim()).filter(color => color !== '');
-                    colorsArray.forEach(color => {
-                        data.append('colors', color);
+                    const colorsArray = value
+                        .split(",")
+                        .map((color) => color.trim())
+                        .filter((color) => color !== "");
+                    colorsArray.forEach((color) => {
+                        data.append("colors", color);
                     });
-                } else if (key === 'sizes' && value) {
+                } else if (key === "sizes" && value) {
                     // Handle sizes array
-                    const sizesArray = value.split(',').map(size => size.trim()).filter(size => size !== '');
-                    sizesArray.forEach(size => {
-                        data.append('sizes', size);
+                    const sizesArray = value
+                        .split(",")
+                        .map((size) => size.trim())
+                        .filter((size) => size !== "");
+                    sizesArray.forEach((size) => {
+                        data.append("sizes", size);
                     });
-                } else if (key === 'isFeatured' || key === 'isSale') {
+                } else if (key === "isFeatured" || key === "isSale") {
                     // Handle boolean values
                     data.append(key, value.toString());
-                } else if (value !== '') {
+                } else if (value !== "") {
                     // Handle other fields
                     data.append(key, value);
                 }
@@ -149,44 +158,52 @@ const ProductUpdate = () => {
 
             // Handle images - THIS IS THE KEY FIX
             if (formData.images && formData.images.length > 0) {
-                console.log('Adding images to FormData:', formData.images.length);
+                console.log(
+                    "Adding images to FormData:",
+                    formData.images.length
+                );
                 for (let i = 0; i < formData.images.length; i++) {
-                    data.append('images', formData.images[i]);
+                    data.append("images", formData.images[i]);
                     console.log(`Added image ${i}:`, formData.images[i].name);
                 }
             }
 
             // Log FormData contents for debugging
-            console.log('FormData contents:');
+            console.log("FormData contents:");
             for (let pair of data.entries()) {
                 console.log(pair[0], pair[1]);
             }
-
-            const response = await axios.put(`/api/v1/products/${selectedProduct}`, data, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
+            const response = await axiosJWT.put(
+                `/api/v1/products/${selectedProduct}`,
+                data,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
                 }
-            });
+            );
 
-            console.log('Update response:', response.data);
-            setSuccess('Product updated successfully!');
-            
+            console.log("Update response:", response.data);
+            setSuccess("Product updated successfully!");
             // Refresh products list
-            const refreshedProducts = await axios.get('/api/v1/products');
+            const refreshedProducts = await axiosJWT.get("/api/v1/products");
             setProducts(refreshedProducts.data);
 
             // Update current product in the form
-            const updatedProduct = refreshedProducts.data.find(p => p._id === selectedProduct);
+            const updatedProduct = refreshedProducts.data.find(
+                (p) => p._id === selectedProduct
+            );
             if (updatedProduct) {
-                setFormData(prev => ({
+                setFormData((prev) => ({
                     ...prev,
-                    images: [] // Clear the file input
+                    images: [], // Clear the file input
                 }));
             }
-
         } catch (err) {
-            console.error('Update error:', err.response || err);
-            setError('Update failed: ' + (err.response?.data?.message || err.message));
+            console.error("Update error:", err.response || err);
+            setError(
+                "Update failed: " + (err.response?.data?.message || err.message)
+            );
         } finally {
             setLoading(false);
         }
@@ -195,7 +212,7 @@ const ProductUpdate = () => {
     return (
         <div className="p-6">
             <h2 className="text-xl font-bold mb-4">Update Product</h2>
-            
+
             <div className="max-w-2xl space-y-4">
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -207,7 +224,7 @@ const ProductUpdate = () => {
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         <option value="">-- Select a product --</option>
-                        {products.map(product => (
+                        {products.map((product) => (
                             <option key={product._id} value={product._id}>
                                 {product.name} (${product.price})
                             </option>
@@ -244,8 +261,11 @@ const ProductUpdate = () => {
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 >
                                     <option value="">Select a category</option>
-                                    {categories.map(category => (
-                                        <option key={category._id} value={category._id}>
+                                    {categories.map((category) => (
+                                        <option
+                                            key={category._id}
+                                            value={category._id}
+                                        >
                                             {category.name}
                                         </option>
                                     ))}
@@ -349,9 +369,11 @@ const ProductUpdate = () => {
                                     checked={formData.isFeatured}
                                     onChange={handleChange}
                                 />
-                                <span className="text-sm">Featured Product</span>
+                                <span className="text-sm">
+                                    Featured Product
+                                </span>
                             </label>
-                            
+
                             <label className="flex items-center gap-2">
                                 <input
                                     type="checkbox"
@@ -380,16 +402,24 @@ const ProductUpdate = () => {
                             </p>
                         </div>
 
-                        {selectedProduct && products.find(p => p._id === selectedProduct)?.image_url && (
-                            <div className="mt-2">
-                                <p className="text-sm font-medium mb-2">Current Image:</p>
-                                <img 
-                                    src={`http://localhost:3000${products.find(p => p._id === selectedProduct).image_url}`} 
-                                    alt="Current product"
-                                    className="h-24 w-24 object-cover border rounded"
-                                />
-                            </div>
-                        )}
+                        {selectedProduct &&
+                            products.find((p) => p._id === selectedProduct)
+                                ?.image_url && (
+                                <div className="mt-2">
+                                    <p className="text-sm font-medium mb-2">
+                                        Current Image:
+                                    </p>
+                                    <img
+                                        src={`http://localhost:3000${
+                                            products.find(
+                                                (p) => p._id === selectedProduct
+                                            ).image_url
+                                        }`}
+                                        alt="Current product"
+                                        className="h-24 w-24 object-cover border rounded"
+                                    />
+                                </div>
+                            )}
 
                         {error && (
                             <div className="text-red-500 text-sm bg-red-50 p-3 rounded-md">
@@ -408,7 +438,7 @@ const ProductUpdate = () => {
                             disabled={loading}
                             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md disabled:bg-gray-400 disabled:cursor-not-allowed"
                         >
-                            {loading ? 'Updating...' : 'Update Product'}
+                            {loading ? "Updating..." : "Update Product"}
                         </button>
                     </form>
                 )}

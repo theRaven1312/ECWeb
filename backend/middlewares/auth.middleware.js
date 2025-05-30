@@ -89,41 +89,6 @@ export const authChangePassMiddleware = async (req, res, next) => {
     });
 };
 
-export const authTokenMiddleware = async (req, res, next) => {
-    try {
-        const authHeader = req.headers.authorization;
-        
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            return res.status(401).json({
-                message: "Access token required",
-                status: "ERROR",
-            });
-        }
-        
-        const token = authHeader.split(" ")[1];
-        
-        jwt.verify(token, process.env.JWT_SECRET, function (err, user) {
-            if (err) {
-                console.error('Token verification error:', err);
-                return res.status(401).json({
-                    message: "Invalid or expired token",
-                    status: "ERROR",
-                });
-            }
-
-            // ✅ Add user info to request object
-            req.user = user;
-            next();
-        });
-    } catch (error) {
-        console.error('Auth token middleware error:', error);
-        res.status(500).json({
-            message: "Authentication error",
-            status: "ERROR",
-        });
-    }
-};
-
 export const authReviewMiddleware = async (req, res, next) => {
     let token = req.headers.authorization?.split(" ")[1];
 
@@ -134,6 +99,40 @@ export const authReviewMiddleware = async (req, res, next) => {
         req.user = await User.findById(decoded.id).select("-password");
         next();
     } catch (err) {
+        res.status(401).json({message: "Token failed"});
+    }
+};
+
+export const authCartMiddleware = async (req, res, next) => {
+    let token = req.headers.authorization?.split(" ")[1];
+    console.log("Token:", token);
+
+    // Kiểm tra xem token có tồn tại không
+    if (!token) {
+        console.log("No token provided");
+        return res.status(401).json({message: "Not authorized"});
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        console.log("Decoded token:", decoded);
+
+        const user = await User.findById(decoded.id).select("-password");
+        if (!user) {
+            console.log("User not found for ID:", decoded.id);
+            return res.status(401).json({message: "User not found"});
+        }
+
+        req.user = user;
+        console.log("User authenticated:", user._id);
+        next();
+    } catch (err) {
+        console.log("Token verification error:", err.message);
+        if (err.name === "TokenExpiredError") {
+            return res.status(401).json({message: "Token expired"});
+        } else if (err.name === "JsonWebTokenError") {
+            return res.status(401).json({message: "Invalid token"});
+        }
         res.status(401).json({message: "Token failed"});
     }
 };
