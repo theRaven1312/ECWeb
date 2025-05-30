@@ -20,7 +20,6 @@ const productSchema = new mongoose.Schema({
     numReviews: {type: Number, default: 0},
     isFeatured: {type: Boolean, default: false},
     isSale: {type: Boolean, default: false},
-    coupon: {type: String, default: ""},
     dateCreated: {type: Date, default: Date.now},
 });
 

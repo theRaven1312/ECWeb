@@ -37,6 +37,7 @@ const logInUser = (userLogIn) => {
         try {
             //KIểm tra email có tồn tại không
             const checkUser = await User.findOne({email}).select("+password");
+            
             if (checkUser == null) {
                 resolve({
                     status: "ERROR",
