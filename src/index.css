@@ -948,7 +948,6 @@ body {
   text-shadow: 0 0 6px rgba(251, 191, 36, 0.4);
 }
 
-
 .review-modal__rating-text {
   @apply text-sm text-gray-600;
 }
