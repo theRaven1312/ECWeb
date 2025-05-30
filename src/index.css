@@ -546,7 +546,7 @@ body {
   }
 
   .cart-page {
-    @apply flex flex-col px-16 py-4 gap-5 max-sm:px-5
+    @apply flex flex-col w-[80%] m-auto py-8 gap-5 max-sm:px-5
   }
 
   .cart-heading {
@@ -558,11 +558,11 @@ body {
   =========================*/
 
   .cart-list {
-    @apply w-[57.6%] h-full border-2 border-gray-300 rounded-2xl max-sm:w-full
+    @apply h-full border-2 border-gray-200 rounded-3xl max-sm:w-full
   }
 
   .cart-card {
-    @apply flex-center-between px-5 py-5 w-full relative max-sm:px-3 max-sm:py-3
+    @apply flex-center-between gap-5 px-5 py-5 w-full relative max-sm:px-3 max-sm:py-3
   }
 
   .card-detail {

@@ -89,6 +89,41 @@ export const authChangePassMiddleware = async (req, res, next) => {
     });
 };
 
+export const authTokenMiddleware = async (req, res, next) => {
+    try {
+        const authHeader = req.headers.authorization;
+        
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(401).json({
+                message: "Access token required",
+                status: "ERROR",
+            });
+        }
+        
+        const token = authHeader.split(" ")[1];
+        
+        jwt.verify(token, process.env.JWT_SECRET, function (err, user) {
+            if (err) {
+                console.error('Token verification error:', err);
+                return res.status(401).json({
+                    message: "Invalid or expired token",
+                    status: "ERROR",
+                });
+            }
+
+            // ✅ Add user info to request object
+            req.user = user;
+            next();
+        });
+    } catch (error) {
+        console.error('Auth token middleware error:', error);
+        res.status(500).json({
+            message: "Authentication error",
+            status: "ERROR",
+        });
+    }
+};
+
 export const authReviewMiddleware = async (req, res, next) => {
     let token = req.headers.authorization?.split(" ")[1];
 
