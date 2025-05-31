@@ -1,6 +1,10 @@
 import React, {useState} from "react";
 
-const QuantitySelector = ({quantity = 1, onQuantityChange, quannityClassName}) => {
+const QuantitySelector = ({
+    quantity = 1,
+    onQuantityChange,
+    quannityClassName,
+}) => {
     const [qty, setQty] = useState(quantity);
 
     const handleDecrease = () => {
@@ -25,7 +29,7 @@ const QuantitySelector = ({quantity = 1, onQuantityChange, quannityClassName}) =
 
     return (
         <div
-            className={`quantity-selector flex-center bg-gray-300 py-4 rounded-full w-30% ${quannityClassName}`}
+            className={`quantity-selector flex-center bg-gray-300 h-full py-1.5 rounded-full w-30% ${quannityClassName}`}
         >
             <button
                 onClick={handleDecrease}

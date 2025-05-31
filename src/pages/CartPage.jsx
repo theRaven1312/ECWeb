@@ -15,7 +15,6 @@ const CartPage = () => {
     });
 
     const user = useSelector((state) => state.user);
-    console.log("User data:", user);
 
     // Fetch cart data when component mounts or user changes
     useEffect(() => {

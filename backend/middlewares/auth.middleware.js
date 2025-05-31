@@ -105,7 +105,6 @@ export const authReviewMiddleware = async (req, res, next) => {
 
 export const authCartMiddleware = async (req, res, next) => {
     let token = req.headers.authorization?.split(" ")[1];
-    console.log("Token:", token);
 
     // Kiểm tra xem token có tồn tại không
     if (!token) {
@@ -115,7 +114,6 @@ export const authCartMiddleware = async (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        console.log("Decoded token:", decoded);
 
         const user = await User.findById(decoded.id).select("-password");
         if (!user) {
@@ -124,7 +122,6 @@ export const authCartMiddleware = async (req, res, next) => {
         }
 
         req.user = user;
-        console.log("User authenticated:", user._id);
         next();
     } catch (err) {
         console.log("Token verification error:", err.message);

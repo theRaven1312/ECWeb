@@ -146,7 +146,6 @@ const getUserById = async (req, res) => {
 const refreshToken = async (req, res) => {
     try {
         const token = req.cookies.refresh_token;
-        console.log(token);
         if (!token) {
             return res.status(404).json({
                 success: false,
