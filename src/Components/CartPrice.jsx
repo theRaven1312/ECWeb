@@ -73,7 +73,7 @@ const CartPrice = ({ items = [], totalPrice = 0, onClearCart }) => {
 
             <div className="space-y-2 mb-4">
                 <div className="flex justify-between py-2">
-                    <span>Subtotal ({items.length} items)</span>
+                    <span>Subtotal ({items.length} products)</span>
                     <span>${subtotal.toFixed(2)}</span>
                 </div>
                 

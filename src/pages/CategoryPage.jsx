@@ -122,15 +122,15 @@ const CategoryPage = ({ heading = 'Shop' }) => {
 
     // Filter products based on selected filters
     useEffect(() => {
-        console.log('=== FILTER DEBUG ===');
-        console.log('Original products:', products.length);
-        console.log('Products data:', products);
-        console.log('Filters:', {
-            selectedCategory,
-            priceRange,
-            selectedColors,
-            selectedSizes
-        });
+        // console.log('=== FILTER DEBUG ===');
+        // console.log('Original products:', products.length);
+        // console.log('Products data:', products);
+        // console.log('Filters:', {
+        //     selectedCategory,
+        //     priceRange,
+        //     selectedColors,
+        //     selectedSizes
+        // });
 
         // Đảm bảo có products trước khi filter
         if (!products || products.length === 0) {
@@ -151,7 +151,7 @@ const CategoryPage = ({ heading = 'Shop' }) => {
                                product.category === selectedCategory;
                 return matches;
             });
-            console.log(`Category filter: ${beforeFilter} -> ${filtered.length}`);
+            // console.log(`Category filter: ${beforeFilter} -> ${filtered.length}`);
         }
 
         // Filter by price range - LUÔN LUÔN APPLY
@@ -164,7 +164,7 @@ const CategoryPage = ({ heading = 'Shop' }) => {
             }
             return inRange;
         });
-        console.log(`Price filter: ${beforePriceFilter} -> ${filtered.length}`);
+        // console.log(`Price filter: ${beforePriceFilter} -> ${filtered.length}`);
 
         // Filter by colors - CHỈ KHI CÓ COLORS ĐƯỢC CHỌN
         if (selectedColors && selectedColors.length > 0) {
@@ -182,7 +182,7 @@ const CategoryPage = ({ heading = 'Shop' }) => {
                 }
                 return hasMatchingColor;
             });
-            console.log(`Color filter: ${beforeColorFilter} -> ${filtered.length}`);
+            // console.log(`Color filter: ${beforeColorFilter} -> ${filtered.length}`);
         }
 
         // Filter by sizes - CHỈ KHI CÓ SIZES ĐƯỢC CHỌN
@@ -201,12 +201,12 @@ const CategoryPage = ({ heading = 'Shop' }) => {
                 }
                 return hasMatchingSize;
             });
-            console.log(`Size filter: ${beforeSizeFilter} -> ${filtered.length}`);
+            // console.log(`Size filter: ${beforeSizeFilter} -> ${filtered.length}`);
         }
 
-        console.log('Final filtered products:', filtered.length);
-        console.log('Filtered products data:', filtered);
-        console.log('==================');
+        // console.log('Final filtered products:', filtered.length);
+        // console.log('Filtered products data:', filtered);
+        // console.log('==================');
 
         setFilteredProducts(filtered);
         setTotalProducts(filtered.length);
@@ -242,18 +242,18 @@ const CategoryPage = ({ heading = 'Shop' }) => {
         return heading;
     };
 
-    useEffect(() => {
-        console.log('=== PAGINATION DEBUG ===');
-        console.log('Current Page:', currentPage);
-        console.log('Products Per Page:', productsPerPage);
-        console.log('Total Products:', totalProducts);
-        console.log('Filtered Products Length:', filteredProducts.length);
-        console.log('Index First Product:', indexOfFirstProduct);
-        console.log('Index Last Product:', indexOfLastProduct);
-        console.log('Current Products:', currentProducts);
-        console.log('Current Products Length:', currentProducts.length);
-        console.log('========================');
-    }, [currentPage, filteredProducts, currentProducts]);
+    // useEffect(() => {
+    //     console.log('=== PAGINATION DEBUG ===');
+    //     console.log('Current Page:', currentPage);
+    //     console.log('Products Per Page:', productsPerPage);
+    //     console.log('Total Products:', totalProducts);
+    //     console.log('Filtered Products Length:', filteredProducts.length);
+    //     console.log('Index First Product:', indexOfFirstProduct);
+    //     console.log('Index Last Product:', indexOfLastProduct);
+    //     console.log('Current Products:', currentProducts);
+    //     console.log('Current Products Length:', currentProducts.length);
+    //     console.log('========================');
+    // }, [currentPage, filteredProducts, currentProducts]);
 
     if (loading) {
         return (
