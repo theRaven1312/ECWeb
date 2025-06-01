@@ -119,12 +119,12 @@ export const create = async (req, res) => {
 
         // Log category value specifically
         console.log("Category value:", req.body.category);
-
         const productData = {
             name: req.body.name,
             description: req.body.description,
             brand: req.body.brand,
             price: req.body.price,
+            discount: req.body.discount || 0,
             stock: req.body.stock,
             category: req.body.category,
             colors: req.body.colors
@@ -178,14 +178,17 @@ export const update = async (req, res) => {
             } else {
                 req.body.sizes = [];
             }
-        }
-
-        // Handle boolean fields
+        } // Handle boolean fields
         if (req.body.isFeatured !== undefined) {
             req.body.isFeatured = req.body.isFeatured === "true";
         }
         if (req.body.isSale !== undefined) {
             req.body.isSale = req.body.isSale === "true";
+        }
+
+        // Handle discount field
+        if (req.body.discount !== undefined) {
+            req.body.discount = parseFloat(req.body.discount) || 0;
         }
 
         // Handle image uploads

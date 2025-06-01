@@ -48,13 +48,13 @@ const ProductUpdate = () => {
     const handleProductSelect = (e) => {
         const productId = e.target.value;
         setSelectedProduct(productId);
-
         if (!productId) {
             setFormData({
                 name: "",
                 category: "",
                 description: "",
                 price: "",
+                discount: "",
                 stock: "",
                 colors: "",
                 brand: "",
@@ -65,7 +65,6 @@ const ProductUpdate = () => {
             });
             return;
         }
-
         const product = products.find((p) => p._id === productId);
         if (product) {
             setFormData({
@@ -73,6 +72,7 @@ const ProductUpdate = () => {
                 category: product.category?._id || product.category || "",
                 description: product.description || "",
                 price: product.price || "",
+                discount: product.discount || "",
                 stock: product.stock || "",
                 colors: product.colors ? product.colors.join(", ") : "",
                 brand: product.brand || "",
@@ -272,7 +272,6 @@ const ProductUpdate = () => {
                                 </select>
                             </div>
                         </div>
-
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Description
@@ -284,9 +283,8 @@ const ProductUpdate = () => {
                                 rows="3"
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        </div>{" "}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
                                     Price *
@@ -305,6 +303,21 @@ const ProductUpdate = () => {
 
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Discount (%)
+                                </label>
+                                <input
+                                    type="number"
+                                    name="discount"
+                                    value={formData.discount}
+                                    onChange={handleChange}
+                                    min="0"
+                                    max="100"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
                                     Stock
                                 </label>
                                 <input
@@ -317,7 +330,6 @@ const ProductUpdate = () => {
                                 />
                             </div>
                         </div>
-
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -346,7 +358,6 @@ const ProductUpdate = () => {
                                 />
                             </div>
                         </div>
-
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Sizes (comma separated)
@@ -360,7 +371,6 @@ const ProductUpdate = () => {
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
-
                         <div className="flex gap-4">
                             <label className="flex items-center gap-2">
                                 <input
@@ -384,7 +394,6 @@ const ProductUpdate = () => {
                                 <span className="text-sm">On Sale</span>
                             </label>
                         </div>
-
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Update Images
@@ -401,7 +410,6 @@ const ProductUpdate = () => {
                                 Leave empty to keep current images
                             </p>
                         </div>
-
                         {selectedProduct &&
                             products.find((p) => p._id === selectedProduct)
                                 ?.image_url && (
@@ -420,19 +428,16 @@ const ProductUpdate = () => {
                                     />
                                 </div>
                             )}
-
                         {error && (
                             <div className="text-red-500 text-sm bg-red-50 p-3 rounded-md">
                                 {error}
                             </div>
                         )}
-
                         {success && (
                             <div className="text-green-600 text-sm bg-green-50 p-3 rounded-md">
                                 {success}
                             </div>
                         )}
-
                         <button
                             type="submit"
                             disabled={loading}
