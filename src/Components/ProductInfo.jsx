@@ -89,7 +89,7 @@ const ProductInfo = ({
             });
 
             if (response.data.status === "SUCCESS") {
-                setAddToCartMessage("✅ Product added to cart successfully!");
+                setAddToCartMessage("Product added to cart successfully!");
                 setTimeout(() => setAddToCartMessage(""), 3000);
 
                 // Optional: Reset selections after successful add
@@ -182,7 +182,7 @@ const ProductInfo = ({
             {addToCartMessage && (
                 <div
                     className={`mt-4 p-3 rounded-lg text-sm ${
-                        addToCartMessage.includes("✅")
+                        addToCartMessage.includes("successfully")
                             ? "bg-green-50 text-green-700 border border-green-200"
                             : "bg-red-50 text-red-700 border border-red-200"
                     }`}

@@ -169,7 +169,7 @@ body {
   }
 
   .commentCard {
-    @apply flex flex-col gap-2 rounded-xl w-96 h-42 p-4 shadow-xl border-1 border-gray-50 shrink-0;
+    @apply flex flex-col gap-2 rounded-xl w-96 max-h-64 p-4 shadow-xl border-1 border-gray-50 shrink-0;
   }
 
   .commentSection {
