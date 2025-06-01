@@ -1,9 +1,9 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React from "react";
+import {useEffect, useState} from "react";
+import {useSelector} from "react-redux";
 import PriceDiscount from "./PriceDiscount";
 
-const CartPrice = ({ items = [], totalPrice = 0, onClearCart }) => {
+const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
     const user = useSelector((state) => state.user);
 
     const subtotal = totalPrice;
@@ -15,11 +15,9 @@ const CartPrice = ({ items = [], totalPrice = 0, onClearCart }) => {
     const [showConfirmed, setShowConfirmed] = useState(false);
 
     const handleProceedToCheckout = () => {
-
         if (items.length > 0) {
             setShowOrderConfirm(true);
-        }
-        else {
+        } else {
             alert("Your cart is empty. Please add items to proceed.");
         }
     };
@@ -27,7 +25,7 @@ const CartPrice = ({ items = [], totalPrice = 0, onClearCart }) => {
     const handleConfirmOrder = () => {
         setShowOrderConfirm(false);
         setShowConfirmed(true);
-    }
+    };
 
     // useEffect(() => {
     //     if (showConfirmed) {
@@ -57,13 +55,11 @@ const CartPrice = ({ items = [], totalPrice = 0, onClearCart }) => {
     //     }
     // }, [showConfirmed, items, total, shipping, user.address, user.phone, onClearCart]);
 
-
     return (
         <div className="border-2 border-gray-200 p-6 rounded-3xl h-fit w-full">
             <h3 className="text-xl font-bold mb-4">Order Summary</h3>
-            
 
-            <div className='flex mb-4 justify-between'>
+            <div className="flex mb-4 justify-between">
                 <div>Order delivery details:</div>
                 <ul className="">
                     <li>Address: {user.address}</li>
@@ -76,30 +72,32 @@ const CartPrice = ({ items = [], totalPrice = 0, onClearCart }) => {
                     <span>Subtotal ({items.length} products)</span>
                     <span>${subtotal.toFixed(2)}</span>
                 </div>
-                
+
                 <div className="flex justify-between py-2">
                     <span>Shipping</span>
-                    <span>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
+                    <span>
+                        {shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}
+                    </span>
                 </div>
-                
+
                 <hr className="my-4" />
-                
+
                 <div className="flex justify-between py-2 text-lg font-bold">
                     <span>Total</span>
                     <span>${total.toFixed(2)}</span>
                 </div>
             </div>
-            
+
             <div className="space-y-3">
-                <button 
+                <button
                     onClick={handleProceedToCheckout}
                     disabled={items.length === 0}
                     className="w-full bg-black text-white py-3 rounded-3xl hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     Proceed to Checkout
                 </button>
-                
-                <button 
+
+                <button
                     onClick={onClearCart}
                     disabled={items.length === 0}
                     className="w-full border border-gray-300 py-2 rounded-3xl hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -107,33 +105,36 @@ const CartPrice = ({ items = [], totalPrice = 0, onClearCart }) => {
                     Clear Cart
                 </button>
             </div>
-            
+
             {subtotal < 100 && subtotal > 0 && (
                 <div className="mt-4 p-3 bg-green-50 rounded-lg">
                     <p className="text-sm text-green-600">
-                        Add ${(100 - subtotal).toFixed(2)} more for free shipping!
+                        Add ${(100 - subtotal).toFixed(2)} more for free
+                        shipping!
                     </p>
                 </div>
             )}
 
             {showOrderConfirm && (
                 <div className="fixed w-screen h-screen inset-0 flex items-center justify-center bg-black/50 z-10">
-                    <div className ="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
-                        <h1 className="text-2xl font-bold mb-4">Order Confirm</h1>
+                    <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
+                        <h1 className="text-2xl font-bold mb-4">
+                            Order Confirm
+                        </h1>
                         <p className="text-gray-600 mb-6">
                             Please review your order details before proceeding.
-                            If everything looks good, click "Confirm" to place your order.
-
+                            If everything looks good, click "Confirm" to place
+                            your order.
                         </p>
-                        <div className ='flex justify-center items-center gap-6'>
-                            <button 
+                        <div className="flex justify-center items-center gap-6">
+                            <button
                                 onClick={() => setShowOrderConfirm(false)}
                                 className="border-1 border-black px-4 py-2 rounded-3xl hover:bg-gray-200 transition-colors"
                             >
                                 Cancel
                             </button>
 
-                            <button 
+                            <button
                                 onClick={() => handleConfirmOrder()}
                                 className="bg-black text-white px-8 py-2 rounded-3xl hover:bg-gray-800 transition-colors"
                             >
@@ -147,9 +148,12 @@ const CartPrice = ({ items = [], totalPrice = 0, onClearCart }) => {
             {showConfirmed && (
                 <div className="fixed w-screen h-screen inset-0 flex items-center justify-center bg-black/50 z-10 ">
                     <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center bounce-in">
-                        <h1 className="text-2xl font-bold mb-4">Order Placed Successfully!</h1>
+                        <h1 className="text-2xl font-bold mb-4">
+                            Order Placed Successfully!
+                        </h1>
                         <p className="text-gray-600 mb-6">
-                            Thank you for your order! Your items will be shipped soon.
+                            Thank you for your order! Your items will be shipped
+                            soon.
                         </p>
                         <button
                             onClick={() => setShowConfirmed(false)}

@@ -83,7 +83,6 @@ const ProductUpdate = () => {
             });
         }
     };
-
     const handleChange = (e) => {
         const {name, value, type, checked, files} = e.target;
 
@@ -93,10 +92,25 @@ const ProductUpdate = () => {
                 images: files,
             }));
         } else if (type === "checkbox") {
-            setFormData((prev) => ({
-                ...prev,
-                [name]: checked,
-            }));
+            setFormData((prev) => {
+                const newFormData = {
+                    ...prev,
+                    [name]: checked,
+                };
+
+                // If isSale is being checked to true and no discount is set, set default 20%
+                if (
+                    name === "isSale" &&
+                    checked &&
+                    (prev.discount === "" ||
+                        prev.discount === "0" ||
+                        prev.discount === 0)
+                ) {
+                    newFormData.discount = "20";
+                }
+
+                return newFormData;
+            });
         } else {
             setFormData((prev) => ({
                 ...prev,

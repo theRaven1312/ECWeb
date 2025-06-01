@@ -115,18 +115,27 @@ export const create = async (req, res) => {
         const sizes = req.body.sizes
             ? req.body.sizes.split(",").map((size) => size.trim())
             : [];
-        console.log("Sizes:", sizes);
-
-        // Log category value specifically
+        console.log("Sizes:", sizes); // Log category value specifically
         console.log("Category value:", req.body.category);
+
+        // Handle isSale and discount logic
+        const isSale = req.body.isSale === "true" || req.body.isSale === true;
+        let discount = parseFloat(req.body.discount) || 0;
+
+        // If isSale is true, set default discount to 20%
+        if (isSale && discount === 0) {
+            discount = 20;
+        }
+
         const productData = {
             name: req.body.name,
             description: req.body.description,
             brand: req.body.brand,
             price: req.body.price,
-            discount: req.body.discount || 0,
+            discount: discount,
             stock: req.body.stock,
             category: req.body.category,
+            isSale: isSale,
             colors: req.body.colors
                 ? req.body.colors.split(",").map((color) => color.trim())
                 : [],
@@ -186,9 +195,17 @@ export const update = async (req, res) => {
             req.body.isSale = req.body.isSale === "true";
         }
 
-        // Handle discount field
+        // Handle discount field with isSale logic
         if (req.body.discount !== undefined) {
             req.body.discount = parseFloat(req.body.discount) || 0;
+        }
+
+        // If isSale is being set to true and no discount is specified, set default 20%
+        if (
+            req.body.isSale === true &&
+            (req.body.discount === undefined || req.body.discount === 0)
+        ) {
+            req.body.discount = 20;
         }
 
         // Handle image uploads
