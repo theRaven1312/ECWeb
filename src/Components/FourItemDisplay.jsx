@@ -59,18 +59,16 @@ const FourItemDisplay = ({ heading, links }) => {
   return (
     <div className='fourDisplay'>
       <div className='heading'>{heading}</div>
-      <div className='itemList'>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 auto-rows-fr">
-          {products.length > 0 ? (
-            products.map(product => (
-              <ProductCard key={product._id} product={product}/>
-            ))
-          ) : (
-            <div className='text-gray-500 text-center py-8 col-span-4'>
-              No products found
-            </div>
-          )}
-        </div>
+      <div className="grid grid-cols-2 sm:grid-cols-2  md:grid-cols-4 gap-4 auto-rows-fr">
+        {products.length > 0 ? (
+          products.map(product => (
+            <ProductCard key={product._id} product={product}/>
+          ))
+        ) : (
+          <div className='text-gray-500 text-center py-8 col-span-4'>
+            No products found
+          </div>
+        )}
       </div>
       
       {products.length > 0 && (

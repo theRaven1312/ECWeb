@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import arrowDown from "../../public/Assets/arrowdown.svg";
 import cartIcon from "../../public/Assets/cart.svg";
 import profile from "../../public/Assets/profile.svg";
@@ -14,6 +14,7 @@ const Navbar = () => {
     const user = useSelector((state) => state.user);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [cartCount, setCartCount] = useState(0);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const handleLogout = async () => {
@@ -26,6 +27,31 @@ const Navbar = () => {
     const closeMobileMenu = () => {
         setMobileMenuOpen(false);
     };
+
+
+    // Get cart count from axios
+    const fetchCartData = async () => {
+        try {
+
+            const response = await axiosJWT.get("/api/v1/cart");
+            const cart = response.data.cart;
+            const items = cart?.products || [];
+            const totalItems = items.reduce(
+                (sum, item) => sum + item.quantity,
+                0
+            );
+            setCartCount(totalItems);
+        }
+        catch (error) {
+            console.error("Error fetching cart data:", error);
+            setCartCount(0);
+        }
+    };
+
+    useEffect(() => {
+        fetchCartData();
+    }, [user.access_token]);
+
 
     return (
         <>
@@ -70,8 +96,18 @@ const Navbar = () => {
 
                 <div className="navbarCartProfile">
                     <Link to="/cart">
-                        <img src={cartIcon} alt="cart" />
+
+                        <div className="relative">
+                            { cartCount >= 0 && (
+                                <div className="bg-red-500 w-4 h-4 text-white text-xs font-bold text-center absolute -top-3 -right-2 rounded-full">
+                                        {cartCount}
+                                </div>
+                            )}
+                            <img src={cartIcon} alt="cart" />
+                        </div>
+                        
                     </Link>
+
                     {user.name ? (
                         <div className="relative">
                             <img

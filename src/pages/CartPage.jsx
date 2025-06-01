@@ -4,6 +4,8 @@ import DirectLink from "../Components/DirectLink";
 import CartList from "../Components/CartList";
 import CartPrice from "../Components/CartPrice";
 import axiosJWT from "../utils/axiosJWT";
+import OrderConfirm from "../Components/OrderConfirm";
+import { set } from "mongoose";
 
 const CartPage = () => {
     const [cartData, setCartData] = useState({
@@ -153,9 +155,12 @@ const CartPage = () => {
         }
     };
 
+
     const clearError = () => {
         setCartData((prev) => ({...prev, error: null}));
     };
+
+    //Show Order Confirm when click on procceed to checkout
 
     // Check if user is logged in
     if (!user?.access_token && !user?._id) {
@@ -297,9 +302,9 @@ const CartPage = () => {
                     <>
                         {/* Progress indicator */}
 
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div className="flex flex-col gap-8 md:flex-row">
                             {/* Cart Items - Takes 2/3 of the space */}
-                            <div className="col-span-2 w-full">
+                            <div className="w-full">
                                 <CartList
                                     items={cartData.items}
                                     onUpdateQuantity={handleUpdateQuantity}
@@ -308,7 +313,7 @@ const CartPage = () => {
                             </div>
 
                             {/* Cart Summary - Takes 1/3 of the space */}
-                            <div className="lg:col-span-1">
+                            <div className="min-w-1/3">
                                 <CartPrice
                                     items={cartData.items}
                                     totalPrice={cartData.totalPrice}

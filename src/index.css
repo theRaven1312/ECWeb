@@ -169,7 +169,7 @@ body {
   }
 
   .commentCard {
-    @apply flex flex-col gap-2 rounded-xl w-96 h-42 p-4 shadow-xl border-1 border-gray-50 shrink-0;
+    @apply flex flex-col gap-2 rounded-xl w-96 max-h-64 p-4 shadow-xl border-1 border-gray-50 shrink-0;
   }
 
   .commentSection {
@@ -216,16 +216,16 @@ body {
     @apply font-integral text-3xl;
   }
 
-  .itemList {
+  /* .itemList {
     @apply flex lg:justify-center gap-5 overflow-x-scroll p-8 w-full;
-  }
+  } */
 
   .viewAllButton {
     @apply border-2 border-gray-400 text-gray-400 w-32 self-center px-6 py-2 rounded-full
   }
 
-  .productCard {
-    @apply flex flex-col gap-2 rounded-3xl hover:-translate-y-6 z-2 cursor-pointer border-gray-100 transition-all;
+  .product-card {
+    @apply flex flex-col
   }
 
   .productImg {
@@ -237,7 +237,7 @@ body {
   }
 
   .ratingStar {
-    @apply flex;
+    @apply flex py-2;
   }
 
   .blackStripe {
@@ -546,7 +546,7 @@ body {
   }
 
   .cart-page {
-    @apply flex flex-col w-[80%] m-auto py-8 gap-5 max-sm:px-5
+    @apply flex flex-col w-[80%] max-sm:w-full m-auto py-8 gap-5 max-sm:px-5;
   }
 
   .cart-heading {
@@ -562,7 +562,7 @@ body {
   }
 
   .cart-card {
-    @apply flex-center-between gap-5 px-5 py-5 w-full relative max-sm:px-3 max-sm:py-3
+    @apply flex-center-between gap-5 px-5 py-5 w-full relative max-sm:px-3  max-sm:py-3 max-sm:flex-col
   }
 
   .card-detail {
@@ -843,6 +843,40 @@ body {
 
 .slide-out {
   animation: slideOut 0.3s ease-in forwards;
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-in-out forwards;
+}
+
+.bounce-in {
+  animation: bounceIn 0.3s ease-out forwards;
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideIn {
