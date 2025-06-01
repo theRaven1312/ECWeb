@@ -396,15 +396,12 @@ const CategoryPage = ({ heading = 'Shop' }) => {
                             <div>
                                 Showing {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, totalProducts)} of {totalProducts} Products
                             </div>
-                            <div>
-                                Sort by: <span>Most Popular</span>
-                            </div>
                         </div>
                     </div>
 
                     <div className="category-main flex flex-col w-full gap-8">
                         {/* Products Grid */}
-                        <div className="category-main-productList grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        <div className="category-main-productList grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                             {currentProducts.length > 0 ? (
                                 currentProducts.map(product => (
                                     <ProductCard key={product._id} product={product} />

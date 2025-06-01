@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import RatingStar from "./RatingStar";
 
 const ProductCard = ({ product }) => {
   const [imageError, setImageError] = useState(false);
@@ -21,8 +22,9 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <Link to={`/product/${product._id}`} className="product-card block h-full">
-      <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden h-full flex flex-col">
+    <Link to={`/product/${product._id}`} className="product-card h-full">
+
+      <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden h-full flex flex-col w-64 max-sm:w-42">
         {/* Fixed height image container */}
         <div className="w-full h-48 overflow-hidden flex-shrink-0">
           <img
@@ -37,10 +39,17 @@ const ProductCard = ({ product }) => {
           />
         </div>
 
+        {/*  Rating Starts */}
+
         <div className="p-4 flex flex-col flex-grow">
-          <h3 className="font-bold text-gray-900 line-clamp-2 min-h-[2.5rem]">
+          <h3 className="font-bold text-gray-900 line-clamp-3 min-h-[2.5rem]">
             {product.name}
           </h3>
+        <div className='flex items-center gap-3'>
+            <RatingStar rating={product.rating}/>
+            <p>{product.rating}/5</p>
+        </div>
+        
 
           {product.category && (
             <p className="text-xs text-blue-600 mt-1">
@@ -62,7 +71,7 @@ const ProductCard = ({ product }) => {
           {/* Push this to bottom with margin-top auto */}
           <div className="flex items-center justify-between mt-auto pt-2 text-xs text-gray-500">
             <span className={product.stock > 0 ? "text-green-600" : "text-red-600"}>
-              {product.stock > 0 ? "In stock" : "Out of stock"}
+              {product.stock > 0 ? "Available" : "Out of stock"}
             </span>
             {product.colors && product.colors.length > 0 && (
               <span>{product.colors.length} colors</span>

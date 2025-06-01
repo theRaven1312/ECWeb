@@ -216,16 +216,16 @@ body {
     @apply font-integral text-3xl;
   }
 
-  .itemList {
+  /* .itemList {
     @apply flex lg:justify-center gap-5 overflow-x-scroll p-8 w-full;
-  }
+  } */
 
   .viewAllButton {
     @apply border-2 border-gray-400 text-gray-400 w-32 self-center px-6 py-2 rounded-full
   }
 
-  .productCard {
-    @apply flex flex-col gap-2 rounded-3xl hover:-translate-y-6 z-2 cursor-pointer border-gray-100 transition-all;
+  .product-card {
+    @apply flex flex-col
   }
 
   .productImg {
@@ -237,7 +237,7 @@ body {
   }
 
   .ratingStar {
-    @apply flex;
+    @apply flex py-2;
   }
 
   .blackStripe {
