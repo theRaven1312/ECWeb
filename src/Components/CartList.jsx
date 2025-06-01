@@ -22,7 +22,7 @@ const CartList = ({items = [], onUpdateQuantity, onRemoveItem}) => {
     }
 
     return (
-        <div className="cart-list w-full space-y-4">
+        <div className="cart-list w-full space-y-4 max-w-full">
             {items.map((item, index) => (
                 <div
                     key={`${item.product._id}-${item.size}-${item.color}-${index}`}
@@ -61,7 +61,7 @@ const CartList = ({items = [], onUpdateQuantity, onRemoveItem}) => {
                         </p>
                     </div>
 
-                    <div className="flex flex-col-reverse items-end gap-4">
+                    <div className="flex flex-col-reverse max-sm:self-end items-end gap-4">
                         <div className="quantity-selector flex-center bg-gray-300 p-2 rounded-full w-30%">
                             <button
                                 onClick={() =>

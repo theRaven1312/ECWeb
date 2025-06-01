@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import arrowDown from "../../public/Assets/arrowdown.svg";
 import cartIcon from "../../public/Assets/cart.svg";
 import profile from "../../public/Assets/profile.svg";
@@ -70,6 +70,12 @@ const Navbar = () => {
 
                 <div className="navbarCartProfile">
                     <Link to="/cart">
+
+                        { user.cartItems && user.cartItems.length > 0 && (
+                            <span className="cart-count">
+                                {user.cartItems.length}
+                            </span> ) }
+
                         <img src={cartIcon} alt="cart" />
                     </Link>
                     {user.name ? (
