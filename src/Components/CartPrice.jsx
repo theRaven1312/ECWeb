@@ -24,6 +24,16 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
 
     const [loading, setLoading] = useState(false);
 
+    
+    const [appliedCoupon, setAppliedCoupon] = useState(() => {
+        const savedCoupon = localStorage.getItem("appliedCoupon");
+        return savedCoupon ? JSON.parse(savedCoupon) : null;
+    });
+    
+    const [couponCode, setCouponCode] = useState(() => {
+        return localStorage.getItem("couponCode") || "";
+    });
+    
     const handleProceedToCheckout = () => {
         if (!user.address || !user.phone) {
             alert(
@@ -37,15 +47,6 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
             setError(null);
         }
     };
-
-    const [appliedCoupon, setAppliedCoupon] = useState(() => {
-        const savedCoupon = localStorage.getItem("appliedCoupon");
-        return savedCoupon ? JSON.parse(savedCoupon) : null;
-    });
-
-    const [couponCode, setCouponCode] = useState(() => {
-        return localStorage.getItem("couponCode") || "";
-    });
 
     const calculateDynamicDiscount = (coupon, currentSubtotal) => {
         if (!coupon) return null;
@@ -78,6 +79,7 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
             appliedCoupon: coupon.code,
         };
     };
+
     const currentDiscount = calculateDynamicDiscount(appliedCoupon, subtotal);
 
     useEffect(() => {
@@ -127,6 +129,7 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
             validateCoupon();
         }
     }, []);
+
     const handleConfirmOrder = async () => {
         setIsProcessing(true);
         setError(null);
@@ -182,6 +185,7 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
             setLoading(false);
         }
     };
+
     const createOrder = async () => {
         try {
             console.log("Creating order...");
@@ -198,19 +202,17 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
 
             const finalTotal = total - (currentDiscount?.discountPrice || 0);
 
-            const response = await axios.post(
-                "/api/v1/orders",
-                {
+            const response = await axiosJWT.post(
+                "/api/v1/orders", {
                     shippingAddress: user.address,
                     phone: user.phone,
-                    finalTotal: finalTotal,
                     appliedCoupon: appliedCoupon
-                        ? {
-                              code: appliedCoupon.code,
-                              discountAmount:
-                                  currentDiscount?.discountPrice || 0,
-                          }
-                        : null,
+                    ? {
+                            code: appliedCoupon.code,
+                            discountAmount:
+                                currentDiscount?.discountPrice || 0,
+                        }
+                    : null,
                 },
                 {
                     headers: {
