@@ -47,21 +47,20 @@ const calculateTotalPrice = async (products, appliedCoupon) => {
 //View all orders for admin
 export const getAllOrders = async (req, res) => {
     try {
-        // ✅ Add pagination support
         const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 10;
+        const limit = parseInt(req.query.limit) || 9; // ✅ 9 items for 3x3 grid
         const skip = (page - 1) * limit;
 
         const filter = req.query.filter || "";
         
+        // ✅ Build query with filter
         const query = {};
-        if (filter) {
+        if (filter && filter !== "all") {
             query.status = filter;
         }
 
-        console.log(`Fetching orders with filter: ${filter}`);
-
-        
+        console.log(`Fetching orders with filter: ${filter}, page: ${page}, limit: ${limit}`);
+        console.log('Query:', query);
 
         const orders = await Order.find(query)
             .populate({
@@ -70,32 +69,36 @@ export const getAllOrders = async (req, res) => {
             })
             .populate({
                 path: "products.product",
-                model: "products",
-                select: "name",
+                model: "products", // ✅ Fix model name
+                select: "name price images",
             })
-            .sort({createdAt: -1})
+            .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit);
 
-        // ✅ Get total count for pagination
-        const totalOrders = await Order.countDocuments();
+        // ✅ Get total count with same filter
+        const totalOrders = await Order.countDocuments(query);
+        const totalPages = Math.ceil(totalOrders / limit);
 
-        console.log(
-            `Found ${orders.length} orders out of ${totalOrders} total`
-        );
+        console.log(`Found ${orders.length} orders out of ${totalOrders} total (page ${page}/${totalPages})`);
 
         res.status(200).json({
             message: "Orders retrieved successfully",
             orders: orders,
+            filter: filter,
             pagination: {
                 currentPage: page,
-                totalPages: Math.ceil(totalOrders / limit),
+                totalPages: totalPages,
                 totalOrders: totalOrders,
-                hasNext: page < Math.ceil(totalOrders / limit),
+                limit: limit,
+                hasNext: page < totalPages,
                 hasPrev: page > 1,
+                startIndex: skip + 1,
+                endIndex: Math.min(skip + limit, totalOrders)
             },
             status: "SUCCESS",
         });
+
     } catch (error) {
         console.error("Get all orders error:", error);
         res.status(500).json({
@@ -208,19 +211,51 @@ export const createOrder = async (req, res) => {
     }
 };
 
+// ✅ Also fix getUserOrders for regular users
 export const getUserOrders = async (req, res) => {
     try {
         const userId = req.user.id || req.user._id;
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 9;
+        const skip = (page - 1) * limit;
+        const filter = req.query.filter || "";
 
-        const orders = await Order.find({user: userId})
-            .populate("products.product")
-            .sort({createdAt: -1});
+        // ✅ Build query for user orders
+        let query = { user: userId };
+        if (filter && filter !== "all") {
+            query.status = filter;
+        }
+
+        const orders = await Order.find(query)
+            .populate({
+                path: "products.product",
+                model: "Product",
+                select: "name price images"
+            })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+
+        const totalOrders = await Order.countDocuments(query);
+        const totalPages = Math.ceil(totalOrders / limit);
 
         res.status(200).json({
             message: "Orders retrieved successfully",
             orders: orders,
+            filter: filter,
+            pagination: {
+                currentPage: page,
+                totalPages: totalPages,
+                totalOrders: totalOrders,
+                limit: limit,
+                hasNext: page < totalPages,
+                hasPrev: page > 1,
+                startIndex: skip + 1,
+                endIndex: Math.min(skip + limit, totalOrders)
+            },
             status: "SUCCESS",
         });
+
     } catch (error) {
         console.error("Get orders error:", error);
         res.status(500).json({
@@ -267,17 +302,54 @@ export const getOrderById = async (req, res) => {
 // Update order status (admin only)
 export const updateOrderStatus = async (req, res) => {
     try {
-        const {orderId} = req.params;
-        const {status, paymentStatus} = req.body;
+        const { orderId } = req.params;
+        const { status } = req.body;
 
-        const updateData = {};
-        if (status) updateData.status = status;
-        if (paymentStatus) updateData.paymentStatus = paymentStatus;
-        updateData.updatedAt = new Date();
+        // ✅ Validation
+        if (!orderId) {
+            return res.status(400).json({
+                message: "Order ID is required",
+                status: "ERROR",
+            });
+        }
 
-        const order = await Order.findByIdAndUpdate(orderId, updateData, {
-            new: true,
-        }).populate("products.product");
+        if (!status) {
+            return res.status(400).json({
+                message: "Status is required",
+                status: "ERROR",
+            });
+        }
+
+        const validStatuses = ['pending', 'delivering', 'delivered', 'cancelled', 'returned'];
+
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({
+                message: `Invalid status. Valid statuses: ${validStatuses.join(', ')}`,
+                status: "ERROR",
+            });
+        }
+
+        console.log('Updating order status:', orderId, 'to:', status);
+
+        // ✅ Update only status
+        const order = await Order.findByIdAndUpdate(
+            orderId, 
+            { 
+                status: status,
+                updatedAt: new Date()
+            }, 
+            { new: true }
+        ).populate([
+            {
+                path: "user",
+                select: "name email"
+            },
+            {
+                path: "products.product",
+                model: "products",
+                select: "name price images"
+            }
+        ]);
 
         if (!order) {
             return res.status(404).json({
@@ -286,15 +358,62 @@ export const updateOrderStatus = async (req, res) => {
             });
         }
 
+        console.log('✅ Order status updated successfully:', {
+            orderId: order._id,
+            orderNumber: order.orderNumber,
+            newStatus: status,
+            updatedBy: req.user?.email || req.user?.name,
+            timestamp: new Date()
+        });
+
         res.status(200).json({
-            message: "Order updated successfully",
+            message: "Order status updated successfully",
             order: order,
             status: "SUCCESS",
         });
+
     } catch (error) {
-        console.error("Update order error:", error);
+        console.error("❌ Update order status error:", error);
         res.status(500).json({
-            message: "Error updating order",
+            message: "Error updating order status",
+            error: error.message,
+            status: "ERROR",
+        });
+    }
+};
+
+// Delete order (admin only)
+export const deleteOrder = async (req, res) => {
+    try {
+        const { orderId } = req.params;
+
+        if (!orderId) {
+            return res.status(400).json({
+                message: "Order ID is required",
+                status: "ERROR",
+            });
+        }
+
+        const order = await Order.findByIdAndDelete(orderId);
+
+        if (!order) {
+            return res.status(404).json({
+                message: "Order not found",
+                status: "ERROR",
+            });
+        }
+
+        console.log(`✅ Order ${orderId} deleted successfully by ${req.user?.email || req.user?.name}`);
+
+        res.status(200).json({
+            message: "Order deleted successfully",
+            status: "SUCCESS",
+        });
+
+    } catch (error) {
+        console.error("❌ Delete order error:", error);
+        res.status(500).json({
+            message: "Error deleting order",
             error: error.message,
             status: "ERROR",
         });
