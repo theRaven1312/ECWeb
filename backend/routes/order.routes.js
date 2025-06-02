@@ -18,4 +18,7 @@ router.get('/:orderId', OrderController.getOrderById);
 // ✅ Admin routes (require admin role)
 router.put('/:orderId/status', OrderController.updateOrderStatus);
 
+// Delete order
+router.delete('/:orderId', OrderController.deleteOrder);
+
 export default router;

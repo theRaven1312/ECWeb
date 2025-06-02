@@ -302,17 +302,54 @@ export const getOrderById = async (req, res) => {
 // Update order status (admin only)
 export const updateOrderStatus = async (req, res) => {
     try {
-        const {orderId} = req.params;
-        const {status, paymentStatus} = req.body;
+        const { orderId } = req.params;
+        const { status } = req.body;
 
-        const updateData = {};
-        if (status) updateData.status = status;
-        if (paymentStatus) updateData.paymentStatus = paymentStatus;
-        updateData.updatedAt = new Date();
+        // ✅ Validation
+        if (!orderId) {
+            return res.status(400).json({
+                message: "Order ID is required",
+                status: "ERROR",
+            });
+        }
 
-        const order = await Order.findByIdAndUpdate(orderId, updateData, {
-            new: true,
-        }).populate("products.product");
+        if (!status) {
+            return res.status(400).json({
+                message: "Status is required",
+                status: "ERROR",
+            });
+        }
+
+        const validStatuses = ['pending', 'delivering', 'delivered', 'cancelled', 'returned'];
+
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({
+                message: `Invalid status. Valid statuses: ${validStatuses.join(', ')}`,
+                status: "ERROR",
+            });
+        }
+
+        console.log('Updating order status:', orderId, 'to:', status);
+
+        // ✅ Update only status
+        const order = await Order.findByIdAndUpdate(
+            orderId, 
+            { 
+                status: status,
+                updatedAt: new Date()
+            }, 
+            { new: true }
+        ).populate([
+            {
+                path: "user",
+                select: "name email"
+            },
+            {
+                path: "products.product",
+                model: "products",
+                select: "name price images"
+            }
+        ]);
 
         if (!order) {
             return res.status(404).json({
@@ -321,15 +358,62 @@ export const updateOrderStatus = async (req, res) => {
             });
         }
 
+        console.log('✅ Order status updated successfully:', {
+            orderId: order._id,
+            orderNumber: order.orderNumber,
+            newStatus: status,
+            updatedBy: req.user?.email || req.user?.name,
+            timestamp: new Date()
+        });
+
         res.status(200).json({
-            message: "Order updated successfully",
+            message: "Order status updated successfully",
             order: order,
             status: "SUCCESS",
         });
+
     } catch (error) {
-        console.error("Update order error:", error);
+        console.error("❌ Update order status error:", error);
         res.status(500).json({
-            message: "Error updating order",
+            message: "Error updating order status",
+            error: error.message,
+            status: "ERROR",
+        });
+    }
+};
+
+// Delete order (admin only)
+export const deleteOrder = async (req, res) => {
+    try {
+        const { orderId } = req.params;
+
+        if (!orderId) {
+            return res.status(400).json({
+                message: "Order ID is required",
+                status: "ERROR",
+            });
+        }
+
+        const order = await Order.findByIdAndDelete(orderId);
+
+        if (!order) {
+            return res.status(404).json({
+                message: "Order not found",
+                status: "ERROR",
+            });
+        }
+
+        console.log(`✅ Order ${orderId} deleted successfully by ${req.user?.email || req.user?.name}`);
+
+        res.status(200).json({
+            message: "Order deleted successfully",
+            status: "SUCCESS",
+        });
+
+    } catch (error) {
+        console.error("❌ Delete order error:", error);
+        res.status(500).json({
+            message: "Error deleting order",
             error: error.message,
             status: "ERROR",
         });

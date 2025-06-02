@@ -28,17 +28,6 @@ const OrderQuery = () => {
           View Orders
         </button>
 
-        <button
-          className={`px-4 py-2 font-medium text-sm ${
-            activeTab === 'delete'
-              ? 'border-b-2 border-black text-black'
-              : 'text-gray-500 hover:text-gray-700'
-          }`}
-          onClick={() => setActiveTab('delete')}
-        >
-          Delete Order
-        </button>
-
       </div>
 
       {/* Content */}

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axiosJWT from '../utils/axiosJWT';
+import OrderUpdate from './OrderUpdate'; 
+import OrderDelete from './OrderDelete';
 
 const OrderView = () => {
     const [loading, setLoading] = useState(false);
@@ -9,6 +11,9 @@ const OrderView = () => {
     const [filter, setFilter] = useState('all');
     const [pagination, setPagination] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const [selectedOrder, setSelectedOrder] = useState(null);
+    const [showUpdateModal, setShowUpdateModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     const user = useSelector((state) => state.user);
 
@@ -57,6 +62,32 @@ const OrderView = () => {
         }
     };
 
+    const handleDeleteOrder = (order) => {
+        console.log('Opening delete modal for order:', order._id);
+        setSelectedOrder(order);
+        setShowDeleteModal(true);
+    };
+
+    const handleOrderDelete = (deletedOrderId) => {
+        console.log('Removing order from list:', deletedOrderId);
+        setOrders(prevOrders => 
+            prevOrders.filter(order => order._id !== deletedOrderId)
+        );
+        
+        // ✅ Update pagination count
+        if (pagination) {
+            setPagination(prev => ({
+                ...prev,
+                totalOrders: prev.totalOrders - 1
+            }));
+        }
+    };
+
+    const handleCloseDeleteModal = () => {
+        setShowDeleteModal(false);
+        setSelectedOrder(null);
+    };
+
     // ✅ Handle filter change (reset to page 1)
     const handleFilterChange = async (newFilter) => {
         console.log('🔄 Filter changing to:', newFilter);
@@ -76,18 +107,35 @@ const OrderView = () => {
         await fetchOrders(filter, newPage);
     };
 
-    // ✅ Initial load
+    const handleUpdateStatus = (order) => {
+        console.log('Opening update modal for order:', order._id);
+        setSelectedOrder(order);
+        setShowUpdateModal(true);
+    };
+
+    const handleOrderUpdate = (updatedOrder) => {
+        console.log('Updating order in list:', updatedOrder._id);
+        setOrders(prevOrders => 
+            prevOrders.map(order => 
+                order._id === updatedOrder._id ? updatedOrder : order
+            )
+        );
+    };
+
+    const handleCloseModal = () => {
+        setShowUpdateModal(false);
+        setSelectedOrder(null);
+    };
+
     useEffect(() => {
         fetchOrders();
     }, []);
 
-    // ✅ Pagination component
     const PaginationComponent = () => {
         if (!pagination || pagination.totalPages <= 1) return null;
 
         const { currentPage, totalPages, hasNext, hasPrev, startIndex, endIndex, totalOrders } = pagination;
 
-        // ✅ Generate page numbers to show
         const getPageNumbers = () => {
             const pages = [];
             const maxVisible = 5;
@@ -240,9 +288,8 @@ const OrderView = () => {
                     >
                         <option value="all">All Orders</option>
                         <option value="pending">Pending Orders</option>
-                        <option value="processing">Processing Orders</option>
+                        <option value="delivering">Delivering Orders</option>
                         <option value="delivered">Delivered Orders</option>
-                        <option value="shipped">Shipped Orders</option>
                         <option value="cancelled">Cancelled Orders</option>
                         <option value="returned">Returned Orders</option>
                     </select>
@@ -288,9 +335,9 @@ const OrderView = () => {
                                         </h2>
 
                                         <span className={`px-2 py-1 rounded text-xs font-medium ${
-                                            order.status === 'shipped' ? 'bg-green-100 text-green-800' :
                                             order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                                             order.status === 'delivering' ? 'bg-purple-100 text-purple-800' :
+                                            order.status === 'delivered' ? 'bg-green-100 text-green-800' :
                                             order.status === 'cancelled' ? 'bg-red-100 text-red-800' :
                                             order.status === 'returned' ? 'bg-orange-100 text-orange-800' :
                                             'bg-gray-100 text-gray-800'
@@ -384,11 +431,15 @@ const OrderView = () => {
                                     {/* ✅ Admin actions */}
                                     {user?.role === 'admin' && (
                                         <div className="mt-3 pt-3 border-t flex gap-2">
-                                            <button className="flex-1 bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600 transition-colors">
+                                            <button className="flex-1 bg-black text-white px-3 py-1 rounded text-xs hover:bg-gray-800 transition-colors"
+                                                onClick={() => handleUpdateStatus(order)}
+                                            >
                                                 Update Status
                                             </button>
-                                            <button className="flex-1 bg-gray-500 text-white px-3 py-1 rounded text-xs hover:bg-gray-600 transition-colors">
-                                                View Details
+                                            <button className="flex-1 bg-red-800 text-white px-3 py-1 rounded text-xs hover:bg-red-500 transition-colors"
+                                                onClick={() => handleDeleteOrder(order)}
+                                            >
+                                                Delete Order
                                             </button>
                                         </div>
                                     )}
@@ -423,6 +474,20 @@ const OrderView = () => {
 
                     {/* ✅ Pagination component */}
                     <PaginationComponent />
+
+                    <OrderUpdate
+                        order={selectedOrder}
+                        isOpen={showUpdateModal}
+                        onClose={handleCloseModal}
+                        onUpdate={handleOrderUpdate}
+                    />
+
+                    <OrderDelete
+                        order={selectedOrder}
+                        isOpen={showDeleteModal}
+                        onClose={handleCloseDeleteModal}
+                        onDelete={handleOrderDelete}
+                    />
                 </>
             )}
         </div>
