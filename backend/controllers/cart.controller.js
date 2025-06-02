@@ -6,7 +6,13 @@ import Coupon from "../models/coupon.model.js";
 function calculateTotalPrice(products) {
     let totalPrice = 0;
     products.forEach((item) => {
-        totalPrice += item.product.price * item.quantity;
+        const originalPrice = item.product.price;
+        const discount = item.product.discount || 0;
+        const discountedPrice =
+            discount > 0
+                ? originalPrice - (originalPrice * discount) / 100
+                : originalPrice;
+        totalPrice += discountedPrice * item.quantity;
     });
     return totalPrice;
 }

@@ -3,7 +3,11 @@ import React, {useState} from "react";
 import ProductQuery from "../Components/ProductQuery";
 import CategoryQuery from "../Components/CategoryQuery";
 import UserQuery from "../Components/UserQuery";
+
 import OrderQuery from "../Components/OrderQuery";
+
+import CouponQuery from "../Components/CouponQuery";
+
 
 const AdminPage = () => {
     const [option, setOption] = useState("products");
@@ -20,6 +24,8 @@ const AdminPage = () => {
                 return <div>Sales Analytics - Coming Soon</div>;
             case "categories":
                 return <CategoryQuery />;
+            case "coupons":
+                return <CouponQuery />;
             default:
                 return <ProductQuery />;
         }
@@ -79,6 +85,16 @@ const AdminPage = () => {
                         onClick={() => setOption("categories")}
                     >
                         Categories
+                    </li>
+                    <li
+                        className={`optionBar__item cursor-pointer p-2 rounded ${
+                            option === "coupons"
+                                ? "bg-gray-200"
+                                : "hover:bg-gray-100"
+                        }`}
+                        onClick={() => setOption("coupons")}
+                    >
+                        Coupons
                     </li>
                 </ul>
                 <div className="flex flex-col gap-4 optionContent w-3/4 p-8 border-1 border-gray-300 rounded-lg">

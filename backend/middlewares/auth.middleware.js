@@ -103,6 +103,36 @@ export const authReviewMiddleware = async (req, res, next) => {
     }
 };
 
+export const authCouponMiddleware = async (req, res, next) => {
+    let token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+        console.log("No token provided");
+        return res.status(401).json({message: "Not authorized"});
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        const user = await User.findById(decoded.id).select("-password");
+        if (!user) {
+            console.log("User not found for ID:", decoded.id);
+            return res.status(401).json({message: "User not found"});
+        }
+
+        req.user = user;
+        next();
+    } catch (err) {
+        console.log("Token verification error:", err.message);
+        if (err.name === "TokenExpiredError") {
+            return res.status(401).json({message: "Token expired"});
+        } else if (err.name === "JsonWebTokenError") {
+            return res.status(401).json({message: "Invalid token"});
+        }
+        res.status(401).json({message: "Token failed"});
+    }
+};
+
 export const authCartMiddleware = async (req, res, next) => {
     let token = req.headers.authorization?.split(" ")[1];
 

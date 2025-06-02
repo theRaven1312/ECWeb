@@ -11,6 +11,7 @@ const ProductAdd = () => {
         category: "",
         description: "",
         price: "",
+        discount: "",
         stock: "",
         colors: "",
         brand: "",
@@ -81,6 +82,7 @@ const ProductAdd = () => {
                 category: "",
                 description: "",
                 price: "",
+                discount: "",
                 stock: "",
                 colors: "",
                 brand: "",
@@ -138,7 +140,6 @@ const ProductAdd = () => {
                         </select>
                     </div>
                 </div>
-
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                         Description
@@ -151,9 +152,8 @@ const ProductAdd = () => {
                         rows="3"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                </div>{" "}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                             Price *
@@ -173,6 +173,22 @@ const ProductAdd = () => {
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Discount (%)
+                        </label>
+                        <input
+                            type="number"
+                            name="discount"
+                            value={formData.discount}
+                            onChange={handleChange}
+                            placeholder="0"
+                            min="0"
+                            max="100"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
                             Stock
                         </label>
                         <input
@@ -186,7 +202,6 @@ const ProductAdd = () => {
                         />
                     </div>
                 </div>
-
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -216,7 +231,6 @@ const ProductAdd = () => {
                         />
                     </div>
                 </div>
-
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                         Sizes (comma separated)
@@ -230,7 +244,6 @@ const ProductAdd = () => {
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
-
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                         Images
@@ -244,19 +257,16 @@ const ProductAdd = () => {
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
-
                 {error && (
                     <div className="text-red-500 text-sm bg-red-50 p-3 rounded-md">
                         {error}
                     </div>
                 )}
-
                 {success && (
                     <div className="text-green-600 text-sm bg-green-50 p-3 rounded-md">
                         {success}
                     </div>
                 )}
-
                 <button
                     type="submit"
                     disabled={loading}

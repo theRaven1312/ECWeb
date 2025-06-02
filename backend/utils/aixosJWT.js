@@ -2,6 +2,7 @@ import {jwtDecode} from "jwt-decode";
 import axios from "axios";
 
 const axiosJWT = axios.create();
+
 const handleDecode = () => {
     const storageData = localStorage.getItem("access_token");
     let decode = {};

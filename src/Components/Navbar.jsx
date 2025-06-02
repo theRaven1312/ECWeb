@@ -28,11 +28,9 @@ const Navbar = () => {
         setMobileMenuOpen(false);
     };
 
-
     // Get cart count from axios
     const fetchCartData = async () => {
         try {
-
             const response = await axiosJWT.get("/api/v1/cart");
             const cart = response.data.cart;
             const items = cart?.products || [];
@@ -41,8 +39,7 @@ const Navbar = () => {
                 0
             );
             setCartCount(totalItems);
-        }
-        catch (error) {
+        } catch (error) {
             console.error("Error fetching cart data:", error);
             setCartCount(0);
         }
@@ -51,7 +48,6 @@ const Navbar = () => {
     useEffect(() => {
         fetchCartData();
     }, [user.access_token]);
-
 
     return (
         <>
@@ -96,16 +92,14 @@ const Navbar = () => {
 
                 <div className="navbarCartProfile">
                     <Link to="/cart">
-
                         <div className="relative">
-                            { cartCount >= 0 && (
-                                <div className="bg-red-500 w-4 h-4 text-white text-xs font-bold text-center absolute -top-3 -right-2 rounded-full">
-                                        {cartCount}
+                            {cartCount >= 0 && (
+                                <div className="bg-red-500 w-4 h-4 text-white text-xs font-bold text-center absolute -top-1.5 -right-2 rounded-full">
+                                    {cartCount}
                                 </div>
                             )}
                             <img src={cartIcon} alt="cart" />
                         </div>
-                        
                     </Link>
 
                     {user.name ? (

@@ -50,14 +50,22 @@ const CartList = ({items = [], onUpdateQuantity, onRemoveItem}) => {
                             <p className="text-sm text-gray-600">
                                 Size: {item.size}
                             </p>
-                        )}
+                        )}{" "}
                         {item.color && (
                             <p className="text-sm text-gray-600">
                                 Color: {item.color}
                             </p>
                         )}
                         <p className="text-lg font-bold">
-                            ${item.product.price}
+                            $
+                            {item.product.discount > 0
+                                ? (
+                                      item.product.price -
+                                      (item.product.price *
+                                          item.product.discount) /
+                                          100
+                                  ).toFixed(2)
+                                : item.product.price.toFixed(2)}
                         </p>
                     </div>
 

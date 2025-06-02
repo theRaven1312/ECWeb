@@ -10,6 +10,7 @@ import axiosJWT from "../utils/axiosJWT";
 const ProductInfo = ({
     heading,
     price,
+    discount = 0,
     desc,
     colors,
     sizes,
@@ -41,15 +42,14 @@ const ProductInfo = ({
     // ✅ Handler for size selection
     const handleSizeSelect = (size) => {
         setSelectedSize(size);
-    };
-
-    // ✅ Handler for quantity change
+    }; // ✅ Handler for quantity change
     const handleQuantityChange = (newQuantity) => {
         setQuantity(newQuantity);
     };
 
-    const discount = 50;
-    const discountPrice = price - (price * discount) / 100;
+    // Calculate discounted price using the discount prop
+    const discountPrice =
+        discount > 0 ? price - (price * discount) / 100 : price;
 
     // ✅ Complete handleAddToCart function
     const handleAddToCart = async () => {
@@ -123,18 +123,23 @@ const ProductInfo = ({
                 <p className="product-content__feedback-score desc">
                     {rating}/5
                 </p>
-            </div>
+            </div>{" "}
             <div className="product-content__price">
-                <p className="price">${discountPrice}</p>
-                <p className="priceDiscount text-[#B3B3B3] line-through mr-4 ml-4">
-                    ${price}
-                </p>
-                <div className="product-content__discount primary-btn">
-                    -{discount}%
-                </div>
+                {discount > 0 ? (
+                    <>
+                        <p className="price">${discountPrice.toFixed(2)}</p>
+                        <p className="priceDiscount text-[#B3B3B3] line-through mr-4 ml-4">
+                            ${price.toFixed(2)}
+                        </p>
+                        <div className="product-content__discount primary-btn">
+                            -{discount}%
+                        </div>
+                    </>
+                ) : (
+                    <p className="price">${price.toFixed(2)}</p>
+                )}
             </div>
             <div className="product-content__desc desc">{desc}</div>
-
             {/* Color Selection */}
             {colors && colors.length > 0 && (
                 <>
@@ -153,7 +158,6 @@ const ProductInfo = ({
                     />
                 </>
             )}
-
             {/* Size Selection */}
             {sizes && sizes.length > 0 && (
                 <>
@@ -177,7 +181,6 @@ const ProductInfo = ({
                     </div>
                 </>
             )}
-
             {/* Add to Cart Message */}
             {addToCartMessage && (
                 <div
@@ -190,7 +193,6 @@ const ProductInfo = ({
                     {addToCartMessage}
                 </div>
             )}
-
             {/* Quantity and Add to Cart */}
             <div className="product-content__choose-quanity flex-center-between gap-5 mt-5">
                 <QuantitySelector

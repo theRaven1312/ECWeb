@@ -99,10 +99,12 @@ export default function ProductionPage() {
                         )}
                     </div>
                     <div className="product-content ">
+                        {" "}
                         {product && (
                             <ProductInfo
                                 heading={product.name}
                                 price={product.price}
+                                discount={product.discount || 0}
                                 desc={product.description}
                                 colors={product.colors}
                                 sizes={product.sizes}
