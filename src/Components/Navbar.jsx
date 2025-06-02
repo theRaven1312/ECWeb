@@ -93,7 +93,7 @@ const Navbar = () => {
                 <div className="navbarCartProfile">
                     <Link to="/cart">
                         <div className="relative">
-                            {cartCount >= 0 && (
+                            {cartCount > 0 && (
                                 <div className="bg-red-500 w-4 h-4 text-white text-xs font-bold text-center absolute -top-1.5 -right-2 rounded-full">
                                     {cartCount}
                                 </div>

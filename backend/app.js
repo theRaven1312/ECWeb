@@ -16,6 +16,7 @@ import categoryRouter from "./routes/category.routes.js";
 import orderRouter from "./routes/order.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
 import couponRoutes from "./routes/coupon.routes.js";
+import reviewRoutes from "./routes/review.routes.js";
 
 const app = express();
 const api = process.env.API_URL;
@@ -68,9 +69,9 @@ app.use(`${api}/orders`, orderRouter);
 
 app.use(`${api}/cart`, cartRoutes);
 
-app.use(`${api}/orders`, orderRouter);
-
 app.use(`${api}/coupons`, couponRoutes);
+
+app.use(`${api}/reviews`, reviewRoutes);
 
 // Static
 app.get(`/`, (req, res) => {

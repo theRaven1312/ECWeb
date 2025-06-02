@@ -37,7 +37,7 @@ const logInUser = (userLogIn) => {
         try {
             //KIểm tra email có tồn tại không
             const checkUser = await User.findOne({email}).select("+password");
-            
+
             if (checkUser == null) {
                 resolve({
                     status: "ERROR",
@@ -257,8 +257,8 @@ const forgotPassword = (email) => {
                     </p>
                 </div>
             `;
-            const data = {email, html};
-            const res = await sendEmail(data);
+            const data = {email, html, subject: "Forgot Password ?"};
+            const res = await sendEmail.sendEmail(data);
             resolve({
                 status: "OK",
                 message: "Send email successfully",
@@ -303,6 +303,159 @@ const resetPassword = (token, newPassword) => {
     });
 };
 
+const sendCoupon = (email, couponCode) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!email || !couponCode) {
+                throw new Error("Email and coupon code are required");
+            }
+            const html = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="utf-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                </head>
+                <body style="margin: 0; padding: 20px; background-color: #f5f5f5; font-family: Arial, sans-serif;">
+                    <div style="max-width: 600px; margin: 0 auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #e0e0e0;">
+                        <!-- Header -->
+                        <div style="background: #000000; padding: 30px; text-align: center;">
+                            <h1 style="color: white; margin: 0; font-size: 24px; font-weight: 600;">Your Coupon Code</h1>
+                        </div>
+                        
+                        <!-- Main Content -->
+                        <div style="background: white; padding: 40px;">
+                            <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
+                                Hello!<br><br>
+                                We're excited to share your exclusive coupon code with you!
+                            </p>
+                            
+                            <!-- Coupon Code Box -->
+                            <div style="background: #000000; border-radius: 8px; padding: 24px; text-align: center; margin: 30px 0; border: 2px dashed #333333;">
+                                <p style="color: white; margin: 0 0 8px 0; font-size: 16px; font-weight: 500;">Your Coupon Code</p>
+                                <div style="background: white; border-radius: 4px; padding: 16px; margin: 10px 0;">
+                                    <span style="color: #000000; font-size: 24px; font-weight: 700; letter-spacing: 2px;">${couponCode}</span>
+                                </div>
+                            </div>
+                            
+                            <p style="color: #666666; font-size: 16px; line-height: 1.6; margin: 24px 0;">
+                                Use this code at checkout to enjoy your special discount.
+                            </p>
+                            
+                            
+                            <p style="color: #666666; font-size: 15px; text-align: center; margin: 30px 0 0 0;">
+                                Thank you for being an amazing customer!
+                            </p>
+                        </div>
+                        
+                        <!-- Footer -->
+                        <div style="background: #f9f9f9; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
+                            <p style="color: #999999; font-size: 12px; margin: 0;">
+                                &copy; ${new Date().getFullYear()} ECWeb Team. All rights reserved.
+                            </p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `;
+            const data = {email, html, subject: "Your Coupon Code"};
+            const res = await sendEmail.sendEmail(data);
+            resolve({
+                status: "OK",
+                message: "Coupon sent successfully",
+                res,
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
+const sendAllCoupons = (couponCode) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!couponCode) {
+                throw new Error("Coupon code is required");
+            }
+
+            // Get all users
+            const users = await User.find({}, "email name");
+            if (!users || users.length === 0) {
+                throw new Error("No users found");
+            }
+            const emailPromises = users.map(async (user) => {
+                const html = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="utf-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    </head>
+                    <body style="margin: 0; padding: 20px; background-color: #f5f5f5; font-family: Arial, sans-serif;">
+                        <div style="max-width: 600px; margin: 0 auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #e0e0e0;">
+                            <!-- Header -->
+                            <div style="background: #000000; padding: 30px; text-align: center;">
+                                <h1 style="color: white; margin: 0; font-size: 24px; font-weight: 600;">Special Coupon for You!</h1>
+                            </div>
+                            
+                            <!-- Main Content -->
+                            <div style="background: white; padding: 40px;">
+                                <p style="color: #333333; font-size: 16px; line-height: 1.6; margin: 0 0 24px 0;">
+                                    Hello ${
+                                        user.name || "Valued Customer"
+                                    }!<br><br>
+                                    We have a special coupon just for you!
+                                </p>
+                                
+                                <!-- Coupon Code Box -->
+                                <div style="background: #000000; border-radius: 8px; padding: 24px; text-align: center; margin: 30px 0; border: 2px dashed #333333;">
+                                    <p style="color: white; margin: 0 0 8px 0; font-size: 16px; font-weight: 500;">Your Special Code</p>
+                                    <div style="background: white; border-radius: 4px; padding: 16px; margin: 10px 0;">
+                                        <span style="color: #000000; font-size: 24px; font-weight: 700; letter-spacing: 2px;">${couponCode}</span>
+                                    </div>
+                                </div>
+                                
+                                <p style="color: #666666; font-size: 16px; line-height: 1.6; margin: 24px 0;">
+                                    Use this code at checkout to get your discount. Happy shopping!
+                                </p>
+                                
+                                
+                                <p style="color: #666666; font-size: 15px; text-align: center; margin: 30px 0 0 0;">
+                                    Thank you for being a valued customer!
+                                </p>
+                            </div>
+                            
+                            <!-- Footer -->
+                            <div style="background: #f9f9f9; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
+                                <p style="color: #999999; font-size: 12px; margin: 0;">
+                                    &copy; ${new Date().getFullYear()} ECWeb Team. All rights reserved.
+                                </p>
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                `;
+
+                const data = {
+                    email: user.email,
+                    html,
+                    subject: "Special Coupon for You!",
+                };
+                return await sendEmail.sendEmail(data);
+            });
+
+            await Promise.all(emailPromises);
+            resolve({
+                status: "OK",
+                message: `Coupons sent successfully to ${users.length} users`,
+                sentTo: users.length,
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
 export default {
     createUser,
     logInUser,
@@ -313,4 +466,6 @@ export default {
     changePassword,
     forgotPassword,
     resetPassword,
+    sendCoupon,
+    sendAllCoupons,
 };

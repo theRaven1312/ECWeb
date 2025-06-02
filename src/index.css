@@ -157,11 +157,11 @@ body {
   }
 
   .inputEmail {
-    @apply bg-gray-100 flex gap-2 p-2 rounded-full;
+    @apply bg-gray-100 flex gap-2 p-2 pl-4 rounded-full;
   }
 
   .submitEmail {
-    @apply bg-gray-100 p-2 rounded-full font-bold;
+    @apply bg-gray-100 p-2 rounded-full font-bold cursor-pointer hover:bg-gray-200 transition-colors duration-300 ease-in-out;
   }
 
   .commentDisplay {

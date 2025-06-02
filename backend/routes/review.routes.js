@@ -7,6 +7,7 @@ import {
     authChangePassMiddleware,
 } from "../middlewares/auth.middleware.js";
 
+router.get("/", reviewController.getAllReviews);
 router.post("/:id", reviewController.createReview);
 
 export default router;
