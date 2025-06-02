@@ -129,6 +129,32 @@ const applyCoupon = async (req, res) => {
     }
 };
 
+const useCoupon = async (req, res) => {
+    try {
+        const {code} = req.body;
+
+        if (!code) {
+            return res.status(400).json({
+                status: "ERROR",
+                message: "Coupon code is required",
+            });
+        }
+
+        const response = await couponService.useCoupon(code);
+
+        return res.status(200).json({
+            status: "OK",
+            message: "Coupon used successfully",
+            data: response,
+        });
+    } catch (err) {
+        return res.status(400).json({
+            status: "ERROR",
+            message: err.message,
+        });
+    }
+};
+
 export default {
     createCoupon,
     updateCoupon,
@@ -136,4 +162,5 @@ export default {
     getAllCoupons,
     deleteCoupon,
     applyCoupon,
+    useCoupon,
 };

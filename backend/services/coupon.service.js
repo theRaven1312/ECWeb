@@ -138,10 +138,33 @@ const applyCoupon = async (couponCode, cartTotal) => {
             ? `${coupon.discountValue}%`
             : `${coupon.discountValue}$`;
     const finalTotal = Math.max(cartTotal - discountPrice, 0);
+    return {
+        discountPrice,
+        finalTotal,
+        appliedCoupon: coupon.code,
+        discountName,
+    };
+};
 
+const useCoupon = async (couponCode) => {
+    const coupon = await Coupon.findOne({
+        code: couponCode.toUpperCase(),
+        isActive: true,
+    });
+
+    if (!coupon) {
+        throw new Error("Invalid or inactive coupon code");
+    }
+
+    if (coupon.usageLimit === 0) {
+        throw new Error("Coupon usage limit reached");
+    }
+
+    // Giảm usageLimit nếu có giá trị
     if (coupon.usageLimit > 0) {
         coupon.usageLimit -= 1;
 
+        // Nếu usageLimit = 0 sau khi giảm, set isActive = false
         if (coupon.usageLimit === 0) {
             coupon.isActive = false;
         }
@@ -149,12 +172,7 @@ const applyCoupon = async (couponCode, cartTotal) => {
         await coupon.save();
     }
 
-    return {
-        discountPrice,
-        finalTotal,
-        appliedCoupon: coupon.code,
-        discountName,
-    };
+    return coupon;
 };
 
 export default {
@@ -164,4 +182,5 @@ export default {
     getAllCoupons,
     deleteCoupon,
     applyCoupon,
+    useCoupon,
 };

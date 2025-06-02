@@ -13,5 +13,6 @@ router.post(
     authCouponMiddleware,
     couponController.applyCoupon
 );
+router.post("/use-coupon", authCouponMiddleware, couponController.useCoupon);
 
 export default router;

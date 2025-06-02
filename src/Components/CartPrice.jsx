@@ -6,29 +6,29 @@ import axiosJWT from "../utils/axiosJWT";
 import axios from "axios";
 
 const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
-
     const user = useSelector((state) => state.user);
 
     const subtotal = totalPrice;
     const shipping = subtotal > 100 ? 0 : 15;
-    const total = subtotal + shipping;
+    let total = subtotal + shipping;
 
     const [showOrderConfirm, setShowOrderConfirm] = useState(false);
 
     const [showConfirmed, setShowConfirmed] = useState(false);
 
-    const [isProcessing, setIsProcessing] = useState(false); 
+    const [isProcessing, setIsProcessing] = useState(false);
 
     const [error, setError] = useState(null);
 
     const [orderData, setOrderData] = useState(null);
-    
+
     const [loading, setLoading] = useState(false);
 
     const handleProceedToCheckout = () => {
-        // ✅ Validate user information
         if (!user.address || !user.phone) {
-            alert("Please update your address and phone number in your profile before placing an order.");
+            alert(
+                "Please update your address and phone number in your profile before placing an order."
+            );
             return;
         }
 
@@ -36,7 +36,7 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
             setShowOrderConfirm(true);
             setError(null);
         }
-    }
+    };
 
     const [appliedCoupon, setAppliedCoupon] = useState(() => {
         const savedCoupon = localStorage.getItem("appliedCoupon");
@@ -46,7 +46,6 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
     const [couponCode, setCouponCode] = useState(() => {
         return localStorage.getItem("couponCode") || "";
     });
-
 
     const calculateDynamicDiscount = (coupon, currentSubtotal) => {
         if (!coupon) return null;
@@ -79,7 +78,6 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
             appliedCoupon: coupon.code,
         };
     };
-
     const currentDiscount = calculateDynamicDiscount(appliedCoupon, subtotal);
 
     useEffect(() => {
@@ -100,6 +98,7 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
                     ) {
                         setAppliedCoupon(null);
                         setCouponCode("");
+
                         localStorage.removeItem("appliedCoupon");
                         localStorage.removeItem("couponCode");
 
@@ -128,25 +127,23 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
             validateCoupon();
         }
     }, []);
-
-
     const handleConfirmOrder = async () => {
         setIsProcessing(true);
         setError(null);
-        
+
         try {
             await createOrder();
         } catch (error) {
             console.error("Error in handleConfirmOrder:", error);
             setError("Failed to place order. Please try again.");
         } finally {
+            if (appliedCoupon) {
+                await axiosJWT.post("/api/v1/coupons/use-coupon", {
+                    code: appliedCoupon.code,
+                });
+            }
             setIsProcessing(false);
-
-        // setAppliedCoupon(null);
-        // setCouponCode("");
-        // localStorage.removeItem("appliedCoupon");
-        // localStorage.removeItem("couponCode");
-        };
+        }
     };
 
     const handleCoupon = async (couponCode) => {
@@ -185,7 +182,6 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
             setLoading(false);
         }
     };
-
     const createOrder = async () => {
         try {
             console.log("Creating order...");
@@ -194,46 +190,62 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
             console.log("User address:", user.address);
             console.log("User phone:", user.phone);
 
-            const token = localStorage.getItem('access_token');
-            
+            const token = localStorage.getItem("access_token");
+
             if (!token) {
-                throw new Error('No authentication token found');
+                throw new Error("No authentication token found");
             }
 
-            const response = await axios.post('/api/v1/orders', {
-                shippingAddress: user.address,
-                phone: user.phone
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
+            const finalTotal = total - (currentDiscount?.discountPrice || 0);
 
-            if (response.status === 201 && response.data.status === 'SUCCESS') {
+            const response = await axios.post(
+                "/api/v1/orders",
+                {
+                    shippingAddress: user.address,
+                    phone: user.phone,
+                    finalTotal: finalTotal,
+                    appliedCoupon: appliedCoupon
+                        ? {
+                              code: appliedCoupon.code,
+                              discountAmount:
+                                  currentDiscount?.discountPrice || 0,
+                          }
+                        : null,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            if (response.status === 201 && response.data.status === "SUCCESS") {
                 console.log("Order created successfully:", response.data.order);
-                
+
                 setOrderData(response.data.order);
-                
                 setShowOrderConfirm(false);
                 setShowConfirmed(true);
-                
             } else {
-                throw new Error(response.data.message || "Failed to place order");
+                throw new Error(
+                    response.data.message || "Failed to place order"
+                );
             }
-
         } catch (error) {
             console.error("Error creating order:", error);
-            
+
             // ✅ Handle different error types
             if (error.response?.status === 401) {
                 setError("Please login again to place your order.");
             } else if (error.response?.status === 400) {
                 setError(error.response.data.message || "Invalid order data.");
             } else {
-                setError(error.response?.data?.message || "An error occurred while placing your order. Please try again.");
+                setError(
+                    error.response?.data?.message ||
+                        "An error occurred while placing your order. Please try again."
+                );
             }
-            
+
             throw error; // Re-throw to be caught by handleConfirmOrder
         }
     };
@@ -243,32 +255,34 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
         setShowConfirmed(false);
         setOrderData(null);
         setError(null);
+        setCouponCode("");
+        setAppliedCoupon(null);
+        localStorage.removeItem("appliedCoupon");
+        localStorage.removeItem("couponCode");
     };
 
     return (
         <div className="border-2 border-gray-200 p-6 rounded-3xl h-fit w-full">
             <h3 className="text-xl font-bold mb-4">Order Summary</h3>
-            
-            <div className='flex mb-4 justify-between'>
+            <div className="flex mb-4 justify-between">
                 <div>Order delivery details:</div>
                 <ul className="">
-                    <li>Address: {user.address || 'Not provided'}</li>
-                    <li>Phone: {user.phone || 'Not provided'}</li>
+                    <li>Address: {user.address || "Not provided"}</li>
+                    <li>Phone: {user.phone || "Not provided"}</li>
                 </ul>
             </div>
-
             {/* ✅ Show warning if address/phone missing */}
             {(!user.address || !user.phone) && (
                 <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                     <div className="flex items-center">
                         <i className="fa-solid fa-exclamation-triangle text-yellow-600 mr-2"></i>
                         <p className="text-sm text-yellow-800">
-                            Please update your address and phone in your profile to place an order.
+                            Please update your address and phone in your profile
+                            to place an order.
                         </p>
                     </div>
                 </div>
             )}
-
             <div className="space-y-2 mb-4">
                 {" "}
                 <div className="flex justify-between py-2">
@@ -355,8 +369,6 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
                                         setAppliedCoupon(null);
                                         setCouponCode("");
                                         setError("");
-
-                                        // Xóa khỏi localStorage
                                         localStorage.removeItem(
                                             "appliedCoupon"
                                         );
@@ -373,7 +385,9 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
 
                 <button
                     onClick={handleProceedToCheckout}
-                    disabled={items.length === 0 || !user.address || !user.phone}
+                    disabled={
+                        items.length === 0 || !user.address || !user.phone
+                    }
                     className="w-full bg-black text-white py-3 rounded-3xl hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     Proceed to Checkout
@@ -395,31 +409,58 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
                     </p>
                 </div>
             )}
-
             {/* ✅ Order Confirmation Modal */}
             {showOrderConfirm && (
                 <div className="fixed w-screen h-screen inset-0 flex items-center justify-center bg-black/50 z-50">
                     <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
-                        <h1 className="text-2xl font-bold mb-4">Confirm Your Order</h1>
+                        <h1 className="text-2xl font-bold mb-4">
+                            Confirm Your Order
+                        </h1>
                         <p className="text-gray-600 mb-6">
                             Please review your order details before proceeding.
-                            If everything looks good, click "Confirm" to place your order.
+                            If everything looks good, click "Confirm" to place
+                            your order.
                         </p>
-                        
+
                         {/* ✅ Order summary */}
                         <div className="bg-gray-50 p-4 rounded-lg mb-6 text-left">
-                            <h3 className="font-semibold mb-2">Order Details:</h3>
-                            <p className="text-sm">Items: {items.length} products</p>
-                            <p className="text-sm">Subtotal: ${subtotal.toFixed(2)}</p>
-                            <p className="text-sm">Shipping: {shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</p>
-                            <p className="text-sm font-bold">Total: ${total.toFixed(2)}</p>
+                            <h3 className="font-semibold mb-2">
+                                Order Details:
+                            </h3>
+                            <p className="text-sm">
+                                Items: {items.length} products
+                            </p>
+                            <p className="text-sm">
+                                Subtotal: ${subtotal.toFixed(2)}
+                            </p>
+                            {currentDiscount && (
+                                <p className="text-sm text-red-500">
+                                    Discount: -$
+                                    {currentDiscount?.discountPrice.toFixed(2)}
+                                </p>
+                            )}
+                            <p className="text-sm">
+                                Shipping:{" "}
+                                {shipping === 0
+                                    ? "Free"
+                                    : `$${shipping.toFixed(2)}`}
+                            </p>{" "}
+                            <p className="text-sm font-bold">
+                                Total: $
+                                {(
+                                    total -
+                                    (currentDiscount?.discountPrice || 0)
+                                ).toFixed(2)}
+                            </p>
                             <hr className="my-2" />
-                            <p className="text-sm">Delivery to: {user.address}</p>
+                            <p className="text-sm">
+                                Delivery to: {user.address}
+                            </p>
                             <p className="text-sm">Phone: {user.phone}</p>
                         </div>
-                        
-                        <div className='flex justify-center items-center gap-6'>
-                            <button 
+
+                        <div className="flex justify-center items-center gap-6">
+                            <button
                                 onClick={() => setShowOrderConfirm(false)}
                                 disabled={isProcessing}
                                 className="border border-black px-4 py-2 rounded-3xl hover:bg-gray-200 transition-colors disabled:opacity-50"
@@ -427,8 +468,7 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
                                 Cancel
                             </button>
 
-
-                            <button 
+                            <button
                                 onClick={handleConfirmOrder}
                                 disabled={isProcessing}
                                 className="bg-black text-white px-8 py-2 rounded-3xl hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center"
@@ -439,7 +479,7 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
                                         Processing...
                                     </>
                                 ) : (
-                                    'Confirm Order'
+                                    "Confirm Order"
                                 )}
                             </button>
                         </div>
@@ -453,7 +493,6 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
                     </div>
                 </div>
             )}
-
             {/* ✅ Success Modal */}
             {showConfirmed && orderData && (
                 <div className="fixed w-screen h-screen inset-0 flex items-center justify-center bg-black/50 z-50">
@@ -464,22 +503,47 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
                                 <i className="fa-solid fa-check text-green-600 text-2xl"></i>
                             </div>
                         </div>
-                        
-                        <h1 className="text-2xl font-bold mb-4 text-green-600">Order Placed Successfully!</h1>
-                        <p className="text-gray-600 mb-6">
-                            Thank you for your order! Your items will be processed and shipped soon.
 
+                        <h1 className="text-2xl font-bold mb-4 text-green-600">
+                            Order Placed Successfully!
+                        </h1>
+                        <p className="text-gray-600 mb-6">
+                            Thank you for your order! Your items will be
+                            processed and shipped soon.
                         </p>
-                        
+
                         {/* ✅ Order details */}
                         <div className="bg-gray-50 p-4 rounded-lg mb-6 text-left">
-                            <h3 className="font-semibold mb-2">Order Information:</h3>
-                            <p className="text-sm">Order Number: <span className="font-mono font-bold">{orderData.orderNumber}</span></p>
-                            <p className="text-sm">Total Amount: ${orderData.totalPrice.toFixed(2)}</p>
-                            <p className="text-sm">Status: <span className="capitalize">{orderData.status}</span></p>
-                            <p className="text-sm">Date: {new Date(orderData.createdAt).toLocaleDateString()}</p>
+                            <h3 className="font-semibold mb-2">
+                                Order Information:
+                            </h3>
+                            <p className="text-sm">
+                                Order Number:{" "}
+                                <span className="font-mono font-bold">
+                                    {orderData.orderNumber}
+                                </span>
+                            </p>{" "}
+                            <p className="text-sm">
+                                Total Amount: $
+                                {(
+                                    total -
+                                    (currentDiscount?.discountPrice || 0)
+                                ).toFixed(2)}
+                            </p>
+                            <p className="text-sm">
+                                Status:{" "}
+                                <span className="capitalize">
+                                    {orderData.status}
+                                </span>
+                            </p>
+                            <p className="text-sm">
+                                Date:{" "}
+                                {new Date(
+                                    orderData.createdAt
+                                ).toLocaleDateString()}
+                            </p>
                         </div>
-                        
+
                         <button
                             onClick={handleCloseSuccess}
                             className="bg-black text-white px-8 py-2 rounded-3xl hover:bg-gray-800 transition-colors"
@@ -489,12 +553,11 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
                     </div>
                 </div>
             )}
-
             {/* ✅ Error display outside modals */}
             {error && !showOrderConfirm && (
                 <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
                     <p className="text-sm text-red-700">{error}</p>
-                    <button 
+                    <button
                         onClick={() => setError(null)}
                         className="text-xs text-red-500 hover:text-red-700 mt-1"
                     >
@@ -505,6 +568,5 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
         </div>
     );
 };
-
 
 export default CartPrice;
