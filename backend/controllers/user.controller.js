@@ -1,5 +1,7 @@
 import jwtService from "../services/jwt.service.js";
 import userService from "../services/user.service.js";
+import Coupon from "../models/coupon.model.js";
+import User from "../models/user.model.js";
 
 //Đăng kí tài khoản
 const createUser = async (req, res) => {
@@ -244,6 +246,61 @@ const resetPassword = async (req, res) => {
     }
 };
 
+const sendCoupon = async (req, res) => {
+    try {
+        const {email, couponCode} = req.body;
+        const response = await userService.sendCoupon(email, couponCode);
+        return res.status(200).json({
+            status: "OK",
+            message: "Coupon sent successfully",
+            data: response,
+        });
+    } catch (err) {
+        return res.status(500).json({status: "ERROR", message: "SERVER ERROR"});
+    }
+};
+
+const sendAllCoupons = async (req, res) => {
+    try {
+        const {couponCode} = req.body;
+        const coupon = await Coupon.findOne({code: couponCode});
+        console.log(coupon);
+        if (!coupon) {
+            return res.status(404).json({
+                status: "ERROR",
+                message: "Coupon not found",
+            });
+        }
+        if (!coupon.isActive) {
+            return res.status(400).json({
+                status: "ERROR",
+                message: "Coupon is not active",
+            });
+        }
+        if (coupon.endDate && new Date(coupon.endDate) < new Date()) {
+            return res.status(400).json({
+                status: "ERROR",
+                message: "Coupon has expired",
+            });
+        }
+        if (coupon.usageLimit && coupon.usageLimit <= 0) {
+            return res.status(400).json({
+                status: "ERROR",
+                message: "Coupon usage limit reached",
+            });
+        }
+        const response = await userService.sendAllCoupons(couponCode);
+        console.log(response);
+        return res.status(200).json({
+            status: "OK",
+            message: "All coupons sent successfully",
+            data: response,
+        });
+    } catch (err) {
+        return res.status(500).json({status: "ERROR", message: "SERVER ERROR"});
+    }
+};
+
 export default {
     createUser,
     logInUser,
@@ -253,6 +310,8 @@ export default {
     getUserById,
     refreshToken,
     logOutUser,
+    sendCoupon,
+    sendAllCoupons,
     changePassword,
     forgotPassword,
     resetPassword,

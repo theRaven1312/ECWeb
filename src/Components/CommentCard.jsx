@@ -10,7 +10,7 @@ const CommentCard = ({review}) => {
         <div className="commentCard">
             <div className="ratingStar">
                 <RatingStar rating={review.rating} />
-            </div>
+            </div>{" "}
             <div className="customer">
                 <div className="name">{review.users?.name || "Anonymous"}</div>
                 <img src={verf} alt="verified" />

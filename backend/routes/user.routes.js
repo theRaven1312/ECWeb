@@ -18,5 +18,7 @@ router.post("/refresh-token", userController.refreshToken);
 router.post("/change-password/:id", userController.changePassword);
 router.post("/forgot-password", userController.forgotPassword);
 router.post("/reset-password/:token", userController.resetPassword);
+router.post("/send-coupon", userController.sendCoupon);
+router.post("/send-all-coupons", userController.sendAllCoupons);
 
 export default router;

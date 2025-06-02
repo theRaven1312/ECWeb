@@ -1,12 +1,31 @@
 import Review from "../models/review.model.js";
 
+const getAllReviews = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const reviews = await Review.find()
+                .populate("users", "name")
+                .populate("products", "name")
+                .sort({createdAt: -1});
+
+            resolve({
+                status: "OK",
+                message: "Get all reviews successfully",
+                data: reviews,
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
 const createReview = (userId, newReview) => {
     return new Promise(async (resolve, reject) => {
         const {product, rating, comment} = newReview;
         try {
             const createReview = await Review.create({
-                user,
-                product,
+                users: userId,
+                products: product,
                 rating,
                 comment,
             });
@@ -24,5 +43,6 @@ const createReview = (userId, newReview) => {
 };
 
 export default {
+    getAllReviews,
     createReview,
 };

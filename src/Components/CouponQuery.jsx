@@ -3,6 +3,7 @@ import CouponAdd from "./CouponAdd";
 import CouponView from "./CouponView";
 import CouponUpdate from "./CouponUpdate";
 import CouponDelete from "./CouponDelete";
+import CouponSend from "./CouponSend";
 
 const CouponQuery = () => {
     const [activeTab, setActiveTab] = useState("view");
@@ -17,6 +18,8 @@ const CouponQuery = () => {
                 return <CouponUpdate />;
             case "delete":
                 return <CouponDelete />;
+            case "send":
+                return <CouponSend />;
             default:
                 return <CouponView />;
         }
@@ -65,6 +68,16 @@ const CouponQuery = () => {
                     onClick={() => setActiveTab("delete")}
                 >
                     Delete Coupon
+                </button>
+                <button
+                    className={`px-4 py-2 font-medium text-sm ${
+                        activeTab === "send"
+                            ? "border-b-2 border-blue-500 text-blue-600"
+                            : "text-gray-500 hover:text-gray-700"
+                    }`}
+                    onClick={() => setActiveTab("send")}
+                >
+                    Send Coupon
                 </button>
             </div>
 
