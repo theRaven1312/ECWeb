@@ -69,8 +69,6 @@ export const createOrder = async (req, res) => {
             });
         }
 
-        
-
         const userId = req.user.id || req.user._id;
         
         if (!userId) {
@@ -137,6 +135,8 @@ export const createOrder = async (req, res) => {
         await newOrder.populate('products.product');
         await newOrder.populate('user', 'name email');
 
+
+        // Clear the cart after order creation
         await Cart.findOneAndUpdate(
             { user: userId },
             { 
