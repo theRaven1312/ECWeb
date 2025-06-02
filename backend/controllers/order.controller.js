@@ -47,21 +47,20 @@ const calculateTotalPrice = async (products, appliedCoupon) => {
 //View all orders for admin
 export const getAllOrders = async (req, res) => {
     try {
-        // ✅ Add pagination support
         const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 10;
+        const limit = parseInt(req.query.limit) || 9; // ✅ 9 items for 3x3 grid
         const skip = (page - 1) * limit;
 
         const filter = req.query.filter || "";
         
+        // ✅ Build query with filter
         const query = {};
-        if (filter) {
+        if (filter && filter !== "all") {
             query.status = filter;
         }
 
-        console.log(`Fetching orders with filter: ${filter}`);
-
-        
+        console.log(`Fetching orders with filter: ${filter}, page: ${page}, limit: ${limit}`);
+        console.log('Query:', query);
 
         const orders = await Order.find(query)
             .populate({
@@ -70,32 +69,36 @@ export const getAllOrders = async (req, res) => {
             })
             .populate({
                 path: "products.product",
-                model: "products",
-                select: "name",
+                model: "products", // ✅ Fix model name
+                select: "name price images",
             })
-            .sort({createdAt: -1})
+            .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit);
 
-        // ✅ Get total count for pagination
-        const totalOrders = await Order.countDocuments();
+        // ✅ Get total count with same filter
+        const totalOrders = await Order.countDocuments(query);
+        const totalPages = Math.ceil(totalOrders / limit);
 
-        console.log(
-            `Found ${orders.length} orders out of ${totalOrders} total`
-        );
+        console.log(`Found ${orders.length} orders out of ${totalOrders} total (page ${page}/${totalPages})`);
 
         res.status(200).json({
             message: "Orders retrieved successfully",
             orders: orders,
+            filter: filter,
             pagination: {
                 currentPage: page,
-                totalPages: Math.ceil(totalOrders / limit),
+                totalPages: totalPages,
                 totalOrders: totalOrders,
-                hasNext: page < Math.ceil(totalOrders / limit),
+                limit: limit,
+                hasNext: page < totalPages,
                 hasPrev: page > 1,
+                startIndex: skip + 1,
+                endIndex: Math.min(skip + limit, totalOrders)
             },
             status: "SUCCESS",
         });
+
     } catch (error) {
         console.error("Get all orders error:", error);
         res.status(500).json({
@@ -208,19 +211,51 @@ export const createOrder = async (req, res) => {
     }
 };
 
+// ✅ Also fix getUserOrders for regular users
 export const getUserOrders = async (req, res) => {
     try {
         const userId = req.user.id || req.user._id;
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 9;
+        const skip = (page - 1) * limit;
+        const filter = req.query.filter || "";
 
-        const orders = await Order.find({user: userId})
-            .populate("products.product")
-            .sort({createdAt: -1});
+        // ✅ Build query for user orders
+        let query = { user: userId };
+        if (filter && filter !== "all") {
+            query.status = filter;
+        }
+
+        const orders = await Order.find(query)
+            .populate({
+                path: "products.product",
+                model: "Product",
+                select: "name price images"
+            })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+
+        const totalOrders = await Order.countDocuments(query);
+        const totalPages = Math.ceil(totalOrders / limit);
 
         res.status(200).json({
             message: "Orders retrieved successfully",
             orders: orders,
+            filter: filter,
+            pagination: {
+                currentPage: page,
+                totalPages: totalPages,
+                totalOrders: totalOrders,
+                limit: limit,
+                hasNext: page < totalPages,
+                hasPrev: page > 1,
+                startIndex: skip + 1,
+                endIndex: Math.min(skip + limit, totalOrders)
+            },
             status: "SUCCESS",
         });
+
     } catch (error) {
         console.error("Get orders error:", error);
         res.status(500).json({
