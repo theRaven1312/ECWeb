@@ -225,7 +225,6 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
         } catch (error) {
             console.error("Error creating order:", error);
             
-            // ✅ Handle different error types
             if (error.response?.status === 401) {
                 setError("Please login again to place your order.");
             } else if (error.response?.status === 400) {
@@ -238,10 +237,8 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
         }
     };
 
-    // ✅ Close success modal and reset states
     const handleCloseSuccess = () => {
         setShowConfirmed(false);
-        setOrderData(null);
         setError(null);
     };
 
