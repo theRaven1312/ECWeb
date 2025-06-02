@@ -82,7 +82,3 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server is runiing on http://localhost:${port}`);
 });
-
-// ✅ Register order routes
-
-console.log('✅ Order routes registered at /api/v1/orders');

@@ -2,12 +2,47 @@ import express from "express";
 import Order from "../models/order.model.js";
 import Cart from "../models/cart.model.js";
 import Product from "../models/product.model.js";
+import Coupon from "../models/coupon.model.js";
 
 const generateOrderNumber = () => {
     const timestamp = Date.now().toString();
     const random = Math.random().toString(36).substr(2, 9);
     return `ORD-${timestamp}-${random}`.toUpperCase();
 };
+
+const calculateTotalPrice = async (products, appliedCoupon) => {
+    let total = products.reduce((sum, item) => {
+        const itemPrice = item.price * item.quantity;
+        return sum + itemPrice;
+    }, 0);
+
+    const shipping = total > 100 ? 0 : 15;
+    total += shipping;
+
+    if (appliedCoupon && appliedCoupon.code) {
+        let discount = await Coupon.findOne({
+            code: appliedCoupon.code.toUpperCase(),
+            isActive: true
+        });
+
+        if (discount) {
+            let discountAmount = 0;
+
+            if (discount.discountType === "percentage") {
+                discountAmount = (total * discount.discountValue) / 100;
+                if (discount.maxDiscountAmount && discountAmount > discount.maxDiscountAmount) {
+                    discountAmount = discount.maxDiscountAmount;
+                }
+            } else if (discount.discountType === "fixed") {
+                discountAmount = discount.discountValue;
+            }
+
+            total = Math.max(0, total - discountAmount);
+        }
+    }
+
+    return total;
+}
 
 //View all orders for admin
 export const getAllOrders = async (req, res) => {
@@ -17,7 +52,18 @@ export const getAllOrders = async (req, res) => {
         const limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
 
-        const orders = await Order.find()
+        const filter = req.query.filter || "";
+        
+        const query = {};
+        if (filter) {
+            query.status = filter;
+        }
+
+        console.log(`Fetching orders with filter: ${filter}`);
+
+        
+
+        const orders = await Order.find(query)
             .populate({
                 path: "user",
                 select: "name email",
@@ -77,7 +123,9 @@ export const createOrder = async (req, res) => {
                 status: "ERROR",
             });
         }
-        const {shippingAddress, phone, finalTotal, appliedCoupon} = req.body;
+        // const {shippingAddress, phone, finalTotal, appliedCoupon} = req.body;
+
+        const {shippingAddress, phone, appliedCoupon} = req.body;
 
         if (!shippingAddress || !phone) {
             return res.status(400).json({
@@ -114,22 +162,9 @@ export const createOrder = async (req, res) => {
                 };
             })
         );
-        let totalPrice = 0;
 
-        if (finalTotal && typeof finalTotal === "number") {
-            totalPrice = finalTotal;
-            console.log("Using final total from frontend:", totalPrice);
-        } else {
-            orderProducts.forEach((item) => {
-                totalPrice +=
-                    item.price * (1 - item.discount / 100) * item.quantity;
-            });
+        let totalPrice = await calculateTotalPrice(orderProducts, appliedCoupon);
 
-            console.log("Total price before shipping:", totalPrice);
-
-            const shipping = totalPrice > 100 ? 0 : 15;
-            totalPrice += shipping;
-        }
         const newOrder = new Order({
             user: userId,
             products: orderProducts,
