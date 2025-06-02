@@ -260,7 +260,7 @@ const ProductAdd = () => {
                 <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    className="w-full bg-black hover:bg-gray-800 text-white py-2 px-4 rounded-md disabled:bg-gray-400 disabled:cursor-not-allowed"
                 >
                     {loading ? "Creating..." : "Create Product"}
                 </button>

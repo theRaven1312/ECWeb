@@ -29,7 +29,7 @@ const ProductQuery = () => {
         <button
           className={`px-4 py-2 font-medium text-sm ${
             activeTab === 'view'
-              ? 'border-b-2 border-blue-500 text-blue-600'
+              ? 'border-b-2 border-black'
               : 'text-gray-500 hover:text-gray-700'
           }`}
           onClick={() => setActiveTab('view')}
@@ -39,7 +39,7 @@ const ProductQuery = () => {
         <button
           className={`px-4 py-2 font-medium text-sm ${
             activeTab === 'add'
-              ? 'border-b-2 border-blue-500 text-blue-600'
+              ? 'border-b-2 border-black text-black'
               : 'text-gray-500 hover:text-gray-700'
           }`}
           onClick={() => setActiveTab('add')}
@@ -49,7 +49,7 @@ const ProductQuery = () => {
         <button
           className={`px-4 py-2 font-medium text-sm ${
             activeTab === 'update'
-              ? 'border-b-2 border-blue-500 text-blue-600'
+              ? 'border-b-2 border-black text-black'
               : 'text-gray-500 hover:text-gray-700'
           }`}
           onClick={() => setActiveTab('update')}
@@ -59,7 +59,7 @@ const ProductQuery = () => {
         <button
           className={`px-4 py-2 font-medium text-sm ${
             activeTab === 'delete'
-              ? 'border-b-2 border-blue-500 text-blue-600'
+              ? 'border-b-2 border-black text-black'
               : 'text-gray-500 hover:text-gray-700'
           }`}
           onClick={() => setActiveTab('delete')}

@@ -3,6 +3,7 @@ import React, {useState} from "react";
 import ProductQuery from "../Components/ProductQuery";
 import CategoryQuery from "../Components/CategoryQuery";
 import UserQuery from "../Components/UserQuery";
+import OrderQuery from "../Components/OrderQuery";
 
 const AdminPage = () => {
     const [option, setOption] = useState("products");
@@ -14,7 +15,7 @@ const AdminPage = () => {
             case "products":
                 return <ProductQuery />;
             case "orders":
-                return <div>Orders Management - Coming Soon</div>;
+                return <OrderQuery/>;
             case "sales":
                 return <div>Sales Analytics - Coming Soon</div>;
             case "categories":

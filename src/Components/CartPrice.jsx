@@ -1,75 +1,134 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import PriceDiscount from "./PriceDiscount";
+import axios from 'axios';
 
 const CartPrice = ({ items = [], totalPrice = 0, onClearCart }) => {
     const user = useSelector((state) => state.user);
 
     const subtotal = totalPrice;
-    const shipping = subtotal > 100 ? 0 : 15; // Free shipping over $100
+    const shipping = subtotal > 100 ? 0 : 15;
     const total = subtotal + shipping;
 
     const [showOrderConfirm, setShowOrderConfirm] = useState(false);
-    const [confirmed, setConfirmed] = useState(false);
     const [showConfirmed, setShowConfirmed] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false); 
+    const [error, setError] = useState(null);
+    const [orderData, setOrderData] = useState(null);
 
     const handleProceedToCheckout = () => {
+        // ✅ Validate user information
+        if (!user.address || !user.phone) {
+            alert("Please update your address and phone number in your profile before placing an order.");
+            return;
+        }
 
         if (items.length > 0) {
             setShowOrderConfirm(true);
-        }
-        else {
+            setError(null);
+        } else {
             alert("Your cart is empty. Please add items to proceed.");
         }
     };
 
-    const handleConfirmOrder = () => {
-        setShowOrderConfirm(false);
-        setShowConfirmed(true);
-    }
+    const handleConfirmOrder = async () => {
+        setIsProcessing(true);
+        setError(null);
+        
+        try {
+            await createOrder();
+        } catch (error) {
+            console.error("Error in handleConfirmOrder:", error);
+            setError("Failed to place order. Please try again.");
+        } finally {
+            setIsProcessing(false);
+        }
+    };
 
-    // useEffect(() => {
-    //     if (showConfirmed) {
-    //         const placeOrder = async () => {
-    //             try {
-    //                 const response = await axios.post('/api/orders', {
-    //                     items,
-    //                     total,
-    //                     shipping,
-    //                     user: {
-    //                         address: user.address,
-    //                         phone: user.phone
-    //                     }
-    //                 });
-    //                 if (response.status === 200) {
-    //                     setConfirmed(true);
-    //                     onClearCart(); // Clear cart after successful order
-    //                 } else {
-    //                     alert("Failed to place order. Please try again.");
-    //                 }
-    //             } catch (error) {
-    //                 console.error("Error placing order:", error);
-    //                 alert("An error occurred while placing your order. Please try again.");
-    //             }
-    //         };
-    //         placeOrder();
-    //     }
-    // }, [showConfirmed, items, total, shipping, user.address, user.phone, onClearCart]);
+    const createOrder = async () => {
+        try {
+            console.log("Creating order...");
+            console.log("Items:", items);
+            console.log("Total price:", total);
+            console.log("User address:", user.address);
+            console.log("User phone:", user.phone);
 
+            const token = localStorage.getItem('access_token');
+            
+            if (!token) {
+                throw new Error('No authentication token found');
+            }
+
+            const response = await axios.post('/api/v1/orders', {
+                shippingAddress: user.address,
+                phone: user.phone
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.status === 201 && response.data.status === 'SUCCESS') {
+                console.log("Order created successfully:", response.data.order);
+                
+                setOrderData(response.data.order);
+                
+                setShowOrderConfirm(false);
+                setShowConfirmed(true);
+                
+                onClearCart();
+                
+            } else {
+                throw new Error(response.data.message || "Failed to place order");
+            }
+
+        } catch (error) {
+            console.error("Error creating order:", error);
+            
+            // ✅ Handle different error types
+            if (error.response?.status === 401) {
+                setError("Please login again to place your order.");
+            } else if (error.response?.status === 400) {
+                setError(error.response.data.message || "Invalid order data.");
+            } else {
+                setError(error.response?.data?.message || "An error occurred while placing your order. Please try again.");
+            }
+            
+            throw error; // Re-throw to be caught by handleConfirmOrder
+        }
+    };
+
+    // ✅ Close success modal and reset states
+    const handleCloseSuccess = () => {
+        setShowConfirmed(false);
+        setOrderData(null);
+        setError(null);
+    };
 
     return (
         <div className="border-2 border-gray-200 p-6 rounded-3xl h-fit w-full">
             <h3 className="text-xl font-bold mb-4">Order Summary</h3>
             
-
             <div className='flex mb-4 justify-between'>
                 <div>Order delivery details:</div>
                 <ul className="">
-                    <li>Address: {user.address}</li>
-                    <li>Phone: {user.phone}</li>
+                    <li>Address: {user.address || 'Not provided'}</li>
+                    <li>Phone: {user.phone || 'Not provided'}</li>
                 </ul>
             </div>
+
+            {/* ✅ Show warning if address/phone missing */}
+            {(!user.address || !user.phone) && (
+                <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <div className="flex items-center">
+                        <i className="fa-solid fa-exclamation-triangle text-yellow-600 mr-2"></i>
+                        <p className="text-sm text-yellow-800">
+                            Please update your address and phone in your profile to place an order.
+                        </p>
+                    </div>
+                </div>
+            )}
 
             <div className="space-y-2 mb-4">
                 <div className="flex justify-between py-2">
@@ -93,7 +152,7 @@ const CartPrice = ({ items = [], totalPrice = 0, onClearCart }) => {
             <div className="space-y-3">
                 <button 
                     onClick={handleProceedToCheckout}
-                    disabled={items.length === 0}
+                    disabled={items.length === 0 || !user.address || !user.phone}
                     className="w-full bg-black text-white py-3 rounded-3xl hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     Proceed to Checkout
@@ -116,48 +175,108 @@ const CartPrice = ({ items = [], totalPrice = 0, onClearCart }) => {
                 </div>
             )}
 
+            {/* ✅ Order Confirmation Modal */}
             {showOrderConfirm && (
-                <div className="fixed w-screen h-screen inset-0 flex items-center justify-center bg-black/50 z-10">
-                    <div className ="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
-                        <h1 className="text-2xl font-bold mb-4">Order Confirm</h1>
+                <div className="fixed w-screen h-screen inset-0 flex items-center justify-center bg-black/50 z-50">
+                    <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
+                        <h1 className="text-2xl font-bold mb-4">Confirm Your Order</h1>
                         <p className="text-gray-600 mb-6">
                             Please review your order details before proceeding.
                             If everything looks good, click "Confirm" to place your order.
-
                         </p>
-                        <div className ='flex justify-center items-center gap-6'>
+                        
+                        {/* ✅ Order summary */}
+                        <div className="bg-gray-50 p-4 rounded-lg mb-6 text-left">
+                            <h3 className="font-semibold mb-2">Order Details:</h3>
+                            <p className="text-sm">Items: {items.length} products</p>
+                            <p className="text-sm">Subtotal: ${subtotal.toFixed(2)}</p>
+                            <p className="text-sm">Shipping: {shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</p>
+                            <p className="text-sm font-bold">Total: ${total.toFixed(2)}</p>
+                            <hr className="my-2" />
+                            <p className="text-sm">Delivery to: {user.address}</p>
+                            <p className="text-sm">Phone: {user.phone}</p>
+                        </div>
+                        
+                        <div className='flex justify-center items-center gap-6'>
                             <button 
                                 onClick={() => setShowOrderConfirm(false)}
-                                className="border-1 border-black px-4 py-2 rounded-3xl hover:bg-gray-200 transition-colors"
+                                disabled={isProcessing}
+                                className="border border-black px-4 py-2 rounded-3xl hover:bg-gray-200 transition-colors disabled:opacity-50"
                             >
                                 Cancel
                             </button>
 
                             <button 
-                                onClick={() => handleConfirmOrder()}
-                                className="bg-black text-white px-8 py-2 rounded-3xl hover:bg-gray-800 transition-colors"
+                                onClick={handleConfirmOrder}
+                                disabled={isProcessing}
+                                className="bg-black text-white px-8 py-2 rounded-3xl hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center"
                             >
-                                Confirm
+                                {isProcessing ? (
+                                    <>
+                                        <i className="fa-solid fa-spinner fa-spin mr-2"></i>
+                                        Processing...
+                                    </>
+                                ) : (
+                                    'Confirm Order'
+                                )}
                             </button>
                         </div>
+
+                        {/* ✅ Show error in modal */}
+                        {error && (
+                            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                                <p className="text-sm text-red-700">{error}</p>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
 
-            {showConfirmed && (
-                <div className="fixed w-screen h-screen inset-0 flex items-center justify-center bg-black/50 z-10 ">
-                    <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center bounce-in">
-                        <h1 className="text-2xl font-bold mb-4">Order Placed Successfully!</h1>
+            {/* ✅ Success Modal */}
+            {showConfirmed && orderData && (
+                <div className="fixed w-screen h-screen inset-0 flex items-center justify-center bg-black/50 z-50">
+                    <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
+                        {/* ✅ Success icon */}
+                        <div className="mb-4">
+                            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full">
+                                <i className="fa-solid fa-check text-green-600 text-2xl"></i>
+                            </div>
+                        </div>
+                        
+                        <h1 className="text-2xl font-bold mb-4 text-green-600">Order Placed Successfully!</h1>
                         <p className="text-gray-600 mb-6">
-                            Thank you for your order! Your items will be shipped soon.
+                            Thank you for your order! Your items will be processed and shipped soon.
                         </p>
+                        
+                        {/* ✅ Order details */}
+                        <div className="bg-gray-50 p-4 rounded-lg mb-6 text-left">
+                            <h3 className="font-semibold mb-2">Order Information:</h3>
+                            <p className="text-sm">Order Number: <span className="font-mono font-bold">{orderData.orderNumber}</span></p>
+                            <p className="text-sm">Total Amount: ${orderData.totalPrice.toFixed(2)}</p>
+                            <p className="text-sm">Status: <span className="capitalize">{orderData.status}</span></p>
+                            <p className="text-sm">Date: {new Date(orderData.createdAt).toLocaleDateString()}</p>
+                        </div>
+                        
                         <button
-                            onClick={() => setShowConfirmed(false)}
-                            className="bg-green-600 text-white px-8 py-2 rounded-3xl hover:bg-gray-800 transition-colors"
+                            onClick={handleCloseSuccess}
+                            className="bg-black text-white px-8 py-2 rounded-3xl hover:bg-gray-800 transition-colors"
                         >
-                            Close
+                            Continue Shopping
                         </button>
                     </div>
+                </div>
+            )}
+
+            {/* ✅ Error display outside modals */}
+            {error && !showOrderConfirm && (
+                <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <p className="text-sm text-red-700">{error}</p>
+                    <button 
+                        onClick={() => setError(null)}
+                        className="text-xs text-red-500 hover:text-red-700 mt-1"
+                    >
+                        Dismiss
+                    </button>
                 </div>
             )}
         </div>

@@ -68,6 +68,8 @@ app.use(`${api}/orders`, orderRouter);
 
 app.use(`${api}/cart`, cartRoutes);
 
+app.use(`${api}/orders`, orderRouter);
+
 // Static
 app.get(`/`, (req, res) => {
     res.send("API is running...");
@@ -78,3 +80,7 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server is runiing on http://localhost:${port}`);
 });
+
+// ✅ Register order routes
+
+console.log('✅ Order routes registered at /api/v1/orders');

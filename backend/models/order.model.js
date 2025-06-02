@@ -1,41 +1,70 @@
 import mongoose from "mongoose";
-import OrderItem from "./order-item.model.js";
-import User from "./user.model.js";
 
-const OrderSchema = new mongoose.Schema({
-    orderItems: [{
+const orderSchema = new mongoose.Schema({
+    user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "OrderItem",
-        required: true
-    }],
-    user : {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
+        ref: 'users',
         required: true
     },
+    products: [{
+        product: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'products',
+            required: true
+        },
+        quantity: {
+            type: Number,
+            required: true,
+            min: 1
+        },
+        size: {
+            type: String,
+            default: ''
+        },
+        color: {
+            type: String,
+            default: ''
+        },
+        price: {
+            type: Number,
+            required: true
+        }
+    }],
     totalPrice: {
         type: Number,
         required: true,
-        default: 0.0
+        min: 0
     },
     shippingAddress: {
         type: String,
         required: true
     },
-    status :{ type: String, default: "Pending" },
-    dateOrdered: {
+    phone: {
+        type: String,
+        required: true
+    },
+    status: {
+        type: String,
+        enum: ['pending', 'processing', 'shipped', 'delivered', 'cancelled'],
+        default: 'pending'
+    },
+    paymentStatus: {
+        type: String,
+        enum: ['pending', 'paid', 'failed'],
+        default: 'pending'
+    },
+    orderNumber: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    createdAt: {
         type: Date,
         default: Date.now
     },
-})
-
-OrderSchema.virtual('id').get(function() {
-    return this._id.toHexString();
+}, {
+    timestamps: true
 });
 
-OrderSchema.set('toJSON', {
-    virtuals: true,
-});
-
-
-export default mongoose.model("Order", OrderSchema);
+const Order = mongoose.model('Order', orderSchema);
+export default Order;

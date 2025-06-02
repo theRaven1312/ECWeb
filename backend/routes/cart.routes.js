@@ -3,7 +3,7 @@ import * as CartController from "../controllers/cart.controller.js";
 import {authCartMiddleware} from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
-// ✅ Apply user authentication middleware to all routes
+
 router.use(authCartMiddleware);
 
 // Get the user's cart
