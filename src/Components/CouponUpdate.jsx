@@ -15,6 +15,7 @@ const CouponUpdate = () => {
         maxDiscountAmount: "",
         startDate: "",
         endDate: "",
+        usageLimit: "",
         isActive: true,
     });
     useEffect(() => {
@@ -47,6 +48,7 @@ const CouponUpdate = () => {
                 maxDiscountAmount: "",
                 startDate: "",
                 endDate: "",
+                usageLimit: "",
                 isActive: true,
             });
             return;
@@ -59,7 +61,6 @@ const CouponUpdate = () => {
                 const date = new Date(dateString);
                 return date.toISOString().slice(0, 16); // YYYY-MM-DDTHH:mm
             };
-
             setFormData({
                 code: coupon.code || "",
                 discountType: coupon.discountType || "percentage",
@@ -68,6 +69,7 @@ const CouponUpdate = () => {
                 maxDiscountAmount: coupon.maxDiscountAmount || "",
                 startDate: formatDateForInput(coupon.startDate),
                 endDate: formatDateForInput(coupon.endDate),
+                usageLimit: coupon.usageLimit || "",
                 isActive:
                     coupon.isActive !== undefined ? coupon.isActive : true,
             });
@@ -218,9 +220,8 @@ const CouponUpdate = () => {
                                     <option value="fixed">Fixed Amount</option>
                                 </select>
                             </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        </div>{" "}
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
                                     Discount Value *
@@ -286,8 +287,25 @@ const CouponUpdate = () => {
                                     Leave 0 for no limit
                                 </p>
                             </div>
-                        </div>
 
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Usage Limit
+                                </label>
+                                <input
+                                    type="number"
+                                    name="usageLimit"
+                                    value={formData.usageLimit}
+                                    onChange={handleChange}
+                                    placeholder="0"
+                                    min="0"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                                <p className="text-xs text-gray-500 mt-1">
+                                    Times can be used
+                                </p>
+                            </div>
+                        </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -315,7 +333,6 @@ const CouponUpdate = () => {
                                 />
                             </div>
                         </div>
-
                         <div className="flex items-center">
                             <input
                                 type="checkbox"
@@ -328,7 +345,6 @@ const CouponUpdate = () => {
                                 Active Coupon
                             </label>
                         </div>
-
                         {error && (
                             <div className="text-red-500 text-sm bg-red-50 p-3 rounded-md">
                                 {error}
@@ -339,7 +355,6 @@ const CouponUpdate = () => {
                                 {success}
                             </div>
                         )}
-
                         <button
                             type="submit"
                             disabled={loading}

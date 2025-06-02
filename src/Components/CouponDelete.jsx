@@ -114,7 +114,7 @@ const CouponDelete = () => {
                                             </span>{" "}
                                             ${coupon.minPurchaseAmount}
                                         </p>
-                                    )}
+                                    )}{" "}
                                     {coupon.maxDiscountAmount > 0 && (
                                         <p className="text-sm text-gray-600">
                                             <span className="font-medium">
@@ -122,7 +122,15 @@ const CouponDelete = () => {
                                             </span>{" "}
                                             ${coupon.maxDiscountAmount}
                                         </p>
-                                    )}{" "}
+                                    )}
+                                    {coupon.usageLimit > 0 && (
+                                        <p className="text-sm text-gray-600">
+                                            <span className="font-medium">
+                                                Uses Left:
+                                            </span>{" "}
+                                            {coupon.usageLimit}
+                                        </p>
+                                    )}
                                     <p className="text-sm text-gray-600">
                                         <span className="font-medium">
                                             Status:

@@ -23,6 +23,7 @@ const couponSchema = new mongoose.Schema({
         default: Date.now() + 7 * 24 * 60 * 60 * 1000,
     },
     isActive: {type: Boolean, default: true},
+    usageLimit: {type: Number, min: 0},
 });
 
 couponSchema.pre("save", function (next) {

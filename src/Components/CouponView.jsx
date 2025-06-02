@@ -97,7 +97,7 @@ const CouponView = () => {
                                             {coupon.minPurchaseAmount}
                                         </div>
                                     </div>
-                                )}
+                                )}{" "}
                                 {coupon.maxDiscountAmount > 0 && (
                                     <div className="bg-orange-50 p-2 rounded-md">
                                         <div className="text-xs font-medium text-orange-800">
@@ -105,7 +105,14 @@ const CouponView = () => {
                                             {coupon.maxDiscountAmount}
                                         </div>
                                     </div>
-                                )}{" "}
+                                )}
+                                {coupon.usageLimit > 0 && (
+                                    <div className="bg-purple-50 p-2 rounded-md">
+                                        <div className="text-xs font-medium text-purple-800">
+                                            Uses Left: {coupon.usageLimit}
+                                        </div>
+                                    </div>
+                                )}
                                 <div className="flex justify-center">
                                     <span
                                         className={`px-3 py-1 rounded-full text-xs font-medium ${

@@ -84,7 +84,7 @@ const AdminPage = () => {
                     </li>
                     <li
                         className={`optionBar__item cursor-pointer p-2 rounded ${
-                            option === "categories"
+                            option === "coupons"
                                 ? "bg-gray-200"
                                 : "hover:bg-gray-100"
                         }`}

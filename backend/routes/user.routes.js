@@ -19,6 +19,4 @@ router.post("/change-password/:id", userController.changePassword);
 router.post("/forgot-password", userController.forgotPassword);
 router.post("/reset-password/:token", userController.resetPassword);
 
-//+ 1 hàm người dùng tự update
-
 export default router;

@@ -29,37 +29,30 @@ const deleteCoupon = async (id) => {
 const getCouponById = async (id) => {
     const coupon = await Coupon.findById(id);
 
-    // Check if coupon is expired and update if necessary
-    if (
-        coupon &&
-        coupon.endDate &&
-        new Date(coupon.endDate) < new Date() &&
-        coupon.isActive
-    ) {
-        coupon.isActive = false;
-        await coupon.save();
+    if (coupon) {
+        // Kiểm tra expired date
+        if (
+            coupon.endDate &&
+            new Date(coupon.endDate) < new Date() &&
+            coupon.isActive
+        ) {
+            coupon.isActive = false;
+            await coupon.save();
+        }
+
+        // Kiểm tra usageLimit
+        if (coupon.usageLimit === 0 && coupon.isActive) {
+            coupon.isActive = false;
+            await coupon.save();
+        }
     }
 
     return coupon;
 };
 
-// Helper function to check and update expired coupons
-const updateExpiredCoupons = async () => {
-    const now = new Date();
-    await Coupon.updateMany(
-        {
-            endDate: {$lt: now},
-            isActive: true,
-        },
-        {isActive: false}
-    );
-};
-
 const getAllCoupons = async () => {
-    // Get all coupons and check for expired ones
     const coupons = await Coupon.find();
 
-    // Update expired coupons to inactive
     const now = new Date();
     const expiredCoupons = coupons.filter(
         (coupon) =>
@@ -68,16 +61,100 @@ const getAllCoupons = async () => {
             coupon.isActive === true
     );
 
-    // Bulk update expired coupons to inactive
+    // Tìm coupons có usageLimit = 0
+    const usageLimitExpiredCoupons = coupons.filter(
+        (coupon) => coupon.usageLimit === 0 && coupon.isActive === true
+    );
+
+    // Update expired coupons
     if (expiredCoupons.length > 0) {
         const expiredIds = expiredCoupons.map((coupon) => coupon._id);
         await Coupon.updateMany({_id: {$in: expiredIds}}, {isActive: false});
+    }
 
-        // Refetch coupons to get updated data
+    // Update usage limit expired coupons
+    if (usageLimitExpiredCoupons.length > 0) {
+        const usageLimitExpiredIds = usageLimitExpiredCoupons.map(
+            (coupon) => coupon._id
+        );
+        await Coupon.updateMany(
+            {_id: {$in: usageLimitExpiredIds}},
+            {isActive: false}
+        );
+    }
+
+    // Return updated coupons nếu có thay đổi
+    if (expiredCoupons.length > 0 || usageLimitExpiredCoupons.length > 0) {
         return await Coupon.find();
     }
 
     return coupons;
+};
+
+const applyCoupon = async (couponCode, cartTotal) => {
+    const coupon = await Coupon.findOne({
+        code: couponCode.toUpperCase(),
+        isActive: true,
+    });
+
+    if (!coupon) {
+        throw new Error("Invalid or inactive coupon code");
+    }
+
+    if (coupon.endDate && new Date() > coupon.endDate) {
+        throw new Error("Coupon expired");
+    }
+
+    if (coupon.usageLimit === 0) {
+        throw new Error("Coupon usage limit reached");
+    }
+
+    if (cartTotal < coupon.minPurchaseAmount) {
+        throw new Error(`Minimum amount required: ${coupon.minPurchaseAmount}`);
+    }
+
+    let discountPrice = 0;
+
+    if (coupon.discountType === "percentage") {
+        discountPrice = (coupon.discountValue / 100) * cartTotal;
+        if (
+            coupon.maxDiscountAmount &&
+            discountPrice > coupon.maxDiscountAmount
+        ) {
+            discountPrice = coupon.maxDiscountAmount;
+        }
+    } else if (coupon.discountType === "fixed") {
+        discountPrice = coupon.discountValue;
+        if (
+            coupon.maxDiscountAmount &&
+            discountPrice > coupon.maxDiscountAmount
+        ) {
+            discountPrice = coupon.maxDiscountAmount;
+        }
+    }
+
+    const discountName =
+        coupon.discountType === "percentage"
+            ? `${coupon.discountValue}%`
+            : `${coupon.discountValue}$`;
+    const finalTotal = Math.max(cartTotal - discountPrice, 0);
+
+    if (coupon.usageLimit > 0) {
+        coupon.usageLimit -= 1;
+
+        if (coupon.usageLimit === 0) {
+            coupon.isActive = false;
+        }
+
+        await coupon.save();
+    }
+
+    return {
+        discountPrice,
+        finalTotal,
+        appliedCoupon: coupon.code,
+        discountName,
+    };
 };
 
 export default {
@@ -86,5 +163,5 @@ export default {
     getCouponById,
     getAllCoupons,
     deleteCoupon,
-    updateExpiredCoupons,
+    applyCoupon,
 };
