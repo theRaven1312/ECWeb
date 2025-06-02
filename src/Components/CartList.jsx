@@ -29,7 +29,7 @@ const CartList = ({items = [], onUpdateQuantity, onRemoveItem}) => {
                     className="cart-card"
                 >
                     {/* Product Image */}
-                    <div className="w-30 h-30 flex-shrink-0">
+                    <div className="w-30 h-30 flex-shrink-0 border-1 border-gray-200 rounded-3xl overflow-hidden shadow-lg">
                         <img
                             src={
                                 item.product.image_url ||

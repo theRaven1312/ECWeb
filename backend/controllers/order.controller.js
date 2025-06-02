@@ -147,6 +147,8 @@ export const createOrder = async (req, res) => {
         await newOrder.populate("products.product");
         await newOrder.populate("user", "name email");
 
+
+        // Clear the cart after order creation
         await Cart.findOneAndUpdate(
             {user: userId},
             {

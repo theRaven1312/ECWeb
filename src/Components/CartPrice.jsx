@@ -250,10 +250,8 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
         }
     };
 
-    // ✅ Close success modal and reset states
     const handleCloseSuccess = () => {
         setShowConfirmed(false);
-        setOrderData(null);
         setError(null);
         setCouponCode("");
         setAppliedCoupon(null);
