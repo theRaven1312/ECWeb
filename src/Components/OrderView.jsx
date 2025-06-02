@@ -300,12 +300,27 @@ const OrderView = () => {
                                     </div>
                                     
                                     {/* ✅ Customer info */}
-                                    <p className="text-gray-600 mb-2">
-                                        <strong>Customer: </strong>
-                                        <span className='text-blue-600'>
-                                            {order.user?.name || order.user?.email || 'Unknown User'}
-                                        </span>
-                                    </p>
+                                        <p className="text-gray-600 mb-2">
+                                                <strong>Customer: </strong>
+                                                <span className='text-blue-600'>
+                                                        {order.user?.name || order.user?.email || 'Unknown User'}
+                                                </span>
+                                        </p>
+
+                                        {/* ✅ Shipping address */}
+                                        <p className="text-gray-600 mb-2">
+                                                <strong>Address: </strong>
+                                                <span>
+                                                        {order.shippingAddress || 'No address provided'}
+                                                </span>
+                                        </p>
+
+                                         <p className="text-gray-600 mb-2">
+                                                <strong>Phone: </strong>
+                                                <span>
+                                                        {order.phone || 'No phone provided'}
+                                                </span>
+                                        </p>
                                     
                                     {/* ✅ Products section */}
                                     <div className="mb-3">

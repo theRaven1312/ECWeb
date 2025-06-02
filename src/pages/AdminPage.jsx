@@ -36,11 +36,12 @@ const AdminPage = () => {
             <div className="divider"></div>
             <div className="flex gap-8">
                 <ul className="optionBar flex flex-col w-1/4 border-1 border-gray-300 p-4 gap-4 rounded-lg h-screen">
+                    <h1 className='text-2xl font-bold mt-4'>Options</h1>
                     <li
                         className={`optionBar__item cursor-pointer p-2 rounded ${
                             option === "users"
-                                ? "bg-gray-200 "
-                                : "hover:bg-gray-100"
+                                ? "bg-gray-900 text-white font-bold"
+                                : "bg-gray-100"
                         }`}
                         onClick={() => setOption("users")}
                     >
@@ -49,8 +50,8 @@ const AdminPage = () => {
                     <li
                         className={`optionBar__item cursor-pointer p-2 rounded ${
                             option === "products"
-                                ? "bg-gray-200"
-                                : "hover:bg-gray-100"
+                                ? "bg-gray-900 text-white font-bold"
+                                : "bg-gray-100"
                         }`}
                         onClick={() => setOption("products")}
                     >
@@ -59,8 +60,8 @@ const AdminPage = () => {
                     <li
                         className={`optionBar__item cursor-pointer p-2 rounded ${
                             option === "orders"
-                                ? "bg-gray-200"
-                                : "hover:bg-gray-100"
+                                ? "bg-gray-900 text-white font-bold"
+                                : "bg-gray-100"
                         }`}
                         onClick={() => setOption("orders")}
                     >
@@ -69,8 +70,8 @@ const AdminPage = () => {
                     <li
                         className={`optionBar__item cursor-pointer p-2 rounded ${
                             option === "sales"
-                                ? "bg-gray-200"
-                                : "hover:bg-gray-100"
+                                ? "bg-gray-900 text-white font-bold"
+                                : "bg-gray-100"
                         }`}
                         onClick={() => setOption("sales")}
                     >
@@ -79,8 +80,8 @@ const AdminPage = () => {
                     <li
                         className={`optionBar__item cursor-pointer p-2 rounded ${
                             option === "categories"
-                                ? "bg-gray-200"
-                                : "hover:bg-gray-100"
+                                ? "bg-gray-900 text-white font-bold"
+                                : "bg-gray-100"
                         }`}
                         onClick={() => setOption("categories")}
                     >
@@ -89,8 +90,8 @@ const AdminPage = () => {
                     <li
                         className={`optionBar__item cursor-pointer p-2 rounded ${
                             option === "coupons"
-                                ? "bg-gray-200"
-                                : "hover:bg-gray-100"
+                                ? "bg-gray-900 text-white font-bold"
+                                : "bg-gray-100"
                         }`}
                         onClick={() => setOption("coupons")}
                     >
