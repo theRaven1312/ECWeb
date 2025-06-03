@@ -119,7 +119,7 @@ const OrderHistoryCard = ({order, onViewDetails}) => {
             <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-100">
                 <button
                     onClick={() => onViewDetails && onViewDetails(order)}
-                    className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center gap-2"
+                    className="flex-1 bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors font-medium flex items-center justify-center gap-2"
                 >
                     <i className="fa-solid fa-eye"></i>
                     View Details

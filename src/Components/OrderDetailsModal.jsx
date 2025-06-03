@@ -83,7 +83,7 @@ const OrderDetailsModal = ({showOrderDetails, selectedOrder, onClose}) => {
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                 <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6">
                     <div className="flex justify-center items-center">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black"></div>
                         <span className="ml-2">Loading...</span>
                     </div>
                 </div>

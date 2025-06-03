@@ -116,7 +116,7 @@ const CouponAdd = () => {
                             value={formData.code}
                             onChange={handleChange}
                             placeholder="Leave empty for auto-generation"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                         />
                         <p className="text-xs text-gray-500 mt-1">
                             Leave empty to auto-generate a 6-character code
@@ -132,7 +132,7 @@ const CouponAdd = () => {
                             value={formData.discountType}
                             onChange={handleChange}
                             required
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                         >
                             <option value="percentage">Percentage (%)</option>
                             <option value="fixed">Fixed Amount</option>
@@ -162,7 +162,7 @@ const CouponAdd = () => {
                                     ? "100"
                                     : undefined
                             }
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                             required
                         />
                         <p className="text-xs text-gray-500 mt-1">
@@ -183,7 +183,7 @@ const CouponAdd = () => {
                             placeholder="0"
                             step="0.01"
                             min="0"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                         />
                     </div>{" "}
                     <div>
@@ -198,7 +198,7 @@ const CouponAdd = () => {
                             placeholder="0"
                             step="0.01"
                             min="0"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                         />
                         <p className="text-xs text-gray-500 mt-1">
                             Leave 0 for no limit
@@ -215,7 +215,7 @@ const CouponAdd = () => {
                             onChange={handleChange}
                             placeholder="0"
                             min="0"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                         />
                         <p className="text-xs text-gray-500 mt-1">
                             Number of times coupon can be used. Leave 0 for
@@ -234,7 +234,7 @@ const CouponAdd = () => {
                             name="startDate"
                             value={formData.startDate}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                         />
                     </div>
 
@@ -247,7 +247,7 @@ const CouponAdd = () => {
                             name="endDate"
                             value={formData.endDate}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
                         />
                     </div>
                 </div>
@@ -258,7 +258,7 @@ const CouponAdd = () => {
                         name="isActive"
                         checked={formData.isActive}
                         onChange={handleChange}
-                        className="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                        className="mr-2 h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
                     />
                     <label className="text-sm font-medium text-gray-700">
                         Active Coupon
@@ -279,7 +279,7 @@ const CouponAdd = () => {
                 <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    className="w-full bg-black hover:bg-gray-800 text-white py-2 px-4 rounded-md disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer transition-colors"
                 >
                     {loading ? "Creating..." : "Create Coupon"}
                 </button>

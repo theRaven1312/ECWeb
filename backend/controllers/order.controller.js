@@ -13,10 +13,6 @@ const generateOrderNumber = () => {
 const calculateTotalPrice = async (products, appliedCoupon) => {
     let total = products.reduce((sum, item) => {
         let price = item.price;
-        if (item.discount && item.discount > 0) {
-            price -= (price * item.discount) / 100;
-        }
-
         const itemPrice = price * item.quantity;
         return sum + itemPrice;
     }, 0);
@@ -171,7 +167,10 @@ export const createOrder = async (req, res) => {
                     quantity: item.quantity,
                     size: item.size || "",
                     color: item.color || "",
-                    price: product.price,
+                    price:
+                        (product.price -=
+                            product.price * (product.discount / 100)) ||
+                        product.price,
                     discount: product.discount,
                 };
             })

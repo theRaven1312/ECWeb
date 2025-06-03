@@ -42,7 +42,7 @@ export const ProfilePage = () => {
 
     return (
         <div className="profile-page">
-            <div className="w-[80%] h-[60%] relative flex-center flex-col bg-white rounded-3xl shadow-2xl overflow-hidden md:w-[70%] max-sm:w-[95%] max-sm:h-[97%]">
+            <div className="w-[80%] h-[80%] relative flex-center flex-col bg-white rounded-3xl shadow-2xl overflow-hidden md:w-[70%] max-sm:w-[95%] max-sm:h-[97%]">
                 <div className="flex-center-between w-full ">
                     <button
                         className={`w-full p-4  rounded-tl-md cursor-pointer hover:bg-gray-300 transition-colors duration-300 active:bg-gray-300 ${

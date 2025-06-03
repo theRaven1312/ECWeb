@@ -192,14 +192,14 @@ const UserOrderHistory = () => {
                             onClick={() => setFilter(filterOption.value)}
                             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
                                 filter === filterOption.value
-                                    ? "bg-blue-600 text-white shadow-lg"
+                                    ? "bg-black text-white shadow-lg"
                                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                             }`}
                         >
                             <i className={`fa-solid ${filterOption.icon}`}></i>
                             {filterOption.label}
                             {filterOption.value === "all" && (
-                                <span className="ml-1 bg-white text-blue-600 px-2 py-1 rounded-full text-xs">
+                                <span className="ml-1 bg-white text-black px-2 py-1 rounded-full text-xs">
                                     {orders.length}
                                 </span>
                             )}
@@ -211,7 +211,7 @@ const UserOrderHistory = () => {
             {/* Loading State */}
             {loading && (
                 <div className="flex justify-center items-center py-12">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
                     <span className="ml-3 text-gray-600">
                         Loading orders...
                     </span>
@@ -349,7 +349,7 @@ const UserOrderHistory = () => {
                                             onClick={() =>
                                                 handleViewOrderDetails(order)
                                             }
-                                            className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center gap-2"
+                                            className="flex-1 bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors font-medium flex items-center justify-center gap-2"
                                         >
                                             <i className="fa-solid fa-eye"></i>
                                             View Details
@@ -415,7 +415,7 @@ const UserOrderHistory = () => {
                             {filter !== "all" && (
                                 <button
                                     onClick={() => setFilter("all")}
-                                    className="text-blue-600 hover:text-blue-700 font-medium"
+                                    className="text-black hover:text-gray-800 font-medium"
                                 >
                                     View all orders
                                 </button>
