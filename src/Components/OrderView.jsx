@@ -199,7 +199,7 @@ const OrderView = () => {
                                 disabled={loading || page === '...'}
                                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                                     page === currentPage
-                                        ? 'bg-blue-600 text-white'
+                                        ? 'bg-black text-white'
                                         : page === '...'
                                         ? 'text-gray-400 cursor-default'
                                         : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'

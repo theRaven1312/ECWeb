@@ -101,10 +101,10 @@ const CartPage = () => {
             // ✅ Update Redux cart quantity
             dispatch(setCartQuantity(totalItems));
         } catch (error) {
-            console.error("Error updating quantity:", error);
+            console.error("Error updating quantity:", error.response?.data.message || error);
             setCartData((prev) => ({
                 ...prev,
-                error: "Failed to update quantity",
+                error: error.response?.data?.message || "Failed to update quantity",
             }));
         }
     };

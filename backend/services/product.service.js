@@ -84,3 +84,17 @@ export const getAllReviews = async (productId) => {
         throw new Error("Error fetching reviews: " + error.message);
     }
 };
+
+export const adjustProductStock = async (productId, quantity) => {
+    try {
+        const product = await Product.findById(productId);
+        if (!product) throw new Error("Product not found");
+        
+        product.stock = quantity;
+        await product.save();
+        return product;
+    }
+    catch (error) {
+        throw new Error("Error adjusting product stock: " + error.message);
+    }
+}
