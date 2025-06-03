@@ -12,7 +12,12 @@ const generateOrderNumber = () => {
 
 const calculateTotalPrice = async (products, appliedCoupon) => {
     let total = products.reduce((sum, item) => {
-        const itemPrice = item.price * item.quantity;
+        let price = item.price;
+        if (item.discount && item.discount > 0) {
+            price -= (price * item.discount) / 100;
+        }
+
+        const itemPrice = price * item.quantity;
         return sum + itemPrice;
     }, 0);
 
@@ -320,6 +325,30 @@ export const updateOrderStatus = async (req, res) => {
 
         console.log("Updating order status:", orderId, "to:", status);
 
+        const checkOrder = await Order.findById(orderId);
+        if (!checkOrder) {
+            return res.status(404).json({
+                message: "Order not found",
+                status: "ERROR",
+            });
+        }
+
+        if (checkOrder.status === "delivering" && status === "cancelled") {
+            return res.status(400).json({
+                message:
+                    "Cannot cancel an order that is currently being delivered",
+                status: "ERROR",
+            });
+        }
+
+        if (checkOrder.status === "delivered" && status === "cancelled") {
+            return res.status(400).json({
+                message:
+                    "Cannot cancel an order that has already been delivered",
+                status: "ERROR",
+            });
+        }
+
         // ✅ Update only status
         const order = await Order.findByIdAndUpdate(
             orderId,
@@ -347,6 +376,40 @@ export const updateOrderStatus = async (req, res) => {
             });
         }
 
+        if (status === "delivering") {
+            for (const product of order.products) {
+                const productData = await Product.findById(product.product._id);
+                if (productData) {
+                    productData.stock -= product.quantity;
+                    await productData.save();
+                    console.log(
+                        `Product ${product.product._id} stock updated to ${productData.stock}`
+                    );
+                } else {
+                    console.error(
+                        `Product ${product.product._id} not found for stock update`
+                    );
+                }
+            }
+        }
+
+        if (status === "returned") {
+            for (const product of order.products) {
+                const productData = await Product.findById(product.product._id);
+                if (productData) {
+                    productData.stock += product.quantity;
+                    await productData.save();
+                    console.log(
+                        `Product ${product.product._id} stock updated to ${productData.stock}`
+                    );
+                } else {
+                    console.error(
+                        `Product ${product.product._id} not found for stock update`
+                    );
+                }
+            }
+        }
+        // Log the update
         console.log("✅ Order status updated successfully:", {
             orderId: order._id,
             orderNumber: order.orderNumber,
@@ -370,7 +433,6 @@ export const updateOrderStatus = async (req, res) => {
     }
 };
 
-// Delete order (admin only)
 export const deleteOrder = async (req, res) => {
     try {
         const {orderId} = req.params;
@@ -390,6 +452,13 @@ export const deleteOrder = async (req, res) => {
                 status: "ERROR",
             });
         }
+
+        if (order.status === "delivering")
+            res.status(400).json({
+                message:
+                    "Cannot delete an order that is currently being delivered",
+                status: "ERROR",
+            });
 
         console.log(
             `✅ Order ${orderId} deleted successfully by ${

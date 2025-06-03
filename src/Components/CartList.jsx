@@ -37,7 +37,7 @@ const CartList = ({items = [], onUpdateQuantity, onRemoveItem}) => {
                                 "/placeholder-image.jpg"
                             }
                             alt={item.product.name}
-                            className="w-full h-full object-cover rounded"
+                            className="w-full h-full object-contain rounded"
                         />
                     </div>
 
