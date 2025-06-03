@@ -1,12 +1,14 @@
 import React from "react";
 import {useEffect, useState} from "react";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux"; // ✅ Add useDispatch
 import PriceDiscount from "./PriceDiscount";
 import axiosJWT from "../utils/axiosJWT";
 import axios from "axios";
+import {setCartQuantity} from "../redux/CartSliceRedux"; // ✅ Import Redux action
 
 const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
     const user = useSelector((state) => state.user);
+    const dispatch = useDispatch();
 
     const subtotal = totalPrice;
     const shipping = subtotal > 100 ? 0 : 15;
@@ -24,16 +26,15 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
 
     const [loading, setLoading] = useState(false);
 
-    
     const [appliedCoupon, setAppliedCoupon] = useState(() => {
         const savedCoupon = localStorage.getItem("appliedCoupon");
         return savedCoupon ? JSON.parse(savedCoupon) : null;
     });
-    
+
     const [couponCode, setCouponCode] = useState(() => {
         return localStorage.getItem("couponCode") || "";
     });
-    
+
     const handleProceedToCheckout = () => {
         if (!user.address || !user.phone) {
             alert(
@@ -145,6 +146,7 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
                     code: appliedCoupon.code,
                 });
             }
+
             setIsProcessing(false);
         }
     };
@@ -203,16 +205,17 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
             const finalTotal = total - (currentDiscount?.discountPrice || 0);
 
             const response = await axiosJWT.post(
-                "/api/v1/orders", {
+                "/api/v1/orders",
+                {
                     shippingAddress: user.address,
                     phone: user.phone,
                     appliedCoupon: appliedCoupon
-                    ? {
-                            code: appliedCoupon.code,
-                            discountAmount:
-                                currentDiscount?.discountPrice || 0,
-                        }
-                    : null,
+                        ? {
+                              code: appliedCoupon.code,
+                              discountAmount:
+                                  currentDiscount?.discountPrice || 0,
+                          }
+                        : null,
                 },
                 {
                     headers: {
@@ -221,13 +224,15 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
                     },
                 }
             );
-
             if (response.status === 201 && response.data.status === "SUCCESS") {
                 console.log("Order created successfully:", response.data.order);
 
                 setOrderData(response.data.order);
                 setShowOrderConfirm(false);
                 setShowConfirmed(true);
+
+                // ✅ Reset Redux cart quantity after successful order
+                dispatch(setCartQuantity(0));
             } else {
                 throw new Error(
                     response.data.message || "Failed to place order"
@@ -249,6 +254,17 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
             }
 
             throw error; // Re-throw to be caught by handleConfirmOrder
+        } finally {
+            await axiosJWT.delete("/api/v1/cart/clear");
+
+            setCartData((prev) => ({
+                ...prev,
+                items: [],
+                totalPrice: 0,
+                totalItems: 0,
+            }));
+
+            setIsProcessing(false);
         }
     };
 
@@ -314,10 +330,16 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
             </div>{" "}
             <div className="space-y-3">
                 {!appliedCoupon ? (
-                    <div className="space-y-2">
+                    <div className="flex flex-col ">
+                        <label
+                            htmlFor="couponCode"
+                            className="text-sm font-medium ml-3"
+                        >
+                            Press Enter to confirm
+                        </label>
                         <input
                             type="text"
-                            placeholder="Enter coupon code and press Enter"
+                            placeholder="Enter coupon code"
                             value={couponCode}
                             onChange={(e) => setCouponCode(e.target.value)}
                             onKeyPress={(e) => {
@@ -335,11 +357,6 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
                         {loading && (
                             <div className="text-black text-sm p-2 rounded text-center">
                                 Applying coupon...
-                            </div>
-                        )}
-                        {error && (
-                            <div className="text-red-500 text-sm p-2 bg-red-50 rounded">
-                                {error}
                             </div>
                         )}
                     </div>

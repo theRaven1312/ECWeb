@@ -9,17 +9,45 @@ import {useDispatch, useSelector} from "react-redux";
 import axiosJWT from "../utils/axiosJWT";
 import {resetUser} from "../redux/UserSliceRedux";
 import {useNavigate} from "react-router-dom";
+import {setCartQuantity} from "../redux/CartSliceRedux";
 
 const Navbar = () => {
     const user = useSelector((state) => state.user);
+    const quantity = useSelector((state) => state.cart.quantity);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [cartCount, setCartCount] = useState(0);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    // ✅ Fetch cart quantity when user changes
+    useEffect(() => {
+        const fetchCartQuantity = async () => {
+            if (user?.access_token || user?._id) {
+                try {
+                    const response = await axiosJWT.get("/api/v1/cart");
+                    const cart = response.data.cart;
+                    const items = cart?.products || [];
+                    const totalItems = items.reduce(
+                        (sum, item) => sum + item.quantity,
+                        0
+                    );
+                    dispatch(setCartQuantity(totalItems));
+                } catch (error) {
+                    console.error("Error fetching cart quantity:", error);
+                    dispatch(setCartQuantity(0));
+                }
+            } else {
+                dispatch(setCartQuantity(0));
+            }
+        };
+
+        fetchCartQuantity();
+    }, [user, dispatch]);
+
     const handleLogout = async () => {
         await axiosJWT.post(`/api/v1/users/log-out`);
         dispatch(resetUser());
+        dispatch(setCartQuantity(0)); // ✅ Reset cart quantity on logout
         localStorage.removeItem("access_token");
         navigate("/");
     };
@@ -27,27 +55,6 @@ const Navbar = () => {
     const closeMobileMenu = () => {
         setMobileMenuOpen(false);
     };
-
-    // Get cart count from axios
-    const fetchCartData = async () => {
-        try {
-            const response = await axiosJWT.get("/api/v1/cart");
-            const cart = response.data.cart;
-            const items = cart?.products || [];
-            const totalItems = items.reduce(
-                (sum, item) => sum + item.quantity,
-                0
-            );
-            setCartCount(totalItems);
-        } catch (error) {
-            console.error("Error fetching cart data:", error);
-            setCartCount(0);
-        }
-    };
-
-    useEffect(() => {
-        fetchCartData();
-    }, [user.access_token]);
 
     return (
         <>
@@ -93,9 +100,9 @@ const Navbar = () => {
                 <div className="navbarCartProfile">
                     <Link to="/cart">
                         <div className="relative">
-                            {cartCount > 0 && (
+                            {quantity > 0 && (
                                 <div className="bg-red-500 w-4 h-4 text-white text-xs font-bold text-center absolute -top-1.5 -right-2 rounded-full">
-                                    {cartCount}
+                                    {quantity}
                                 </div>
                             )}
                             <img src={cartIcon} alt="cart" />

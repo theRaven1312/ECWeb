@@ -26,7 +26,6 @@ const AppContent = () => {
     const location = useLocation();
     const hideLayout = location.pathname === "/login";
 
-    //Xử lí token khi reload lại trang
     const dispatch = useDispatch();
     useEffect(() => {
         const storageData = localStorage.getItem("access_token");
@@ -38,7 +37,6 @@ const AppContent = () => {
     }, []);
 
     const handleGetDetailUser = async (id, token) => {
-        //Khi gửi API get sẽ được kiểm tra điều kiện tại axiosJWT
         const res = await axiosJWT.get(`/api/v1/users/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`,

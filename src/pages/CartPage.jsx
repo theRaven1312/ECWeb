@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from "react";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux"; // ✅ Add useDispatch
 import DirectLink from "../Components/DirectLink";
 import CartList from "../Components/CartList";
 import CartPrice from "../Components/CartPrice";
 import axiosJWT from "../utils/axiosJWT";
 import OrderConfirm from "../Components/OrderConfirm";
-import { set } from "mongoose";
+import {set} from "mongoose";
+import {setCartQuantity, removeFromCart} from "../redux/CartSliceRedux"; // ✅ Import Redux actions
 
 const CartPage = () => {
     const [cartData, setCartData] = useState({
@@ -17,6 +18,7 @@ const CartPage = () => {
     });
 
     const user = useSelector((state) => state.user);
+    const dispatch = useDispatch(); // ✅ Initialize useDispatch
 
     // Fetch cart data when component mounts or user changes
     useEffect(() => {
@@ -50,6 +52,9 @@ const CartPage = () => {
                 loading: false,
                 error: null,
             });
+
+            // ✅ Update Redux cart quantity
+            dispatch(setCartQuantity(totalItems));
         } catch (error) {
             console.error("Error fetching cart:", error);
             setCartData((prev) => ({
@@ -79,7 +84,6 @@ const CartPage = () => {
                     color,
                 }
             );
-
             const cart = response.data.cart;
             const items = cart?.products || [];
             const totalItems = items.reduce(
@@ -93,6 +97,9 @@ const CartPage = () => {
                 totalPrice: cart?.totalPrice || 0,
                 totalItems: totalItems,
             }));
+
+            // ✅ Update Redux cart quantity
+            dispatch(setCartQuantity(totalItems));
         } catch (error) {
             console.error("Error updating quantity:", error);
             setCartData((prev) => ({
@@ -110,7 +117,6 @@ const CartPage = () => {
                     data: {size, color},
                 }
             );
-
             const cart = response.data.cart;
             const items = cart?.products || [];
             const totalItems = items.reduce(
@@ -124,6 +130,9 @@ const CartPage = () => {
                 totalPrice: cart?.totalPrice || 0,
                 totalItems: totalItems,
             }));
+
+            // ✅ Update Redux cart quantity
+            dispatch(setCartQuantity(totalItems));
         } catch (error) {
             console.error("Error removing item:", error);
             setCartData((prev) => ({
@@ -146,6 +155,8 @@ const CartPage = () => {
                 totalPrice: 0,
                 totalItems: 0,
             }));
+
+            dispatch(setCartQuantity(0));
         } catch (error) {
             console.error("Error clearing cart:", error);
             setCartData((prev) => ({
@@ -154,7 +165,6 @@ const CartPage = () => {
             }));
         }
     };
-
 
     const clearError = () => {
         setCartData((prev) => ({...prev, error: null}));

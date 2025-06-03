@@ -6,6 +6,8 @@ import RatingStar from "./RatingStar";
 import {useSelector} from "react-redux";
 import {useLocation, useNavigate} from "react-router-dom";
 import axiosJWT from "../utils/axiosJWT";
+import {useDispatch} from "react-redux";
+import {addToCart} from "../redux/CartSliceRedux"; // ✅ Import Redux action
 
 const ProductInfo = ({
     heading,
@@ -21,6 +23,7 @@ const ProductInfo = ({
     const [selectedColor, setSelectedColor] = useState("");
     const [selectedSize, setSelectedSize] = useState(""); // ✅ Add size state
     const [quantity, setQuantity] = useState(1); // ✅ Add quantity state
+    const dispatch = useDispatch();
     const [isAddingToCart, setIsAddingToCart] = useState(false); // ✅ Add loading state
     const [addToCartMessage, setAddToCartMessage] = useState(""); // ✅ Add message state
 
@@ -87,10 +90,12 @@ const ProductInfo = ({
                 size: selectedSize,
                 color: selectedColor,
             });
-
             if (response.data.status === "SUCCESS") {
                 setAddToCartMessage("Product added to cart successfully!");
                 setTimeout(() => setAddToCartMessage(""), 3000);
+
+                // ✅ Update Redux cart quantity
+                dispatch(addToCart(quantity));
 
                 // Optional: Reset selections after successful add
                 // setSelectedColor("");

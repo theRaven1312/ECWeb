@@ -116,8 +116,7 @@ export default function ProductionPage() {
                     </div>
                 </div>
                 {/* Comment-Section */}
-                <CommentSelector />{" "}
-                
+                <CommentSelector />
                 <div className="comment-header">
                     <div className="flex items-center">
                         <h1 className="comment-heading">All reviews</h1>
