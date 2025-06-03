@@ -22,7 +22,7 @@ const calculateTotalPrice = async (products, appliedCoupon) => {
     if (appliedCoupon && appliedCoupon.code) {
         let discount = await Coupon.findOne({
             code: appliedCoupon.code.toUpperCase(),
-            isActive: true
+            isActive: true,
         });
 
         if (discount) {
@@ -30,7 +30,10 @@ const calculateTotalPrice = async (products, appliedCoupon) => {
 
             if (discount.discountType === "percentage") {
                 discountAmount = (total * discount.discountValue) / 100;
-                if (discount.maxDiscountAmount && discountAmount > discount.maxDiscountAmount) {
+                if (
+                    discount.maxDiscountAmount &&
+                    discountAmount > discount.maxDiscountAmount
+                ) {
                     discountAmount = discount.maxDiscountAmount;
                 }
             } else if (discount.discountType === "fixed") {
@@ -42,7 +45,7 @@ const calculateTotalPrice = async (products, appliedCoupon) => {
     }
 
     return total;
-}
+};
 
 //View all orders for admin
 export const getAllOrders = async (req, res) => {
@@ -52,15 +55,17 @@ export const getAllOrders = async (req, res) => {
         const skip = (page - 1) * limit;
 
         const filter = req.query.filter || "";
-        
+
         // ✅ Build query with filter
         const query = {};
         if (filter && filter !== "all") {
             query.status = filter;
         }
 
-        console.log(`Fetching orders with filter: ${filter}, page: ${page}, limit: ${limit}`);
-        console.log('Query:', query);
+        console.log(
+            `Fetching orders with filter: ${filter}, page: ${page}, limit: ${limit}`
+        );
+        console.log("Query:", query);
 
         const orders = await Order.find(query)
             .populate({
@@ -72,7 +77,7 @@ export const getAllOrders = async (req, res) => {
                 model: "products", // ✅ Fix model name
                 select: "name price images",
             })
-            .sort({ createdAt: -1 })
+            .sort({createdAt: -1})
             .skip(skip)
             .limit(limit);
 
@@ -80,7 +85,9 @@ export const getAllOrders = async (req, res) => {
         const totalOrders = await Order.countDocuments(query);
         const totalPages = Math.ceil(totalOrders / limit);
 
-        console.log(`Found ${orders.length} orders out of ${totalOrders} total (page ${page}/${totalPages})`);
+        console.log(
+            `Found ${orders.length} orders out of ${totalOrders} total (page ${page}/${totalPages})`
+        );
 
         res.status(200).json({
             message: "Orders retrieved successfully",
@@ -94,11 +101,10 @@ export const getAllOrders = async (req, res) => {
                 hasNext: page < totalPages,
                 hasPrev: page > 1,
                 startIndex: skip + 1,
-                endIndex: Math.min(skip + limit, totalOrders)
+                endIndex: Math.min(skip + limit, totalOrders),
             },
             status: "SUCCESS",
         });
-
     } catch (error) {
         console.error("Get all orders error:", error);
         res.status(500).json({
@@ -166,7 +172,10 @@ export const createOrder = async (req, res) => {
             })
         );
 
-        let totalPrice = await calculateTotalPrice(orderProducts, appliedCoupon);
+        let totalPrice = await calculateTotalPrice(
+            orderProducts,
+            appliedCoupon
+        );
 
         const newOrder = new Order({
             user: userId,
@@ -184,7 +193,6 @@ export const createOrder = async (req, res) => {
 
         await newOrder.populate("products.product");
         await newOrder.populate("user", "name email");
-
 
         // Clear the cart after order creation
         await Cart.findOneAndUpdate(
@@ -215,47 +223,20 @@ export const createOrder = async (req, res) => {
 export const getUserOrders = async (req, res) => {
     try {
         const userId = req.user.id || req.user._id;
-        const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 9;
-        const skip = (page - 1) * limit;
-        const filter = req.query.filter || "";
-
-        // ✅ Build query for user orders
-        let query = { user: userId };
-        if (filter && filter !== "all") {
-            query.status = filter;
-        }
-
-        const orders = await Order.find(query)
+        console.log("Fetching orders for user:", userId);
+        const orders = await Order.find({user: userId})
             .populate({
                 path: "products.product",
-                model: "Product",
-                select: "name price images"
+                model: "products",
+                select: "name price images",
             })
-            .sort({ createdAt: -1 })
-            .skip(skip)
-            .limit(limit);
-
-        const totalOrders = await Order.countDocuments(query);
-        const totalPages = Math.ceil(totalOrders / limit);
+            .sort({createdAt: -1});
 
         res.status(200).json({
             message: "Orders retrieved successfully",
             orders: orders,
-            filter: filter,
-            pagination: {
-                currentPage: page,
-                totalPages: totalPages,
-                totalOrders: totalOrders,
-                limit: limit,
-                hasNext: page < totalPages,
-                hasPrev: page > 1,
-                startIndex: skip + 1,
-                endIndex: Math.min(skip + limit, totalOrders)
-            },
             status: "SUCCESS",
         });
-
     } catch (error) {
         console.error("Get orders error:", error);
         res.status(500).json({
@@ -302,8 +283,8 @@ export const getOrderById = async (req, res) => {
 // Update order status (admin only)
 export const updateOrderStatus = async (req, res) => {
     try {
-        const { orderId } = req.params;
-        const { status } = req.body;
+        const {orderId} = req.params;
+        const {status} = req.body;
 
         // ✅ Validation
         if (!orderId) {
@@ -320,35 +301,43 @@ export const updateOrderStatus = async (req, res) => {
             });
         }
 
-        const validStatuses = ['pending', 'delivering', 'delivered', 'cancelled', 'returned'];
+        const validStatuses = [
+            "pending",
+            "delivering",
+            "delivered",
+            "cancelled",
+            "returned",
+        ];
 
         if (!validStatuses.includes(status)) {
             return res.status(400).json({
-                message: `Invalid status. Valid statuses: ${validStatuses.join(', ')}`,
+                message: `Invalid status. Valid statuses: ${validStatuses.join(
+                    ", "
+                )}`,
                 status: "ERROR",
             });
         }
 
-        console.log('Updating order status:', orderId, 'to:', status);
+        console.log("Updating order status:", orderId, "to:", status);
 
         // ✅ Update only status
         const order = await Order.findByIdAndUpdate(
-            orderId, 
-            { 
+            orderId,
+            {
                 status: status,
-                updatedAt: new Date()
-            }, 
-            { new: true }
+                updatedAt: new Date(),
+            },
+            {new: true}
         ).populate([
             {
                 path: "user",
-                select: "name email"
+                select: "name email",
             },
             {
                 path: "products.product",
                 model: "products",
-                select: "name price images"
-            }
+                select: "name price images",
+            },
         ]);
 
         if (!order) {
@@ -358,12 +347,12 @@ export const updateOrderStatus = async (req, res) => {
             });
         }
 
-        console.log('✅ Order status updated successfully:', {
+        console.log("✅ Order status updated successfully:", {
             orderId: order._id,
             orderNumber: order.orderNumber,
             newStatus: status,
             updatedBy: req.user?.email || req.user?.name,
-            timestamp: new Date()
+            timestamp: new Date(),
         });
 
         res.status(200).json({
@@ -371,7 +360,6 @@ export const updateOrderStatus = async (req, res) => {
             order: order,
             status: "SUCCESS",
         });
-
     } catch (error) {
         console.error("❌ Update order status error:", error);
         res.status(500).json({
@@ -385,7 +373,7 @@ export const updateOrderStatus = async (req, res) => {
 // Delete order (admin only)
 export const deleteOrder = async (req, res) => {
     try {
-        const { orderId } = req.params;
+        const {orderId} = req.params;
 
         if (!orderId) {
             return res.status(400).json({
@@ -403,13 +391,16 @@ export const deleteOrder = async (req, res) => {
             });
         }
 
-        console.log(`✅ Order ${orderId} deleted successfully by ${req.user?.email || req.user?.name}`);
+        console.log(
+            `✅ Order ${orderId} deleted successfully by ${
+                req.user?.email || req.user?.name
+            }`
+        );
 
         res.status(200).json({
             message: "Order deleted successfully",
             status: "SUCCESS",
         });
-
     } catch (error) {
         console.error("❌ Delete order error:", error);
         res.status(500).json({

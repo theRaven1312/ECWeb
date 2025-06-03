@@ -6,6 +6,7 @@ import axiosJWT from "../utils/axiosJWT";
 import {useState} from "react";
 import EditProfile from "../Components/EditProfile";
 import EditPassword from "../Components/EditPassword";
+import UserOrderHistory from "../Components/UserOrderHistory";
 import {useEffect} from "react";
 
 export const ProfilePage = () => {
@@ -26,6 +27,8 @@ export const ProfilePage = () => {
     //Thay đổi mật khẩu
     const [isChangePass, setIsChangePass] = useState(false);
 
+    const [content, setContent] = useState("info");
+
     useEffect(() => {
         if (isChanged || isChangePass) {
             document.body.style.overflow = "hidden";
@@ -39,48 +42,76 @@ export const ProfilePage = () => {
 
     return (
         <div className="profile-page">
-            <div className="profile-container max-sm: flex-col">
-                <div className="flex"></div>
-                <div className="profile-left">
-                    <i class="fa-solid fa-user p-5 bg-gray-200 text-9xl rounded-2xl"></i>
-                    <div className="profile-left__info">
-                        <h1 className="heading profile-left__name text-4xl">
-                            {user.name}
-                        </h1>
-                        <h1 className="profile-left__rank">Diamond</h1>
-                    </div>
+            <div className="w-[80%] h-[70%] relative flex-center flex-col bg-white rounded-3xl shadow-2xl overflow-hidden md:w-[70%] max-sm:w-[95%] max-sm:h-[97%]">
+                <div className="flex-center-between w-full ">
+                    <button
+                        className="w-full p-4 bg-white rounded-tl-md cursor-pointer hover:bg-gray-300 transition-colors duration-300"
+                        onClick={() => setContent("info")}
+                    >
+                        <i className="fa-solid fa-user mr-2"></i>
+                        Edit Profile
+                    </button>
+                    <button
+                        className="w-full p-4 bg-white rounded-tr-md cursor-pointer hover:bg-gray-300 transition-colors duration-300"
+                        onClick={() => setContent("orderHistory")}
+                    >
+                        <i className="fa-solid fa-box mr-2"></i>
+                        Order History
+                    </button>
                 </div>
-                <div className="profile-right">
-                    <div className="relative">
-                        <i
-                            class="fa-solid fa-pen-to-square absolute right-0 top-0 cursor-pointer"
-                            onClick={() => setIsChanged(true)}
-                        ></i>
-                        <h1 className="heading profile-right__heading">
-                            Information
-                        </h1>
+                {content === "info" && (
+                    <div className="flex-center-between w-full h-full">
+                        <div className="profile-left">
+                            <i class="fa-solid fa-user p-5 bg-gray-200 text-9xl rounded-2xl"></i>
+                            <div className="profile-left__info">
+                                <h1 className="heading profile-left__name text-4xl">
+                                    {user.name}
+                                </h1>
+                            </div>
+                        </div>
+                        <div className="profile-right">
+                            <div className="relative">
+                                <i
+                                    class="fa-solid fa-pen-to-square absolute right-0 top-0 cursor-pointer"
+                                    onClick={() => setIsChanged(true)}
+                                ></i>
+                                <h1 className="heading profile-right__heading">
+                                    Information
+                                </h1>
+                            </div>
+                            <div className="flex flex-col gap-3">
+                                <ProfileInfo
+                                    heading="Email"
+                                    data={user.email}
+                                />
+                                <ProfileInfo
+                                    heading="Phone"
+                                    data={user.phone}
+                                />
+                                <ProfileInfo
+                                    heading="Address"
+                                    data={user.address}
+                                />
+                            </div>
+                            <div className="flex flex-center-between">
+                                <p
+                                    className="profile-right__change-password"
+                                    onClick={() => setIsChangePass(true)}
+                                >
+                                    Change password ?
+                                </p>
+                                <button
+                                    className="right-10 bottom-10 text-lg text-red-600 underline cursor-pointer mr-2 hover:opacity-80 group transition-all duration-300"
+                                    onClick={handleLogout}
+                                >
+                                    <span>Log Out</span>
+                                    <i class="fa-solid fa-right-from-bracket ml-2 transform transition-transform duration-300 group-hover:translate-x-1 "></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div className="flex flex-col gap-3">
-                        <ProfileInfo heading="Email" data={user.email} />
-                        <ProfileInfo heading="Phone" data={user.phone} />
-                        <ProfileInfo heading="Address" data={user.address} />
-                    </div>
-                    <div className="flex flex-center-between">
-                        <p
-                            className="profile-right__change-password"
-                            onClick={() => setIsChangePass(true)}
-                        >
-                            Change password ?
-                        </p>
-                        <button
-                            className="right-10 bottom-10 text-lg text-red-600 underline cursor-pointer mr-2 hover:opacity-80 group transition-all duration-300"
-                            onClick={handleLogout}
-                        >
-                            <span>Log Out</span>
-                            <i class="fa-solid fa-right-from-bracket ml-2 transform transition-transform duration-300 group-hover:translate-x-1 "></i>
-                        </button>
-                    </div>
-                </div>
+                )}
+                {content === "orderHistory" && <UserOrderHistory />}
             </div>
             {isChanged && <EditProfile onClose={() => setIsChanged(false)} />}
             {isChangePass && (
