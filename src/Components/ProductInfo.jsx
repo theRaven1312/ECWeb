@@ -18,7 +18,8 @@ const ProductInfo = ({
     sizes,
     rating,
     numReviews,
-    productId, // ✅ Add productId prop
+    productId,
+    isSold = 0,
 }) => {
     const [selectedColor, setSelectedColor] = useState("");
     const [selectedSize, setSelectedSize] = useState(""); // ✅ Add size state
@@ -120,15 +121,37 @@ const ProductInfo = ({
         }
     };
 
+    if (numReviews > 1000) {
+        numReviews = (numReviews / 1000).toFixed(1) + "K";
+    }
+
+    if (isSold > 1000) {
+        isSold = (isSold / 1000).toFixed(1) + "K";
+    }
+
     return (
         <>
             <h1 className="product-content__heading heading">{heading}</h1>
-            <div className="product-content__feedback">
-                <RatingStar rating={rating} />
-                <p className="product-content__feedback-score desc">
-                    {rating}/5
-                </p>
-            </div>{" "}
+            <div className="flex-center-between">
+                <div className="flex gap-5">
+                    <div className="product-content__feedback">
+                        <RatingStar rating={rating} />
+                        <p className="product-content__feedback-score desc">
+                            {rating}/5
+                        </p>
+                    </div>
+                    <div className="product-content__feedback">
+                        <p className="product-content__feedback-score desc">
+                            ({numReviews} Reviews)
+                        </p>
+                    </div>
+                </div>
+                <div className="product-content__feedback">
+                    <p className="product-content__feedback-score desc mr-15">
+                        Have sold: {isSold}
+                    </p>
+                </div>
+            </div>
             <div className="product-content__price">
                 {discount > 0 ? (
                     <>

@@ -1,18 +1,43 @@
 // Components/UpdateOrderStatus.jsx
-import React, { useState } from 'react';
-import axiosJWT from '../utils/axiosJWT';
+import React, {useState} from "react";
+import axiosJWT from "../utils/axiosJWT";
 
-const OrderUpdate = ({ order, isOpen, onClose, onUpdate }) => {
-    const [newStatus, setNewStatus] = useState(order?.status || 'pending');
+const OrderUpdate = ({order, isOpen, onClose, onUpdate}) => {
+    const [newStatus, setNewStatus] = useState(order?.status || "pending");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const statusOptions = [
-        { value: 'pending', label: 'Pending', color: 'bg-yellow-100 text-yellow-800', icon: 'fa-clock' },
-        { value: 'delivering', label: 'Delivering', color: 'bg-indigo-100 text-indigo-800', icon: 'fa-shipping-fast' },
-        { value: 'delivered', label: 'Delivered', color: 'bg-green-100 text-green-800', icon: 'fa-check-circle' },
-        { value: 'cancelled', label: 'Cancelled', color: 'bg-red-100 text-red-800', icon: 'fa-times-circle' },
-        { value: 'returned', label: 'Returned', color: 'bg-orange-100 text-orange-800', icon: 'fa-undo' }
+        {
+            value: "pending",
+            label: "Pending",
+            color: "bg-yellow-100 text-yellow-800",
+            icon: "fa-clock",
+        },
+        {
+            value: "delivering",
+            label: "Delivering",
+            color: "bg-indigo-100 text-indigo-800",
+            icon: "fa-shipping-fast",
+        },
+        {
+            value: "delivered",
+            label: "Delivered",
+            color: "bg-green-100 text-green-800",
+            icon: "fa-check-circle",
+        },
+        {
+            value: "cancelled",
+            label: "Cancelled",
+            color: "bg-red-100 text-red-800",
+            icon: "fa-times-circle",
+        },
+        {
+            value: "returned",
+            label: "Returned",
+            color: "bg-orange-100 text-orange-800",
+            icon: "fa-undo",
+        },
     ];
 
     const handleSubmit = async (e) => {
@@ -21,26 +46,31 @@ const OrderUpdate = ({ order, isOpen, onClose, onUpdate }) => {
         setError(null);
 
         try {
-            const token = localStorage.getItem('access_token');
-            if (!token) throw new Error('Authentication required');
+            const token = localStorage.getItem("access_token");
+            if (!token) throw new Error("Authentication required");
 
-            console.log('Updating order status:', order._id, 'to:', newStatus);
+            console.log("Updating order status:", order._id, "to:", newStatus);
 
-            const response = await axiosJWT.put(`/api/v1/orders/${order._id}/status`, {
-                status: newStatus
-            });
+            const response = await axiosJWT.put(
+                `/api/v1/orders/${order._id}/status`,
+                {
+                    status: newStatus,
+                }
+            );
 
-            console.log('Update response:', response.data);
+            console.log("Update response:", response.data);
 
-            if (response.data.status === 'SUCCESS') {
+            if (response.data.status === "SUCCESS") {
                 onUpdate(response.data.order); // Update the order in parent component
                 onClose(); // Close modal
-                console.log('✅ Order status updated successfully');
+                console.log("✅ Order status updated successfully");
             } else {
-                throw new Error(response.data.message || 'Failed to update order');
+                throw new Error(
+                    response.data.message || "Failed to update order"
+                );
             }
         } catch (err) {
-            console.error('❌ Update status error:', err);
+            console.error("❌ Update status error:", err);
             setError(err.response?.data?.message || err.message);
         } finally {
             setLoading(false);
@@ -48,7 +78,7 @@ const OrderUpdate = ({ order, isOpen, onClose, onUpdate }) => {
     };
 
     const handleClose = () => {
-        setNewStatus(order?.status || 'pending');
+        setNewStatus(order?.status || "pending");
         setError(null);
         onClose();
     };
@@ -56,7 +86,7 @@ const OrderUpdate = ({ order, isOpen, onClose, onUpdate }) => {
     // Reset status when order changes
     React.useEffect(() => {
         if (order) {
-            setNewStatus(order.status || 'pending');
+            setNewStatus(order.status || "pending");
         }
     }, [order]);
 
@@ -90,30 +120,39 @@ const OrderUpdate = ({ order, isOpen, onClose, onUpdate }) => {
                         <div>
                             <span className="text-gray-600">Customer:</span>
                             <p className="font-medium text-blue-600">
-                                {order.user?.name || order.user?.email || 'Unknown'}
+                                {order.user?.name ||
+                                    order.user?.email ||
+                                    "Unknown"}
                             </p>
                         </div>
                         <div>
                             <span className="text-gray-600">Total:</span>
                             <p className="font-medium text-green-600">
-                                ${order.totalPrice?.toFixed(2) || '0.00'}
+                                ${order.totalPrice?.toFixed(2) || "0.00"}
                             </p>
                         </div>
                         <div>
-                            <span className="text-gray-600">Current Status:</span>
-                            <span className={`inline-block px-2 py-1 rounded text-xs font-medium mt-1 ${
-                                statusOptions.find(s => s.value === order.status)?.color || 'bg-gray-100 text-gray-800'
-                            }`}>
-                                {order.status || 'Unknown'}
+                            <span className="text-gray-600">
+                                Current Status:
+                            </span>
+                            <span
+                                className={`inline-block px-2 py-1 rounded text-xs font-medium mt-1 ${
+                                    statusOptions.find(
+                                        (s) => s.value === order.status
+                                    )?.color || "bg-gray-100 text-gray-800"
+                                }`}
+                            >
+                                {order.status || "Unknown"}
                             </span>
                         </div>
                         <div>
                             <span className="text-gray-600">Date:</span>
                             <p className="font-medium">
-                                {order.createdAt 
-                                    ? new Date(order.createdAt).toLocaleDateString()
-                                    : 'Unknown'
-                                }
+                                {order.createdAt
+                                    ? new Date(
+                                          order.createdAt
+                                      ).toLocaleDateString()
+                                    : "Unknown"}
                             </p>
                         </div>
                     </div>
@@ -137,12 +176,12 @@ const OrderUpdate = ({ order, isOpen, onClose, onUpdate }) => {
                         </label>
                         <div className="space-y-2">
                             {statusOptions.map((option) => (
-                                <label 
-                                    key={option.value} 
+                                <label
+                                    key={option.value}
                                     className={`flex items-center cursor-pointer p-3 rounded-lg border transition-colors ${
                                         newStatus === option.value
-                                            ? 'border-blue-500 bg-blue-50'
-                                            : 'border-gray-200 hover:bg-gray-50'
+                                            ? "border-blue-500 bg-blue-50"
+                                            : "border-gray-200 hover:bg-gray-50"
                                     }`}
                                 >
                                     <input
@@ -150,22 +189,34 @@ const OrderUpdate = ({ order, isOpen, onClose, onUpdate }) => {
                                         name="status"
                                         value={option.value}
                                         checked={newStatus === option.value}
-                                        onChange={(e) => setNewStatus(e.target.value)}
+                                        onChange={(e) =>
+                                            setNewStatus(e.target.value)
+                                        }
                                         className="mr-3 text-blue-600"
                                         disabled={loading}
                                     />
-                                    <i className={`fa-solid ${option.icon} mr-3 w-4 text-gray-400`}></i>
+                                    <i
+                                        className={`fa-solid ${option.icon} mr-3 w-4 text-gray-400`}
+                                    ></i>
                                     <div className="flex-1">
-                                        <span className={`px-2 py-1 rounded text-xs font-medium ${option.color}`}>
+                                        <span
+                                            className={`px-2 py-1 rounded text-xs font-medium ${option.color}`}
+                                        >
                                             {option.label}
                                         </span>
                                         {newStatus === option.value && (
                                             <p className="text-xs text-gray-600 mt-1">
-                                                {option.value === 'pending' && 'Order is waiting to be processed'}
-                                                {option.value === 'delivering' && 'Order is out for delivery'}
-                                                {option.value === 'delivered' && 'Order has been delivered'}
-                                                {option.value === 'cancelled' && 'Order has been cancelled'}
-                                                {option.value === 'returned' && 'Order has been returned'}
+                                                {option.value === "pending" &&
+                                                    "Order is waiting to be processed"}
+                                                {option.value ===
+                                                    "delivering" &&
+                                                    "Order is out for delivery"}
+                                                {option.value === "delivered" &&
+                                                    "Order has been delivered"}
+                                                {option.value === "cancelled" &&
+                                                    "Order has been cancelled"}
+                                                {option.value === "returned" &&
+                                                    "Order has been returned"}
                                             </p>
                                         )}
                                     </div>
@@ -210,9 +261,13 @@ const OrderUpdate = ({ order, isOpen, onClose, onUpdate }) => {
                             <div className="flex items-start">
                                 <i className="fa-solid fa-info-circle text-yellow-600 mr-2 mt-0.5"></i>
                                 <div className="text-sm">
-                                    <p className="text-yellow-800 font-medium">Status Change</p>
+                                    <p className="text-yellow-800 font-medium">
+                                        Status Change
+                                    </p>
                                     <p className="text-yellow-700">
-                                        Order will change from <strong>{order.status}</strong> to <strong>{newStatus}</strong>
+                                        Order will change from{" "}
+                                        <strong>{order.status}</strong> to{" "}
+                                        <strong>{newStatus}</strong>
                                     </p>
                                 </div>
                             </div>

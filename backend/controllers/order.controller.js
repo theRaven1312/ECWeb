@@ -408,6 +408,25 @@ export const updateOrderStatus = async (req, res) => {
                 }
             }
         }
+
+        if (status === "delivered") {
+            for (const product of order.products) {
+                const productData = await Product.findById(product.product._id);
+                if (productData) {
+                    productData.isSold += product.quantity;
+                    productData.stock -= product.quantity;
+                    await productData.save();
+                    console.log(
+                        `Product ${product.product._id} isSold updated to ${productData.isSold}`
+                    );
+                } else {
+                    console.error(
+                        `Product ${product.product._id} not found for isSold update`
+                    );
+                }
+            }
+        }
+
         // Log the update
         console.log("✅ Order status updated successfully:", {
             orderId: order._id,

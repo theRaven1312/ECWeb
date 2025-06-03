@@ -7,7 +7,9 @@ import UserQuery from "../Components/UserQuery";
 import OrderQuery from "../Components/OrderQuery";
 
 import CouponQuery from "../Components/CouponQuery";
+4;
 
+import SaleQuery from "../Components/SaleQuery";
 
 const AdminPage = () => {
     const [option, setOption] = useState("products");
@@ -19,9 +21,9 @@ const AdminPage = () => {
             case "products":
                 return <ProductQuery />;
             case "orders":
-                return <OrderQuery/>;
+                return <OrderQuery />;
             case "sales":
-                return <div>Sales Analytics - Coming Soon</div>;
+                return <SaleQuery />;
             case "categories":
                 return <CategoryQuery />;
             case "coupons":
@@ -36,7 +38,7 @@ const AdminPage = () => {
             <div className="divider"></div>
             <div className="flex gap-8">
                 <ul className="optionBar flex flex-col w-1/4 border-1 border-gray-300 p-4 gap-4 rounded-lg h-screen">
-                    <h1 className='text-2xl font-bold mt-4'>Options</h1>
+                    <h1 className="text-2xl font-bold mt-4">Options</h1>
                     <li
                         className={`optionBar__item cursor-pointer p-2 rounded ${
                             option === "users"

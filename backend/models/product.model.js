@@ -22,7 +22,7 @@ const productSchema = new mongoose.Schema({
     isFeatured: {type: Boolean, default: false},
     isSale: {type: Boolean, default: false},
     dateCreated: {type: Date, default: Date.now},
+    isSold: {type: Number, default: 0},
 });
-
 
 export default mongoose.model("products", productSchema);
