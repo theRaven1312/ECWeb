@@ -129,6 +129,13 @@ export const addToCart = async (req, res) => {
 
         if (existingProductIndex > -1) {
             // Product with same size/color exists, update quantity
+            if (cart.products[existingProductIndex].quantity + parseInt(quantity) > product.stock) {
+                return res.status(400).json({
+                    message: `Only ${product.stock - cart.products[existingProductIndex].quantity} items available in stock`,
+                    status: "ERROR",
+                });
+            }
+            // Update quantity of existing product variant
             cart.products[existingProductIndex].quantity += parseInt(quantity);
         } else {
             // Add new product variant to cart
@@ -255,6 +262,23 @@ export const updateProductQuantity = async (req, res) => {
         // Populate and recalculate total
         await cart.populate("products.product");
         cart.totalPrice = calculateTotalPrice(cart.products);
+
+        // Check stock availability
+        for (const item of cart.products) {
+            const product = await Product.findById(item.product);
+            if (!product) {
+                return res.status(404).json({
+                    message: "Product not found",
+                    status: "ERROR",
+                });
+            }
+            if (product.stock < item.quantity) {
+                return res.status(400).json({
+                    message: `Only ${product.stock} items available in stock for ${product.name}`,
+                    status: "ERROR",
+                });
+            }
+        }
 
         await cart.save();
 
