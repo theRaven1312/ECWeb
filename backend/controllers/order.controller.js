@@ -337,6 +337,30 @@ export const updateOrderStatus = async (req, res) => {
 
         console.log('Updating order status:', orderId, 'to:', status);
 
+        const checkOrder = await Order.findById(orderId);
+        if (!checkOrder) {
+            return res.status(404).json({
+                message: "Order not found",
+                status: "ERROR",
+            });
+        }
+
+        if(checkOrder.status === 'delivering' && status === 'cancelled')
+        {
+            return res.status(400).json({
+                message: "Cannot cancel an order that is currently being delivered",
+                status: "ERROR",
+            });
+        }
+        
+        if(checkOrder.status === 'delivered' && status === 'cancelled')
+        {
+            return res.status(400).json({
+                message: "Cannot cancel an order that has already been delivered",
+                status: "ERROR",
+            });
+        }
+
         // ✅ Update only status
         const order = await Order.findByIdAndUpdate(
             orderId, 
@@ -435,6 +459,11 @@ export const deleteOrder = async (req, res) => {
                 status: "ERROR",
             });
         }
+
+        if(order.status === 'delivering') res.status(400).json({
+            message: "Cannot delete an order that is currently being delivered",
+            status: "ERROR",
+        });
 
         console.log(`✅ Order ${orderId} deleted successfully by ${req.user?.email || req.user?.name}`);
 
