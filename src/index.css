@@ -815,7 +815,7 @@ body {
 
 
 .profile-left {
-  @apply flex flex-col items-center gap-10 w-[40%] py-10 pl-10
+  @apply flex-center flex-col gap-10 w-[40%] py-10 pl-10 max-sm:w-full max-sm:h-[40%] max-sm:py-0 max-sm:pl-0 max-sm:gap-4
 }
 
 .profile-left__info {
@@ -823,7 +823,7 @@ body {
 }
 
 .profile-right {
-  @apply flex flex-col gap-5 w-[60%] py-10 pr-15 relative
+  @apply flex flex-col gap-5 w-[60%] py-10 pr-15 relative max-sm:w-full max-sm:h-[60%] max-sm:pr-0 max-sm:py-0 max-sm:gap-0 max-sm:pl-4 max-sm:pr-4
 }
 
 .profile-right__heading {
@@ -831,7 +831,7 @@ body {
 }
 
 .profile-right__change-password {
-  @apply bottom-10 text-lg underline cursor-pointer hover:opacity-70
+  @apply bottom-10 text-lg underline cursor-pointer hover:opacity-70 max-sm:bottom-0
 }
 
 /* Smooth slide animation */

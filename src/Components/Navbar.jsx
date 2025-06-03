@@ -118,7 +118,7 @@ const Navbar = () => {
                                 onClick={() => setDropdownOpen((prev) => !prev)}
                             />
                             {dropdownOpen && (
-                                <div className="dropdown-menu">
+                                <div className="dropdown-menu max-sm:hidden">
                                     <div className="dropdown-menu__name">
                                         <i className="fa-solid fa-user mr-2"></i>
                                         {user.name}

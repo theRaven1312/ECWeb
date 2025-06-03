@@ -294,11 +294,6 @@ const OrderDetailsModal = ({showOrderDetails, selectedOrder, onClose}) => {
                     >
                         Close
                     </button>
-                    {selectedOrder.status === "delivered" && (
-                        <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                            Reorder
-                        </button>
-                    )}
                 </div>
             </div>
         </div>

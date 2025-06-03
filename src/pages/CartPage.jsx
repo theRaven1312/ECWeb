@@ -82,6 +82,13 @@ const CartPage = () => {
                     quantity: newQuantity,
                     size,
                     color,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "access_token"
+                        )}`,
+                    },
                 }
             );
             const cart = response.data.cart;
@@ -101,10 +108,15 @@ const CartPage = () => {
             // ✅ Update Redux cart quantity
             dispatch(setCartQuantity(totalItems));
         } catch (error) {
-            console.error("Error updating quantity:", error.response?.data.message || error);
+            console.error(
+                "Error updating quantity:",
+                error.response?.data.message || error
+            );
             setCartData((prev) => ({
                 ...prev,
-                error: error.response?.data?.message || "Failed to update quantity",
+                error:
+                    error.response?.data?.message ||
+                    "Failed to update quantity",
             }));
         }
     };
@@ -115,6 +127,11 @@ const CartPage = () => {
                 `/api/v1/cart/remove/${productId}`,
                 {
                     data: {size, color},
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "access_token"
+                        )}`,
+                    },
                 }
             );
             const cart = response.data.cart;
@@ -147,7 +164,13 @@ const CartPage = () => {
             return;
         }
         try {
-            await axiosJWT.delete("/api/v1/cart/clear");
+            await axiosJWT.delete("/api/v1/cart/clear", {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        "access_token"
+                    )}`,
+                },
+            });
 
             setCartData((prev) => ({
                 ...prev,

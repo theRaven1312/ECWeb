@@ -1,14 +1,18 @@
 import React, {useState, useEffect} from "react";
 import OrderDetailsModal from "./OrderDetailsModal";
 import axiosJWT from "../utils/axiosJWT";
+import {useNavigate} from "react-router-dom";
 
 const UserOrderHistory = () => {
+    const navigate = useNavigate();
     const [filter, setFilter] = useState("all");
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [showOrderDetails, setShowOrderDetails] = useState(false);
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [processingOrderId, setProcessingOrderId] = useState(null);
+    const [message, setMessage] = useState("");
     const fetchUserOrders = async () => {
         setLoading(true);
         setError(null);
@@ -80,7 +84,72 @@ const UserOrderHistory = () => {
     const handleCloseOrderDetails = () => {
         setShowOrderDetails(false);
         setSelectedOrder(null);
-    }; // Filter orders based on status
+    };
+    const handleReorder = (order) => {
+        if (order.products && order.products.length > 0) {
+            if (order.products.length === 1) {
+                const productId =
+                    order.products[0].product?._id || order.products[0].product;
+                if (productId) {
+                    navigate(`/product/${productId}`);
+                }
+            } else {
+                const productId =
+                    order.products[0].product?._id || order.products[0].product;
+                if (productId) {
+                    navigate(`/product/${productId}`);
+                }
+            }
+        }
+    };
+
+    // Handle cancel order functionality
+    const handleCancelOrder = async (orderId) => {
+        if (!window.confirm("Are you sure you want to cancel this order?")) {
+            return;
+        }
+
+        setProcessingOrderId(orderId);
+        try {
+            const response = await axiosJWT.put(
+                `/api/v1/orders/${orderId}/status`,
+                {
+                    status: "cancelled",
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "access_token"
+                        )}`,
+                    },
+                }
+            );
+
+            if (response.data.status === "SUCCESS") {
+                setOrders((prevOrders) =>
+                    prevOrders.map((order) =>
+                        order._id === orderId
+                            ? {...order, status: "cancelled"}
+                            : order
+                    )
+                );
+                alert("Order cancelled successfully!");
+            } else {
+                throw new Error(
+                    response.data.message || "Failed to cancel order"
+                );
+            }
+        } catch (error) {
+            console.error("Error cancelling order:", error);
+            alert(
+                error.response?.data?.message ||
+                    error.message ||
+                    "Failed to cancel order"
+            );
+        } finally {
+            setProcessingOrderId(null);
+        }
+    };
     const filteredOrders =
         filter === "all"
             ? orders
@@ -284,17 +353,46 @@ const UserOrderHistory = () => {
                                         >
                                             <i className="fa-solid fa-eye"></i>
                                             View Details
-                                        </button>
+                                        </button>{" "}
                                         {order.status === "delivered" && (
-                                            <button className="flex-1 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors font-medium flex items-center justify-center gap-2">
+                                            <button
+                                                onClick={() =>
+                                                    handleReorder(order)
+                                                }
+                                                className="flex-1 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors font-medium flex items-center justify-center gap-2"
+                                            >
                                                 <i className="fa-solid fa-redo"></i>
                                                 Reorder
                                             </button>
                                         )}
                                         {order.status === "pending" && (
-                                            <button className="flex-1 bg-red-100 text-red-700 px-4 py-2 rounded-lg hover:bg-red-200 transition-colors font-medium flex items-center justify-center gap-2">
-                                                <i className="fa-solid fa-times"></i>
-                                                Cancel Order
+                                            <button
+                                                onClick={() =>
+                                                    handleCancelOrder(order._id)
+                                                }
+                                                disabled={
+                                                    processingOrderId ===
+                                                    order._id
+                                                }
+                                                className={`flex-1 px-4 py-2 rounded-lg transition-colors font-medium flex items-center justify-center gap-2 ${
+                                                    processingOrderId ===
+                                                    order._id
+                                                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                                        : "bg-red-100 text-red-700 hover:bg-red-200"
+                                                }`}
+                                            >
+                                                {processingOrderId ===
+                                                order._id ? (
+                                                    <>
+                                                        <i className="fa-solid fa-spinner fa-spin"></i>
+                                                        Cancelling...
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <i className="fa-solid fa-times"></i>
+                                                        Cancel Order
+                                                    </>
+                                                )}
                                             </button>
                                         )}
                                     </div>

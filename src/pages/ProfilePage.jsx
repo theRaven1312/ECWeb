@@ -42,17 +42,25 @@ export const ProfilePage = () => {
 
     return (
         <div className="profile-page">
-            <div className="w-[80%] h-[70%] relative flex-center flex-col bg-white rounded-3xl shadow-2xl overflow-hidden md:w-[70%] max-sm:w-[95%] max-sm:h-[97%]">
+            <div className="w-[80%] h-[60%] relative flex-center flex-col bg-white rounded-3xl shadow-2xl overflow-hidden md:w-[70%] max-sm:w-[95%] max-sm:h-[97%]">
                 <div className="flex-center-between w-full ">
                     <button
-                        className="w-full p-4 bg-white rounded-tl-md cursor-pointer hover:bg-gray-300 transition-colors duration-300"
+                        className={`w-full p-4  rounded-tl-md cursor-pointer hover:bg-gray-300 transition-colors duration-300 active:bg-gray-300 ${
+                            content === "info"
+                                ? "bg-gray-300 shadow-md"
+                                : "bg-white"
+                        }`}
                         onClick={() => setContent("info")}
                     >
                         <i className="fa-solid fa-user mr-2"></i>
                         Edit Profile
                     </button>
                     <button
-                        className="w-full p-4 bg-white rounded-tr-md cursor-pointer hover:bg-gray-300 transition-colors duration-300"
+                        className={`w-full p-4  rounded-tr-md cursor-pointer hover:bg-gray-300 transition-colors duration-300 active:bg-gray-300 ${
+                            content === "orderHistory"
+                                ? "bg-gray-300 shadow-md"
+                                : "bg-white"
+                        }`}
                         onClick={() => setContent("orderHistory")}
                     >
                         <i className="fa-solid fa-box mr-2"></i>
@@ -60,9 +68,9 @@ export const ProfilePage = () => {
                     </button>
                 </div>
                 {content === "info" && (
-                    <div className="flex-center-between w-full h-full">
+                    <div className="flex-center-between w-full h-full max-sm:flex-col">
                         <div className="profile-left">
-                            <i class="fa-solid fa-user p-5 bg-gray-200 text-9xl rounded-2xl"></i>
+                            <i class="fa-solid fa-user p-5 bg-gray-200 text-9xl rounded-2xl max-sm:text-6xl"></i>
                             <div className="profile-left__info">
                                 <h1 className="heading profile-left__name text-4xl">
                                     {user.name}
@@ -75,7 +83,7 @@ export const ProfilePage = () => {
                                     class="fa-solid fa-pen-to-square absolute right-0 top-0 cursor-pointer"
                                     onClick={() => setIsChanged(true)}
                                 ></i>
-                                <h1 className="heading profile-right__heading">
+                                <h1 className="heading profile-right__heading max-sm:hidden">
                                     Information
                                 </h1>
                             </div>
@@ -93,7 +101,7 @@ export const ProfilePage = () => {
                                     data={user.address}
                                 />
                             </div>
-                            <div className="flex flex-center-between">
+                            <div className="flex flex-center-between max-sm:my-5">
                                 <p
                                     className="profile-right__change-password"
                                     onClick={() => setIsChangePass(true)}
