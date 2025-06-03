@@ -39,7 +39,8 @@ export const ProfilePage = () => {
 
     return (
         <div className="profile-page">
-            <div className="profile-container">
+            <div className="profile-container max-sm: flex-col">
+                <div className="flex"></div>
                 <div className="profile-left">
                     <i class="fa-solid fa-user p-5 bg-gray-200 text-9xl rounded-2xl"></i>
                     <div className="profile-left__info">
