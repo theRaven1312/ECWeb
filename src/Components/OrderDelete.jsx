@@ -90,7 +90,7 @@ const OrderDelete = ({ order, isOpen, onClose, onDelete }) => {
                         </div>
                         <div className="flex justify-between">
                             <span className="text-sm text-gray-600">Status:</span>
-                            <span className={`text-sm font-medium px-2 py-1 rounded text-xs ${
+                            <span className={`font-medium px-2 py-1 rounded text-xs ${
                                 order.status === 'delivered' ? 'bg-green-100 text-green-800' :
                                 order.status === 'shipped' ? 'bg-purple-100 text-purple-800' :
                                 order.status === 'delivering' ? 'bg-indigo-100 text-indigo-800' :

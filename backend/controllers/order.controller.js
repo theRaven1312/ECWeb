@@ -12,7 +12,13 @@ const generateOrderNumber = () => {
 
 const calculateTotalPrice = async (products, appliedCoupon) => {
     let total = products.reduce((sum, item) => {
-        const itemPrice = item.price * item.quantity;
+        let price = item.price;
+        if(item.discount && item.discount > 0) 
+        {
+            price -= (price * item.discount) / 100;
+        }
+        
+        const itemPrice = price * item.quantity;
         return sum + itemPrice;
     }, 0);
 
@@ -358,6 +364,34 @@ export const updateOrderStatus = async (req, res) => {
             });
         }
 
+        if(status === 'delivering')
+        {
+            for (const product of order.products) {
+                const productData = await Product.findById(product.product._id);
+                if (productData) {
+                    productData.stock -= product.quantity;
+                    await productData.save();
+                    console.log(`Product ${product.product._id} stock updated to ${productData.stock}`);
+                } else {
+                    console.error(`Product ${product.product._id} not found for stock update`);
+                }
+            }
+        }
+
+        if(status === 'returned')
+        {
+            for (const product of order.products) {
+                const productData = await Product.findById(product.product._id);
+                if (productData) {
+                    productData.stock += product.quantity;
+                    await productData.save();
+                    console.log(`Product ${product.product._id} stock updated to ${productData.stock}`);
+                } else {
+                    console.error(`Product ${product.product._id} not found for stock update`);
+                }
+            }
+        }
+        // Log the update
         console.log('✅ Order status updated successfully:', {
             orderId: order._id,
             orderNumber: order.orderNumber,
@@ -382,7 +416,6 @@ export const updateOrderStatus = async (req, res) => {
     }
 };
 
-// Delete order (admin only)
 export const deleteOrder = async (req, res) => {
     try {
         const { orderId } = req.params;

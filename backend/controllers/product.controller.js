@@ -349,3 +349,30 @@ export const getAllReviews = async (req, res) => {
         res.status(500).json({message: error.message});
     }
 };
+
+export const adjustStock = async (req, res) => {
+    try {
+        const {productId, quantity} = req.body;
+        
+        if (!productId || !quantity) {
+            return res.status(400).json({
+                message: "Product ID and quantity are required.",
+            });
+        }
+
+        const product = await productService.adjustProductStock(
+            productId,
+            quantity
+        );
+        if (!product) {
+            return res
+                .status(404)
+                .json({message: "Product not found or cannot be updated!"});
+        }
+
+        res.status(200).json(product);
+    } catch (error) {
+        console.error("Error adjusting stock:", error);
+        res.status(500).json({message: error.message});
+    }
+}

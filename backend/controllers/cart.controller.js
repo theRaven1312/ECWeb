@@ -61,7 +61,7 @@ export const initializeCart = async (req, res) => {
 // Add a product to the cart
 export const addToCart = async (req, res) => {
     try {
-        // ✅ Get user ID from JWT token
+
         const userId = req.user.id || req.user._id;
         const {productId, quantity = 1, size = "", color = ""} = req.body;
 
@@ -88,11 +88,27 @@ export const addToCart = async (req, res) => {
             });
         }
 
+
         // ✅ Validate product exists
         const product = await Product.findById(productId);
         if (!product) {
             return res.status(404).json({
                 message: "Product not found",
+                status: "ERROR",
+            });
+        }
+
+        //Check if the product is available
+        if (product.stock <= 0) {
+            return res.status(400).json({
+                message: "Product is out of stock",
+                status: "ERROR",
+            });
+        }
+
+        if(product.stock < quantity) {
+            return res.status(400).json({
+                message: `Only ${product.stock} items available in stock`,
                 status: "ERROR",
             });
         }
@@ -124,7 +140,6 @@ export const addToCart = async (req, res) => {
             });
         }
 
-        // Populate products to calculate total
         await cart.populate("products.product");
         cart.totalPrice = calculateTotalPrice(cart.products);
 

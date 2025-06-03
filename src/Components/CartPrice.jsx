@@ -257,13 +257,6 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
         } finally {
             await axiosJWT.delete("/api/v1/cart/clear");
 
-            setCartData((prev) => ({
-                ...prev,
-                items: [],
-                totalPrice: 0,
-                totalItems: 0,
-            }));
-
             setIsProcessing(false);
         }
     };
