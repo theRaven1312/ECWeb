@@ -155,6 +155,20 @@ export const createOrder = async (req, res) => {
             });
         }
 
+        //Validate stock
+        for (const item of cart.products) {
+            const product = await Product.findById(item.product._id);
+            if (!product) {
+                throw new Error(`Product ${item.product._id} not found`);
+            }
+            if (product.stock < item.quantity) {
+                return res.status(400).json({
+                    message: `Insufficient stock for product ${product.name}`,
+                    status: "ERROR",
+                });
+            }
+        }
+
         const orderProducts = await Promise.all(
             cart.products.map(async (item) => {
                 const product = await Product.findById(item.product._id);
