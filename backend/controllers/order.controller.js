@@ -414,7 +414,6 @@ export const updateOrderStatus = async (req, res) => {
                 const productData = await Product.findById(product.product._id);
                 if (productData) {
                     productData.isSold += product.quantity;
-                    productData.stock -= product.quantity;
                     await productData.save();
                     console.log(
                         `Product ${product.product._id} isSold updated to ${productData.isSold}`
