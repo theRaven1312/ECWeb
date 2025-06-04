@@ -91,7 +91,7 @@ const getAllCoupons = async () => {
     return coupons;
 };
 
-const applyCoupon = async (couponCode, cartTotal) => {
+const applyCoupon = async (userId, couponCode, cartTotal) => {
     const coupon = await Coupon.findOne({
         code: couponCode.toUpperCase(),
         isActive: true,
@@ -112,6 +112,12 @@ const applyCoupon = async (couponCode, cartTotal) => {
     if (cartTotal < coupon.minPurchaseAmount) {
         throw new Error(`Minimum amount required: ${coupon.minPurchaseAmount}`);
     }
+
+    if (coupon.usedBy.includes(userId))
+        throw new Error("You already used this coupon");
+
+    coupon.usedBy.push(userId);
+    await coupon.save();
 
     let discountPrice = 0;
 

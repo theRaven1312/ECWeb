@@ -309,6 +309,18 @@ const sendCoupon = (email, couponCode) => {
             if (!email || !couponCode) {
                 throw new Error("Email and coupon code are required");
             }
+
+            // Update user's subscription status
+            const updatedUser = await User.findOneAndUpdate(
+                {email: email},
+                {isSubscribe: true},
+                {new: true, select: "name email phone address role isSubscribe"}
+            );
+
+            if (!updatedUser) {
+                throw new Error("User not found");
+            }
+
             const html = `
                 <!DOCTYPE html>
                 <html>
@@ -363,6 +375,7 @@ const sendCoupon = (email, couponCode) => {
             resolve({
                 status: "OK",
                 message: "Coupon sent successfully",
+                user: updatedUser,
                 res,
             });
         } catch (e) {

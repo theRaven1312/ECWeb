@@ -7,6 +7,7 @@ const initialState = {
     address: "",
     role: "",
     access_token: "",
+    isSubscribe: false,
 };
 
 export const userSlice = createSlice({
@@ -14,16 +15,23 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         updateUser: (state, actions) => {
-            const {name, email, phone, address, role, access_token} =
-                actions.payload;
+            const {
+                name,
+                email,
+                phone,
+                address,
+                role,
+                access_token,
+                isSubscribe,
+            } = actions.payload;
             state.name = name;
             state.email = email;
             state.phone = phone;
             state.address = address;
             state.role = role;
             state.access_token = access_token;
+            state.isSubscribe = isSubscribe || false;
         },
-
         resetUser: (state, actions) => {
             state.name = "";
             state.email = "";
@@ -31,6 +39,7 @@ export const userSlice = createSlice({
             state.address = "";
             state.role = "";
             state.access_token = "";
+            state.isSubscribe = false;
         },
     },
 });
