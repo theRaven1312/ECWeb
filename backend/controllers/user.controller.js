@@ -254,6 +254,7 @@ const sendCoupon = async (req, res) => {
             status: "OK",
             message: "Coupon sent successfully",
             data: response,
+            user: response.user, // Include updated user data
         });
     } catch (err) {
         return res.status(500).json({status: "ERROR", message: "SERVER ERROR"});

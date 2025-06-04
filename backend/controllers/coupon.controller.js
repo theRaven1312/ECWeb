@@ -102,7 +102,11 @@ const applyCoupon = async (req, res) => {
             return total + productPrice * item.quantity;
         }, 0);
 
-        const response = await couponService.applyCoupon(code, cartTotal);
+        const response = await couponService.applyCoupon(
+            req.user._id,
+            code,
+            cartTotal
+        );
 
         cart.totalPrice = response.finalTotal;
         await cart.save();

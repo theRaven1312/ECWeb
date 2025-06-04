@@ -5,27 +5,54 @@ import ins from "../../public/Assets/ins.svg";
 import github from "../../public/Assets/github.svg";
 import {useState} from "react";
 import axiosJWT from "../utils/axiosJWT";
+import {useSelector, useDispatch} from "react-redux";
+import {updateUser} from "../redux/UserSliceRedux";
 
 const Footer = () => {
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
+    const dispatch = useDispatch();
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
     };
+    const user = useSelector((state) => state.user);
     const handleEmailSubmit = async (e) => {
         e.preventDefault();
         try {
             if (email.trim() === "") {
-                alert("Please enter a valid email address.");
+                setError("Please enter a valid email address.");
+                setTimeout(() => {
+                    setError("");
+                }, 5000);
                 return;
             }
+            if (user.isSubscribe) {
+                setError("You are already subscribed.");
+                setTimeout(() => {
+                    setError("");
+                }, 5000);
+                return;
+            }
+            setLoading(true);
             const response = await axiosJWT.post("/api/v1/users/send-coupon", {
                 email,
                 couponCode: "NEWBIE",
             });
+
             if (response.data.status === "OK") {
+                // Update Redux store with the updated user data from backend
+                if (response.data.user) {
+                    dispatch(
+                        updateUser({
+                            ...user,
+                            isSubscribe: true,
+                            // Include any other updated fields from the backend
+                            ...response.data.user,
+                        })
+                    );
+                }
                 setMessage("Coupon sent successfully!");
             } else {
                 setError("Failed to send coupon. Please try again.");

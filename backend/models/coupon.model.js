@@ -24,6 +24,7 @@ const couponSchema = new mongoose.Schema({
     },
     isActive: {type: Boolean, default: true},
     usageLimit: {type: Number, min: 0},
+    usedBy: [{type: mongoose.Schema.Types.ObjectId, ref: "users"}],
 });
 
 couponSchema.pre("save", function (next) {

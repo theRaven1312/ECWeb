@@ -52,6 +52,11 @@ const UserSchema = new mongoose.Schema(
             default: "",
         },
 
+        isSubscribe: {
+            type: Boolean,
+            default: false,
+        },
+
         resetPasswordToken: String,
         resetPasswordExpire: Date,
     },
