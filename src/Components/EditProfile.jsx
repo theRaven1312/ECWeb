@@ -52,7 +52,7 @@ const EditProfile = ({onClose}) => {
             onClose();
         } catch (err) {
             const data = err.response.data;
-            setError(data.messages[0]);
+            setError(data.message || data.messages[0]);
         }
     };
     return (

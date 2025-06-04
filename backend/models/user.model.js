@@ -35,11 +35,12 @@ const UserSchema = new mongoose.Schema(
             },
             validate: {
                 validator: function (v) {
-                    return /^[0-9]*$/.test(v); // chỉ cho phép số
+                    return /^[0-9]*$/.test(v);
                 },
                 message:
                     "Phone number cannot contain letters or special characters",
             },
+            minlength: [10, "Phone number minimum 10 characters"],
         },
         role: {
             type: String,

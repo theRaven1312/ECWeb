@@ -9,5 +9,6 @@ import {
 
 router.get("/", reviewController.getAllReviews);
 router.post("/:id", reviewController.createReview);
+router.delete("/:id", authMiddleware, reviewController.deleteReview);
 
 export default router;

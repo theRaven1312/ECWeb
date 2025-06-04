@@ -42,7 +42,27 @@ const createReview = (userId, newReview) => {
     });
 };
 
+const deleteReview = (reviewId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const deletedReview = await Review.findByIdAndDelete(reviewId);
+            if (deletedReview) {
+                resolve({
+                    status: "OK",
+                    message: "Delete review successfully",
+                    data: deletedReview,
+                });
+            } else {
+                reject(new Error("Review not found"));
+            }
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
 export default {
     getAllReviews,
     createReview,
+    deleteReview,
 };

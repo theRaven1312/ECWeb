@@ -125,25 +125,13 @@ export default function ProductionPage() {
                             ({reviews.length})
                         </span>
                     </div>
-
-                    <div className="flex">
-                        <button className="primary-btn comment-header__adjustBtn">
-                            <i className="fa-solid fa-sliders"></i>
-                        </button>
-                        <div className="comment-header__moreBtn">
-                            <span className="max-sm:text-sm">Latest</span>
-                            <button className="w-[16px] h-[16px] cursor-pointer flex-center ml-2 hover:bg-gray-100 rounded-full">
-                                <i className="fa-solid fa-angle-down "></i>
-                            </button>
-                        </div>{" "}
-                        <button
-                            className="primary-btn comment-header__writeBtn"
-                            onClick={() => setShowReviewModal(true)}
-                        >
-                            Write a review
-                        </button>
-                    </div>
-                </div>{" "}
+                    <button
+                        className="primary-btn comment-header__writeBtn"
+                        onClick={() => setShowReviewModal(true)}
+                    >
+                        Write a review
+                    </button>
+                </div>
                 <div className="commentSection">
                     {loading ? (
                         <div className="text-center py-8">
