@@ -201,7 +201,7 @@ body {
   }
 
   .galleryItem {
-    @apply h-64 bg-white rounded-3xl p-4;
+    @apply h-64 bg-white rounded-3xl p-4 font-bold overflow-hidden;
   }
 
   .displaySection {
