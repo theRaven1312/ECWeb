@@ -40,7 +40,6 @@ const UserSchema = new mongoose.Schema(
                 message:
                     "Phone number cannot contain letters or special characters",
             },
-            minlength: [10, "Phone number minimum 10 characters"],
         },
         role: {
             type: String,
