@@ -55,6 +55,50 @@ const UserQuery = () => {
         }
     };
 
+    const handleChangeRole = async (userId, newRole) => {
+        if (
+            !window.confirm(
+                `Are you sure you want to change the role of this user to "${newRole}"?`
+            )
+        ) {
+            return;
+        }
+        setLoading(true);
+        setError("");
+        setSuccess("");
+        try {
+            const response = await axiosJWT.put(
+                `/api/v1/users/update-user/${userId}`,
+                {
+                    role: newRole,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            "accessToken"
+                        )}`,
+                    },
+                }
+            );
+            const updatedUser = response.data.data;
+            setUsers((prev) =>
+                prev.map((user) => (user._id === userId ? updatedUser : user))
+            );
+            setSuccess(`Role changed to "${newRole}" successfully!`);
+        } catch (err) {
+            console.error("Failed to change user role:", err);
+            setError(
+                "Failed to change user role: " +
+                    (err.response?.data?.message || err.message)
+            );
+        } finally {
+            setLoading(false);
+            setTimeout(() => {
+                setSuccess("");
+            }, 5000);
+        }
+    };
+
     const totalPages = Math.ceil(users.length / USERS_PER_PAGE);
     const startIdx = (currentPage - 1) * USERS_PER_PAGE;
     const currentUsers = users.slice(startIdx, startIdx + USERS_PER_PAGE);
@@ -85,6 +129,7 @@ const UserQuery = () => {
                 </div>
             ) : (
                 <>
+                    {" "}
                     {currentUsers.map((user) => (
                         <UserCardMini
                             key={user._id}
@@ -95,6 +140,9 @@ const UserQuery = () => {
                             lastOnline={"N/A"}
                             state={"online"}
                             onDelete={() => handleDelete(user._id, user.name)}
+                            onChangeRole={(userId, newRole) =>
+                                handleChangeRole(userId, newRole)
+                            }
                         />
                     ))}
                     <div className="flex gap-2 mt-4 justify-center">

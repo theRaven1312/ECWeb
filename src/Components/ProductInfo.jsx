@@ -131,7 +131,9 @@ const ProductInfo = ({
 
     return (
         <>
-            <h1 className="product-content__heading heading">{heading}</h1>
+            <h1 className="product-content__heading font-sans uppercase font-extrabold heading">
+                {heading}
+            </h1>
             <div className="flex-center-between">
                 <div className="flex gap-5">
                     <div className="product-content__feedback">

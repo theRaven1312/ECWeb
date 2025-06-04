@@ -485,7 +485,7 @@ body {
   }
 
   .comment-header {
-    @apply flex w-full flex-center-between;
+    @apply flex w-full gap-10;
   }
 
   .comment-quanity {
@@ -505,7 +505,7 @@ body {
   }
 
   .commentSelectorButton {
-    @apply w-full border-b-2 border-[var(--unactive-btn)] text-[#666666] cursor-pointer pb-3 hover:text-[var(--active-btn)] hover:font-bold hover:border-[var(--active-btn)] max-sm:text-base
+    @apply w-full border-b-2 border-[var(--unactive-btn)] text-[#666666] pb-3 text-center font-bold text-xl max-sm:text-base
   }
 
   .comment-header__writeBtn {
