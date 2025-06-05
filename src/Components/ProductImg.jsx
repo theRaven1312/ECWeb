@@ -12,7 +12,7 @@ const ProductImg = ({images, mainImage}) => {
         <div className="w-full h-full grid grid-cols-4 max-sm:flex max-sm:flex-col max-sm:items-center">
             {/* Thumbnails */}
             <div
-                className="flex flex-col gap-2 overflow-y-auto scrollbar-hide max-h-[500px] flex-center-between w-full
+                className="flex flex-col gap-3 overflow-y-auto scrollbar-hide max-h-[500px] flex-center w-full
                        max-sm:flex-row max-sm:overflow-x-auto
                        max-sm:w-full max-sm:px-1 max-sm:order-2 max-sm:flex-center-between"
             >
