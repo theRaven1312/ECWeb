@@ -4,13 +4,13 @@ const BlackStripe = () => {
   return (
     <div className='blackStripe'>
         <div className='brandList'>
-            <div>KEVIN</div>
-            <div>GUSI</div>
-            <div>VERSA</div>
-            <div>NICE</div>
-            <div>7UP</div>
-            <div>NGOT</div>
-            <div>NIGGA</div>
+            <div>Zeagoo</div>
+            <div>ODODO</div>
+            <div>underDAWG</div>
+            <div>NIKE</div>
+            <div>HANES</div>
+            <div>RED KAP</div>
+            <div>MOFIZ</div>
         </div>
     </div>
   )
