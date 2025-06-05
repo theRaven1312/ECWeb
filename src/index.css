@@ -809,7 +809,7 @@ body {
     Profile
 ========================*/
 .profile-page {
-  @apply w-screen h-screen flex-center bg-linear-to-r from-[#e2e2e2] to-[#c9d6ff] overflow-hidden
+  @apply w-screen h-screen flex-center bg-linear-to-r from-[#e2e2e2] to-[#c9d6ff]
 }
 
 
