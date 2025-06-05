@@ -122,7 +122,7 @@ const Navbar = () => {
                             <img
                                 src={profile}
                                 alt="Profile"
-                                className="profile-img navbar-profile"
+                                className="profile-img navbar-profile max-sm:hidden"
                                 onClick={() => setDropdownOpen((prev) => !prev)}
                             />
                             {dropdownOpen && (
