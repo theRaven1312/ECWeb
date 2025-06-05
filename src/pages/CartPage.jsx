@@ -160,9 +160,6 @@ const CartPage = () => {
     };
 
     const handleClearCart = async () => {
-        if (!window.confirm("Are you sure you want to clear your cart?")) {
-            return;
-        }
         try {
             await axiosJWT.delete("/api/v1/cart/clear", {
                 headers: {
