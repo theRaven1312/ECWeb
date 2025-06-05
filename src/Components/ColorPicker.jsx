@@ -61,7 +61,7 @@ const ColorPicker = ({
                     return (
                         <button
                             key={`color-${index}`}
-                            className={`w-8 h-8 rounded-full border-2 transition-all duration-200 relative ${
+                            className={`w-8 h-8 rounded-full border-2 cursor-pointer transition-all duration-200 relative ${
                                 isSelected
                                     ? "border-gray-800 scale-110"
                                     : "border-gray-300 hover:border-gray-500"

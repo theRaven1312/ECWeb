@@ -65,43 +65,51 @@ const Navbar = () => {
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 >
                     <img src={menu} alt="menu" className="w-6 h-6" />
-                </button>
-
+                </button>{" "}
                 <div className="navbarLogo">
-                    <Link to="/" onClick={() => window.scrollTo(0, 0)}>
+                    <Link
+                        to="/"
+                        onClick={() => window.scrollTo(0, 0)}
+                        className="navbar-logo"
+                    >
                         T3.SAHUR
                     </Link>
-                </div>
-
+                </div>{" "}
                 {/* Desktop Navigation */}
                 <ul className="navbarList">
                     <Link to="/category">
                         <li className="navbarListSub">
-                            <span>Shop</span>
-                            <img src={arrowDown} alt="arrow down" />
+                            <span className="navbar-link">Shop</span>
                         </li>
                     </Link>
                     <li>
-                        <Link to="/category/sales">On Sales</Link>
+                        <Link to="/category/sales" className="navbar-link">
+                            On Sales
+                        </Link>
                     </li>
                     <li>
-                        <Link to="/category/new-arrivals">New Arrivals</Link>
+                        <Link
+                            to="/category/new-arrivals"
+                            className="navbar-link"
+                        >
+                            New Arrivals
+                        </Link>
                     </li>
                     <li>
-                        <Link to="/category/top">Top Selling</Link>
+                        <Link to="/category/top" className="navbar-link">
+                            Top Selling
+                        </Link>
                     </li>
                 </ul>
-
                 {/* Desktop SearchBar */}
                 <div className="hidden md:block">
                     <SearchBar />
-                </div>
-
+                </div>{" "}
                 <div className="navbarCartProfile">
-                    <Link to="/cart">
+                    <Link to="/cart" className="navbar-icon">
                         <div className="relative">
                             {quantity > 0 && (
-                                <div className="bg-red-500 w-4 h-4 text-white text-xs font-bold text-center absolute -top-1.5 -right-2 rounded-full">
+                                <div className="navbar-cart-badge">
                                     {quantity}
                                 </div>
                             )}
@@ -114,7 +122,7 @@ const Navbar = () => {
                             <img
                                 src={profile}
                                 alt="Profile"
-                                className="profile-img"
+                                className="profile-img navbar-profile"
                                 onClick={() => setDropdownOpen((prev) => !prev)}
                             />
                             {dropdownOpen && (
@@ -122,7 +130,7 @@ const Navbar = () => {
                                     <div className="dropdown-menu__name">
                                         <i className="fa-solid fa-user mr-2"></i>
                                         {user.name}
-                                    </div>
+                                    </div>{" "}
                                     <Link
                                         to="/profile"
                                         onClick={() => setDropdownOpen(false)}
@@ -143,7 +151,7 @@ const Navbar = () => {
                                     )}
                                     <button
                                         onClick={handleLogout}
-                                        className="dropdown-menu__logout"
+                                        className="dropdown-menu__logout dropdown-logout"
                                     >
                                         Log Out
                                     </button>
@@ -151,7 +159,7 @@ const Navbar = () => {
                             )}
                         </div>
                     ) : (
-                        <Link to="/login" className="relative">
+                        <Link to="/login" className="relative navbar-icon">
                             <img
                                 src={profile}
                                 alt="Profile"
@@ -198,24 +206,25 @@ const Navbar = () => {
                     {/* Navigation Links */}
                     <nav className="flex-1 py-6">
                         <ul className="space-y-2">
+                            {" "}
                             <li>
                                 <Link
                                     to="/category"
-                                    className="flex items-center justify-between px-6 py-4 text-lg font-medium hover:bg-gray-100 transition-colors"
+                                    className="flex items-center justify-between px-6 py-4 text-lg font-medium mobile-nav-link"
                                     onClick={closeMobileMenu}
                                 >
                                     <span>Shop</span>
                                     <img
                                         src={arrowDown}
                                         alt="arrow"
-                                        className="w-4 h-4"
+                                        className="mobile-nav-arrow"
                                     />
                                 </Link>
                             </li>
                             <li>
                                 <Link
                                     to="/category/sales"
-                                    className="block px-6 py-4 text-lg hover:bg-gray-100 transition-colors"
+                                    className="block px-6 py-4 text-lg mobile-nav-link"
                                     onClick={closeMobileMenu}
                                 >
                                     On Sales
@@ -224,7 +233,7 @@ const Navbar = () => {
                             <li>
                                 <Link
                                     to="/category/new-arrivals"
-                                    className="block px-6 py-4 text-lg hover:bg-gray-100 transition-colors"
+                                    className="block px-6 py-4 text-lg mobile-nav-link"
                                     onClick={closeMobileMenu}
                                 >
                                     New Arrivals
@@ -233,7 +242,7 @@ const Navbar = () => {
                             <li>
                                 <Link
                                     to="/category/top"
-                                    className="block px-6 py-4 text-lg hover:bg-gray-100 transition-colors"
+                                    className="block px-6 py-4 text-lg mobile-nav-link"
                                     onClick={closeMobileMenu}
                                 >
                                     Top Selling
@@ -260,43 +269,39 @@ const Navbar = () => {
                                             Welcome back!
                                         </div>
                                     </div>
-                                </div>
-
+                                </div>{" "}
                                 <Link
                                     to="/profile"
-                                    className="flex items-center gap-3 py-2 text-gray-700 hover:text-black"
+                                    className="mobile-user-link"
                                     onClick={closeMobileMenu}
                                 >
                                     <i className="fa-solid fa-user w-5"></i>
                                     <span>User Info</span>
                                 </Link>
-
                                 <Link
                                     to="/cart"
-                                    className="flex items-center gap-3 py-2 text-gray-700 hover:text-black"
+                                    className="mobile-user-link"
                                     onClick={closeMobileMenu}
                                 >
                                     <i className="fa-solid fa-shopping-cart w-5"></i>
                                     <span>Cart</span>
                                 </Link>
-
                                 {user.role === "admin" && (
                                     <Link
                                         to="/admin"
-                                        className="flex items-center gap-3 py-2 text-gray-700 hover:text-black"
+                                        className="mobile-user-link"
                                         onClick={closeMobileMenu}
                                     >
                                         <i className="fa-solid fa-cog w-5"></i>
                                         <span>Store Management</span>
                                     </Link>
                                 )}
-
                                 <button
                                     onClick={() => {
                                         handleLogout();
                                         closeMobileMenu();
                                     }}
-                                    className="flex items-center gap-3 py-2 text-red-600 hover:text-red-700 w-full text-left"
+                                    className="mobile-logout-btn"
                                 >
                                     <i className="fa-solid fa-sign-out-alt w-5"></i>
                                     <span>Log Out</span>
@@ -304,16 +309,17 @@ const Navbar = () => {
                             </div>
                         ) : (
                             <div className="space-y-3">
+                                {" "}
                                 <Link
                                     to="/login"
-                                    className="block w-full bg-black text-white text-center py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors"
+                                    className="mobile-signin-btn"
                                     onClick={closeMobileMenu}
                                 >
                                     Sign In
                                 </Link>
                                 <Link
                                     to="/cart"
-                                    className="flex items-center justify-center gap-2 py-3 text-gray-700 hover:text-black"
+                                    className="mobile-cart-link"
                                     onClick={closeMobileMenu}
                                 >
                                     <i className="fa-solid fa-shopping-cart"></i>

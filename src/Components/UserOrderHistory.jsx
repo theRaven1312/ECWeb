@@ -190,7 +190,7 @@ const UserOrderHistory = () => {
                         <button
                             key={filterOption.value}
                             onClick={() => setFilter(filterOption.value)}
-                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 cursor-pointer ${
                                 filter === filterOption.value
                                     ? "bg-black text-white shadow-lg"
                                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -349,7 +349,7 @@ const UserOrderHistory = () => {
                                             onClick={() =>
                                                 handleViewOrderDetails(order)
                                             }
-                                            className="flex-1 bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors font-medium flex items-center justify-center gap-2"
+                                            className="flex-1 bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors font-medium flex items-center justify-center gap-2 cursor-pointer"
                                         >
                                             <i className="fa-solid fa-eye"></i>
                                             View Details
@@ -359,7 +359,7 @@ const UserOrderHistory = () => {
                                                 onClick={() =>
                                                     handleReorder(order)
                                                 }
-                                                className="flex-1 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors font-medium flex items-center justify-center gap-2"
+                                                className="flex-1 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors font-medium flex items-center justify-center gap-2 cursor-pointer"
                                             >
                                                 <i className="fa-solid fa-redo"></i>
                                                 Reorder
