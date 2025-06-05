@@ -587,7 +587,7 @@ const CategoryPage = ({ heading = 'Shop' }) => {
                                                 key={pageNumber}
                                                 className={`w-10 h-10 rounded-lg ${
                                                     currentPage === pageNumber
-                                                        ? 'bg-blue-600 text-white'
+                                                        ? 'bg-black text-white'
                                                         : 'hover:bg-gray-100'
                                                 }`}
                                                 onClick={() => setCurrentPage(pageNumber)}
