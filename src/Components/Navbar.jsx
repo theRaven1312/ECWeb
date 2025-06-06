@@ -16,8 +16,13 @@ const Navbar = () => {
     const quantity = useSelector((state) => state.cart.quantity);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [active, setActive] = useState("");
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const handleLinkClick = (link) => {
+        setActive(link);
+    };
 
     // ✅ Fetch cart quantity when user changes
     useEffect(() => {
@@ -77,17 +82,31 @@ const Navbar = () => {
                 </div>{" "}
                 {/* Desktop Navigation */}
                 <ul className="navbarList">
-                    <Link to="/category">
-                        <li className="navbarListSub">
+                    <li
+                        onClick={() => handleLinkClick("shop")}
+                        className={active === "shop" ? "navbarLinkActive" : ""}
+                    >
+                        <Link to="/category">
                             <span className="navbar-link">Shop</span>
-                        </li>
-                    </Link>
-                    <li>
+                        </Link>
+                    </li>
+
+                    <li
+                        onClick={() => handleLinkClick("onSales")}
+                        className={
+                            active === "onSales" ? "navbarLinkActive" : ""
+                        }
+                    >
                         <Link to="/category/sales" className="navbar-link">
                             On Sales
                         </Link>
                     </li>
-                    <li>
+                    <li
+                        onClick={() => handleLinkClick("newArrivals")}
+                        className={
+                            active === "newArrivals" ? "navbarLinkActive" : ""
+                        }
+                    >
                         <Link
                             to="/category/new-arrivals"
                             className="navbar-link"
@@ -95,7 +114,12 @@ const Navbar = () => {
                             New Arrivals
                         </Link>
                     </li>
-                    <li>
+                    <li
+                        onClick={() => handleLinkClick("topSelling")}
+                        className={
+                            active === "topSelling" ? "navbarLinkActive" : ""
+                        }
+                    >
                         <Link to="/category/top" className="navbar-link">
                             Top Selling
                         </Link>
