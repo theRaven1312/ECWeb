@@ -1040,6 +1040,14 @@ body {
   @apply w-full;
 }
 
+.navbarLinkActive .navbar-link::after {
+  @apply w-full;
+}
+
+.navbarLinkActive .navbar-link {
+  @apply text-black font-bold;
+}
+
 .navbar-icon {
   @apply transition-all duration-300 ease-in-out hover:scale-110;
 }

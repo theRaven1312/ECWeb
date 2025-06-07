@@ -289,7 +289,7 @@ const UserOrderHistory = () => {
 
                                     {/* Products Preview */}
                                     <div className="mb-4">
-                                        <div className="flex items-center gap-3 overflow-x-auto pb-2">
+                                        <div className="flex flex-col gap-5 overflow-hidden overflow-x-auto pb-2">
                                             {order.products &&
                                                 order.products
                                                     .slice(0, 3)
@@ -303,7 +303,15 @@ const UserOrderHistory = () => {
                                                                 className="flex items-center gap-3 bg-gray-50 rounded-lg p-3 min-w-[250px]"
                                                             >
                                                                 <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                                                                    <i className="fa-solid fa-image text-gray-400"></i>
+                                                                    <img
+                                                                        src={
+                                                                            productItem
+                                                                                .product
+                                                                                ?.images[0] ||
+                                                                            ""
+                                                                        }
+                                                                        alt=""
+                                                                    />
                                                                 </div>
                                                                 <div className="flex-1 min-w-0">
                                                                     <p className="font-medium text-gray-900 truncate">
@@ -312,14 +320,28 @@ const UserOrderHistory = () => {
                                                                             ?.name ||
                                                                             "Product"}
                                                                     </p>
-                                                                    <p className="text-sm text-gray-500">
-                                                                        Qty:{" "}
-                                                                        {
-                                                                            productItem.quantity
-                                                                        }
-                                                                    </p>
+                                                                    <div className="flex items-center gap-2">
+                                                                        <p className="text-sm text-gray-500">
+                                                                            Qty:{" "}
+                                                                            {
+                                                                                productItem.quantity
+                                                                            }
+                                                                        </p>
+                                                                        <p className="text-sm text-gray-500">
+                                                                            Color:{" "}
+                                                                            {
+                                                                                productItem.color
+                                                                            }
+                                                                        </p>
+                                                                        <p className="text-sm text-gray-500">
+                                                                            Size:{" "}
+                                                                            {
+                                                                                productItem.size
+                                                                            }
+                                                                        </p>
+                                                                    </div>
                                                                 </div>
-                                                                <span className="font-bold text-gray-900 flex-shrink-0">
+                                                                <span className="font-bold text-gray-900 flex-shrink-0 ml-3">
                                                                     $
                                                                     {productItem.price?.toFixed(
                                                                         2

@@ -74,7 +74,10 @@ const Navbar = () => {
                 <div className="navbarLogo">
                     <Link
                         to="/"
-                        onClick={() => window.scrollTo(0, 0)}
+                        onClick={() => {
+                            setActive("");
+                            window.scrollTo(0, 0);
+                        }}
                         className="navbar-logo"
                     >
                         T3.SAHUR
@@ -130,7 +133,11 @@ const Navbar = () => {
                     <SearchBar />
                 </div>{" "}
                 <div className="navbarCartProfile">
-                    <Link to="/cart" className="navbar-icon">
+                    <Link
+                        to="/cart"
+                        className="navbar-icon"
+                        onClick={() => setActive("")}
+                    >
                         <div className="relative">
                             {quantity > 0 && (
                                 <div className="navbar-cart-badge">
@@ -147,7 +154,9 @@ const Navbar = () => {
                                 src={profile}
                                 alt="Profile"
                                 className="profile-img navbar-profile max-sm:hidden"
-                                onClick={() => setDropdownOpen((prev) => !prev)}
+                                onClick={() => {
+                                    setDropdownOpen((prev) => !prev);
+                                }}
                             />
                             {dropdownOpen && (
                                 <div className="dropdown-menu max-sm:hidden">
@@ -157,7 +166,10 @@ const Navbar = () => {
                                     </div>{" "}
                                     <Link
                                         to="/profile"
-                                        onClick={() => setDropdownOpen(false)}
+                                        onClick={() => {
+                                            setDropdownOpen(false);
+                                            setActive("");
+                                        }}
                                         className="dropdown-menu__info"
                                     >
                                         User Info
@@ -165,16 +177,21 @@ const Navbar = () => {
                                     {user.role === "admin" && (
                                         <Link
                                             to="/admin"
-                                            onClick={() =>
-                                                setDropdownOpen(false)
-                                            }
+                                            onClick={() => {
+                                                setDropdownOpen(false);
+                                                setActive("");
+                                            }}
                                             className="dropdown-menu__info"
                                         >
                                             Store Management
                                         </Link>
                                     )}
                                     <button
-                                        onClick={handleLogout}
+                                        onClick={() => {
+                                            handleLogout();
+                                            setDropdownOpen(false);
+                                            setActive("");
+                                        }}
                                         className="dropdown-menu__logout dropdown-logout"
                                     >
                                         Log Out
@@ -183,7 +200,11 @@ const Navbar = () => {
                             )}
                         </div>
                     ) : (
-                        <Link to="/login" className="relative navbar-icon">
+                        <Link
+                            to="/login"
+                            className="relative navbar-icon"
+                            onClick={() => setActive("")}
+                        >
                             <img
                                 src={profile}
                                 alt="Profile"
