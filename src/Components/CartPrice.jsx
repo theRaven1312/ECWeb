@@ -266,6 +266,8 @@ const CartPrice = ({items = [], totalPrice = 0, onClearCart}) => {
         setError(null);
         setCouponCode("");
         setAppliedCoupon(null);
+        
+        onClearCart();
         localStorage.removeItem("appliedCoupon");
         localStorage.removeItem("couponCode");
     };
