@@ -240,7 +240,7 @@ const CartPage = () => {
 
             <div className="cart-page px-4 py-8">
                 {/* Cart-heading */}
-                <div className=" mb-8">
+                <div className=" mb-8 max-sm:mb-0">
                     <h1 className="text-3xl font-bold text-gray-800 mb-2 font-integral">
                         YOUR CART
                     </h1>
