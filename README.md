@@ -63,3 +63,5 @@ npm run dev
 ```bash
 npm start
 ```
+## References
+Thanks Hamza Naeem for an amazing website design. Check it out <a target= "_blank" href="https://www.figma.com/design/E56Vf4glNMB88L7FuCXCi1/E-commerce-Website-Template--Freebie---Community-?node-id=39-1402&p=f&t=dkeTjsbYKSBFKEW3-0">HERE</a>
