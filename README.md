@@ -1,12 +1,65 @@
-# React + Vite
+# E-commerce Website Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📚 Introduction
 
-Currently, two official plugins are available:
+This is a fullstack e-commerce website developed as the final project for the Introduction to Software Engineering course at University of Information Technology.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Guiding teacher:** Do Van Tien
 
-## Expanding the ESLint configuration
+**Team members:**
+- Dang Viet Hoang - 23520513
+- Tran Hoang Hai - 23520422
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🚀 Features
+
+- User registration, login, JWT authentication
+- Product and category management
+- Shopping cart, order placement, order history
+- Admin dashboard for managing products, users, and orders
+- Discount codes, product reviews
+- Responsive UI (Tailwind CSS)
+- REST API with Node.js/Express & MongoDB
+
+## ⚙️ Installation
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/theRaven1312/ECWeb.git
+cd ECWeb
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure environment variables
+
+Create a `.env` file in the root directory and add the following lines:
+
+```
+LAUNCH_DB = your_db_uri
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRES_IN=1d
+JWT_REFRESH_SECRET=your_refresh_secret
+JWT_REFRESH_EXPIRES_IN=7d
+API_URL=/api/v1
+VITE_API_URL = http://localhost:3000/api/v1
+PORT = 3000
+```
+
+## 🚀 Run the project
+
+### 1. Start the front-end
+
+```bash
+npm run dev
+```
+
+### 2. Start the back-end
+
+```bash
+npm start
+```
