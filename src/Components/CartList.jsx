@@ -29,7 +29,7 @@ const CartList = ({items = [], onUpdateQuantity, onRemoveItem}) => {
                     className="cart-card"
                 >
                     {/* Product Image */}
-                    <div className="w-30 h-30 flex-shrink-0 border-1 border-gray-200 rounded-3xl overflow-hidden shadow-lg">
+                    <div className="w-30 h-30 flex-shrink-0 border-1 border-gray-200 rounded-3xl overflow-hidden shadow-lg ">
                         <img
                             src={
                                 item.product.image_url ||
@@ -42,7 +42,7 @@ const CartList = ({items = [], onUpdateQuantity, onRemoveItem}) => {
                     </div>
 
                     {/* Product Details */}
-                    <div className="flex-1">
+                    <div className="flex-1 flex flex-col max-sm:self-start max-sm:items-start ">
                         <h3 className="font-semibold text-lg">
                             {item.product.name}
                         </h3>
@@ -70,7 +70,7 @@ const CartList = ({items = [], onUpdateQuantity, onRemoveItem}) => {
                     </div>
 
                     <div className="flex flex-col-reverse max-sm:self-end items-end gap-4">
-                        <div className="quantity-selector flex-center bg-gray-300 p-2 rounded-full w-30%">
+                        <div className="quantity-selector max-sm:absolute max-sm:bottom-8 max-sm:right-3 flex-center bg-gray-300 p-2 rounded-full w-30% max-sm:p-0.5">
                             <button
                                 onClick={() =>
                                     handleQuantityChange(
@@ -78,12 +78,12 @@ const CartList = ({items = [], onUpdateQuantity, onRemoveItem}) => {
                                         item.quantity - 1
                                     )
                                 }
-                                className="w-8 h-8 border border-gray-300 rounded flex items-center justify-center hover:bg-gray-100"
+                                className="w-8 h-8  rounded flex items-center justify-center hover:bg-gray-100"
                             >
                                 -
                             </button>
 
-                            <span className="px-3 py-1 border border-gray-300 rounded text-center min-w-12">
+                            <span className="px-3 py-1 rounded text-center min-w-12">
                                 {item.quantity}
                             </span>
 
@@ -94,7 +94,7 @@ const CartList = ({items = [], onUpdateQuantity, onRemoveItem}) => {
                                         item.quantity + 1
                                     )
                                 }
-                                className="w-8 h-8 border border-gray-300 rounded flex items-center justify-center hover:bg-gray-100"
+                                className="w-8 h-8  rounded flex items-center justify-center hover:bg-gray-100"
                             >
                                 +
                             </button>
@@ -103,7 +103,7 @@ const CartList = ({items = [], onUpdateQuantity, onRemoveItem}) => {
                         {/* Remove Button */}
                         <button
                             onClick={() => handleRemove(item)}
-                            className="text-red-500 hover:text-red-700 p-2"
+                            className="text-red-500 hover:text-red-700 p-2 max-sm:absolute max-sm:top-2 max-sm:right-2 transition-colors duration-200"
                         >
                             <i className="fa-solid fa-trash"></i>
                         </button>

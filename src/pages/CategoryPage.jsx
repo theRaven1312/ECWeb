@@ -176,7 +176,8 @@ const CategoryPage = ({heading = "Shop"}) => {
 
         if (selectedColors && selectedColors.length > 0) {
             filtered = filtered.filter((product) => {
-                if (!product.colors || product.colors.length === 0) {
+                if (!product.colors || product.colors.length === 0) 
+                {
                     return false;
                 }
                 const hasMatchingColor = product.colors.some((color) =>
@@ -550,7 +551,7 @@ const CategoryPage = ({heading = "Shop"}) => {
                                 </div>
                             </div>
 
-                            {/* ✅ Modal Footer */}
+                            {/* Modal Footer */}
                             <div className="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4">
                                 <div className="flex gap-3">
                                     <button
@@ -570,14 +571,14 @@ const CategoryPage = ({heading = "Shop"}) => {
                     <div className="category-heading flex justify-between items-center w-full">
                         <div className="heading">{getPageTitle()}</div>
 
-                        {/* ✅ Mobile Filter Button */}
+                        {/* Mobile Filter Button */}
                         <button
                             className="sm:hidden py-2 px-4 bg-gray-200 rounded-full relative"
                             onClick={toggleFilters}
                         >
                             <i className="fa-solid fa-sliders cursor-pointer"></i>
 
-                            {/* ✅ Filter Badge */}
+                            {/* Filter Badge */}
                             {(selectedCategory ||
                                 selectedColors.length > 0 ||
                                 selectedSizes.length > 0 ||

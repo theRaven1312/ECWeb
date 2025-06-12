@@ -143,13 +143,13 @@ const ProductInfo = ({
                         </p>
                     </div>
                     <div className="product-content__feedback">
-                        <p className="product-content__feedback-score desc">
+                        <p className="product-content__feedback-score desc max-sm:text-xs ">
                             ({numReviews} Reviews)
                         </p>
                     </div>
                 </div>
                 <div className="product-content__feedback">
-                    <p className="product-content__feedback-score desc mr-15">
+                    <p className="product-content__feedback-score desc mr-15 max-sm:text-xs">
                         Have sold: {isSold}
                     </p>
                 </div>
