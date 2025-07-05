@@ -29,10 +29,18 @@ const AppContent = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         const storageData = localStorage.getItem("access_token");
-        const decode = storageData ? jwtDecode(storageData) : null;
 
-        if (decode && decode.id) {
-            handleGetDetailUser(decode.id, storageData);
+        if (storageData) {
+            try {
+                const decode = jwtDecode(storageData);
+                if (decode && decode.id) {
+                    handleGetDetailUser(decode.id, storageData);
+                }
+            } catch (error) {
+                console.error("Invalid token:", error);
+                // Clear invalid token from localStorage
+                localStorage.removeItem("access_token");
+            }
         }
     }, []);
 
